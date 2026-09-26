@@ -1,0 +1,18 @@
+source_id,source,type,geography,well,data_types,status,access_method,url
+VOLVE,Equinor Volve (official),field,Norway,selected,drilling/logs/reports,selected,Databricks Marketplace (auth required — NOT a direct file download anymore),https://www.equinor.com/energy/volve-data-sharing
+VOLVE_F9A_KAGGLE,Volve F-9A Real-Time Drilling CSV,derived,Norway,F-9A,real-time drilling CSV,ingested (raw),Kaggle API (kaggle datasets download),https://www.kaggle.com/datasets/imranulhaquenoor/volve-dataset-well-f-9-a
+VOLVE_DDR_HF,Volve Daily Drilling Reports,derived,Norway,selected,DDR (1759 files WITSML->JSON),selected,huggingface_hub (datasets.load_dataset),https://huggingface.co/datasets/bengsoon/volve_daily_drilling_report
+VOLVE_RT_UIS,Volve real-time CSV (UiS parsed),derived,Norway,selected,parsed WITSML real-time,later,direct download (CC BY-NC-SA 4.0 - non-commercial only),see NWIS dossier refs
+FORGE16B,Utah FORGE Well 16B(78)-32,well,USA,16B(78)-32,survey/mud/mud-temp/DDR/Pason (core and EOW report pending),ingested (raw),user-supplied local archives (checksummed in data/raw/download_log.csv),https://catalog.data.gov/dataset/utah-forge-well-16b78-32-drilling-data
+FORGE78B,Utah FORGE Well 78B-32,well,USA,78B-32,daily reports + Pason (1s/10s) + logs,"ingested (raw, DDR PDF only — Pason/logs still pending)",direct HTTPS (gdr.openei.org),https://catalog.data.gov/dataset/utah-forge-well-78b-32-daily-drilling-reports-and-logs
+FORGE56_32,Utah FORGE Well 56-32,well,USA,56-32,drilling data and logs,later,direct HTTPS (amerigeoss/GDR),https://data.amerigeoss.org/dataset/utah-forge-well-56-32-drilling-data-and-logs-64155
+FORGE58_32,Utah FORGE Well 58-32,well,USA,58-32,1 Hz drilling data,later,check GDR listing,https://gdr.openei.org
+FORCE2020,FORCE 2020 lithology competition,competition,Norway,multiple,LAS logs/lithology labels,"ingested (raw, trimmed - see data/raw/ml_tasks/force2020_official/lithology_competition/data/TRIMMED_MANIFEST.txt)",git clone (done),https://github.com/bolgebrygg/Force-2020-Machine-Learning-competition
+FORCE2020_KAGGLE,FORCE 2020 Well Logs (mirror),competition,Norway,multiple,LAS logs/lithology labels,ingested (raw),Kaggle API,https://www.kaggle.com (search: FORCE 2020 well logs)
+BSEE_WELL,BSEE Well database,national/regional,USA Gulf,later,well header/spatial (~57500 records),later,web UI / API - no bulk file link found yet,https://www.data.bsee.gov/Main/Well.aspx
+BSEE_RAW,BSEE Raw Data,national/regional,USA Gulf,later,delimited ASCII raw feeds,later,web UI - inspect for bulk export,https://www.data.bsee.gov/Main/RawData.aspx
+NLOG,NLOG Boreholes,national,Netherlands,later,deviation/stratigraphy/logs/reports,later,web UI export,https://www.nlog.nl/en/boreholes
+NDR,DGH National Data Repository,national,India,later,well/log/drilling/reservoir/geological/E&P,access check,requires registration,https://www.ndrdgh.gov.in/NDR/
+WITSML_ENERGISTICS,Energistics WITSML standard,standard,-,n/a,schema/spec only (not well data),reference,spec download,https://energistics.org/witsml-developers-users
+WITSML_DRILLFLOW,DrillFlow WITSML API server,tooling,-,n/a,WITSML server implementation,ingested (raw),git clone (done - data/raw/ml_tasks/drillflow_witsml),https://github.com/hashmapinc/Drillflow
+WITSML_PDS,PDS WITSML/ETP,tooling,-,n/a,WITSML/ETP dev docs,reference,docs only,https://witsml.pds.technology/docs/getting-started/

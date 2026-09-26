@@ -1,0 +1,1 @@
+event_id,wellbore_id,event_type,event_subtype,start_time,end_time,start_md,end_md,start_tvd,end_tvd,formation,severity,cause,mitigation,outcome,npt_hours,source_document,source_page,source,confidence

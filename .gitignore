@@ -1,0 +1,14 @@
+# Raw source archives and extracted source data are retained locally.
+# Their provenance is committed through the two manifest files below.
+data/raw/*
+!data/raw/download_log.csv
+!data/raw/git_clone_log.csv
+
+# Reproducible intermediate outputs
+data/interim/
+
+# Local/editor files
+.DS_Store
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/

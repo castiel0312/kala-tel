@@ -1,0 +1,20 @@
+source,well,url,file_name,file_type,download_date,checksum
+VOLVE_F9A_KAGGLE,F-9A,https://www.kaggle.com/datasets/imranulhaquenoor/volve-dataset-well-f-9-a,volve_F9A_realtime_drilling.zip,"zip (contains: Norway-NA-15_47_9-F-9 A depth.csv, Norway-NA-15_47_9-F-9 A time.csv)",2026-09-26T07:06:13Z,fbab41c1a914ee8e650c29dbe7a25b449ed4265b639638631baddf0fb215bea3
+FORGE78B,78B-32,https://catalog.data.gov/dataset/utah-forge-well-78b-32-daily-drilling-reports-and-logs,78B-32-DailyDrillingReports-6-27thru7-31.pdf,pdf,2026-09-26T07:06:13Z,e1424b3a73dc878a09e23698a03f3f40bf59e5817bc7847af0c58d1cf384964f
+FORCE2020_KAGGLE,"multiple (15/9-14, 15/9-15, 16/1-2, 16/10-2, 25/11-19S, 25/11-24, 31/2-7, 33/9-17, 34/10-19, 35/11-10, 7/1-1)",https://www.kaggle.com (FORCE 2020 well logs mirror),force2020_well_logs.zip,"zip (11x CSV, well-log + lithofacies + X/Y/Z per depth sample)",2026-09-26T07:06:26Z,16f23dc6e8c0eb4bd2e172273765a5a2a619b73cd47dd83beed793f40b624f0f
+ML_TASKS_BATCH,multiple,https://github.com/petrobras/3W.git,petrobras_3W/,"git repo (code+docs+2 of 11 event classes kept, trimmed)",2026-09-26T00:00:00Z,not-checksummed-directory
+ML_TASKS_BATCH,multiple,https://github.com/DareAdekunle/wellmatch-3w.git,3W_mirror_wellmatch/,git repo,2026-09-26T00:00:00Z,not-checksummed-directory
+ML_TASKS_BATCH,multiple,https://github.com/HaythamElmousalami/Drilling-Stuck-Pipe-Prediction.git,stuckpipe_elmousalami/,git repo,2026-09-26T00:00:00Z,not-checksummed-directory
+ML_TASKS_BATCH,multiple,https://github.com/pro-well-plan/torque_drag.git,torque_drag_powellplan/,git repo,2026-09-26T00:00:00Z,not-checksummed-directory
+ML_TASKS_BATCH,multiple,https://github.com/APMonitor/drilling.git,rop_apmonitor/,git repo,2026-09-26T00:00:00Z,not-checksummed-directory
+ML_TASKS_BATCH,multiple,https://github.com/yudhaadi77/force2020-lithology-prediction.git,force2020_litho_alt/,git repo,2026-09-26T00:00:00Z,not-checksummed-directory
+ML_TASKS_BATCH,multiple (Volve F-9 only - trimmed),https://github.com/f0nzie/volve-drilling.git,volve_drilling_r/,"git repo (WITSML for F-9 kept, F-7/F-4 dropped)",2026-09-26T00:00:00Z,not-checksummed-directory
+ML_TASKS_BATCH,multiple,https://github.com/yohanesnuwara/MLGeo.git,mlgeo/,git repo,2026-09-26T00:00:00Z,not-checksummed-directory
+ML_TASKS_BATCH,n/a,https://github.com/Ashu220805/NNFS_Project.git,nnfs_project_unverified/,"git repo (UNVERIFIED scope)",2026-09-26T00:00:00Z,not-checksummed-directory
+ML_TASKS_BATCH,n/a,https://github.com/hashmapinc/Drillflow.git,drillflow_witsml/,git repo (WITSML server tooling - reference not data),2026-09-26T00:00:00Z,not-checksummed-directory
+FORCE2020,multiple (118 wells - competition data),https://github.com/bolgebrygg/Force-2020-Machine-Learning-competition.git,force2020_official/,"git repo (code+scoring dropped, train/test tables + labels kept)",2026-09-26T00:00:00Z,not-checksummed-directory
+FORGE16B,16B(78)-32,local user-supplied archive,16B Daily Reports.zip,zip,2026-09-26T00:00:00Z,2c2475d95be35a1f3103694e2673c0e0eeab034c9af1b4e99667724cd0cffdf3
+FORGE16B,16B(78)-32,local user-supplied archive,16B Mud Logs.zip,zip,2026-09-26T00:00:00Z,5979fd761d48a8e07f19089a545b514e85ef3d5ccbed38d4ed4bb561a070ddc7
+FORGE16B,16B(78)-32,local user-supplied archive,16B(78)-32 Well Survey.zip,zip,2026-09-26T00:00:00Z,38c59c9452da709fa971448699eb46fb13f452d2aa8c08fbe88fe73f08ce5302
+FORGE16B,16B(78)-32,local user-supplied archive,16B_Pason.zip,zip,2026-09-26T00:00:00Z,858a6eaf56c2cb3cbf45b59f431e59f82fc0ef2502ced244608d4d7b76ac54a2
+FORGE16B,16B(78)-32,local user-supplied archive,16B mud temp logs.zip,zip,2026-09-26T00:00:00Z,ecefb1fb69ecda06d9cf783120f5bb74a688597a42b4230745e6cd6e017de33b
