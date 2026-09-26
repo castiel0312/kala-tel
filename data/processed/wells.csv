@@ -1,1 +1,2 @@
-well_id,source,source_well_id,well_name,field,basin,country,operator,latitude,longitude,spud_date,completion_date,well_type,well_status,planned_td,actual_td
+well_id,source,source_well_id,well_name,field,basin,country,operator,latitude,longitude,easting,northing,crs,epsg,block,spud_date,completion_date,well_type,well_status,planned_td,actual_td,kb_elevation,gl_elevation,kb_elevation_unit,data_origin
+FORGE16B7832,Utah FORGE 16B(78)-32,16B(78)-32,FORGE 16B(78)-32,FORGE,Milford (Church Rocks) Utah,USA,University of Utah,38.5046,-112.8968,334642.081,4263471.0646,NAD83 Utah - HARN / UTM zone 12N (US Survey Feet),,,2023-04-26,,DIRECTIONAL,,,3336.6456,1660.4437,1650.6901,m,PUBLIC_REAL

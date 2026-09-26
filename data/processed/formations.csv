@@ -1,1 +1,1 @@
-wellbore_id,formation_name,formation_alias,top_md,base_md,top_tvd,base_tvd,top_tvdss,base_tvdss,lithology,source,source_document,source_page,confidence
+wellbore_id,formation_name,formation_alias,top_md,base_md,top_tvd,base_tvd,top_tvdss,base_tvdss,lithology,formation_group,vocabulary_id,source,source_document,source_page,confidence,data_origin

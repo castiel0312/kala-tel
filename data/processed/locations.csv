@@ -1,0 +1,2 @@
+location_id,wellbore_id,location_type,latitude,longitude,x,y,x_unit,y_unit,crs,epsg,datum,kb_elevation,gl_elevation,elevation_unit,source,confidence,data_origin
+FORGE16B7832-01-WELLHEAD,FORGE16B7832-01,WELLHEAD,38.5046,-112.8968,334642.081,4263471.0646,US survey ft,US survey ft,NAD83 Utah - HARN / UTM zone 12N (US Survey Feet),,NAD83 Utah - HARN,1660.4437,1650.6901,m,"easting/northing/elevations: 16B(78)-32 Final Survey Report; lat/lon: pason kpi_daily daily_kpi.csv 'All' column, no datum declared by the source",medium,PUBLIC_REAL

@@ -12,3 +12,4 @@ data/interim/
 __pycache__/
 *.py[cod]
 .ipynb_checkpoints/
+data/processed/mud_temperature_depth.csv

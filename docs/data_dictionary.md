@@ -22,8 +22,37 @@ non-canonical name.
 | `pit_volume`   | total pit volume, Pit gain/loss           | m³             | convert                  |
 | `formation`    | Formation, Formation_name, source lithostrat name | —      | map via formation alias dictionary |
 | `lithology`    | Lithology, VCL, lithology_group           | —              | map to fixed lithology taxonomy |
-| `timestamp`    | Time, Timestamp, Date                     | UTC ISO 8601   | convert to UTC           |
+| `timestamp`    | Time, Timestamp, Date                     | UTC ISO 8601   | convert to UTC |
 | `event_type`   | NPT code, activity code, free-text remark | fixed ontology | map to MUD_LOSS / STUCK_PIPE / KICK / OVERPRESSURE / TORQUE_SPIKE / WELLBORE_INSTABILITY / CEMENT_FAILURE / NPT |
+
+## Depth-indexed tables
+
+Not every source is indexed by time. `mud_temperature_depth` is indexed by
+**measured depth**, one row per (log, LAS file, depth):
+
+| NWIS field      | Source field | Unit | Transformation |
+|-----------------|--------------|------|----------------|
+| `md`            | DEPT        | m    | convert from ft (`las_index_ft`) |
+| `depth_reference` | —          | —    | constant `MD`; records that `md` is measured depth |
+| `log_date`      | DATE (LAS header) | ISO 8601 | acquisition date **of the LAS file**, not a per-sample timestamp |
+| `mud_temp_in`   | MTIA        | °C   | `(degF − 32) × 5/9` |
+| `mud_temp_out`  | MTOA        | °C   | `(degF − 32) × 5/9` |
+| `null_code`     | NULL. (LAS header) | — | the null value the file declares, recorded not discarded |
+
+Two rules govern this table:
+
+1. **No timestamp is invented.** These samples have a depth, not a clock
+   time. `log_date` is provenance for the whole log; it must never be treated
+   as the sample time, and this table must not be joined to time-keyed tables
+   on time. Tables carrying this grain are listed in
+   `nwis_lib.DEPTH_INDEXED_TABLES`.
+2. **The primary key includes `source_file`.** Several LAS logs share a
+   `log_date` *and* overlap in depth, so `(wellbore_id, log_date, md)` is not
+   unique — over the real ingest it collapses 457,104 rows into 243,965 keys.
+   Dropping `source_file` would silently destroy 179,421 samples.
+
+Both `mud_temp_in` and `mud_temp_out` are kept because the source reports
+both, and the source nulls them independently.
 
 ## Rules
 
