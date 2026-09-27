@@ -1,0 +1,105 @@
+{
+  "state": "PARTIAL",
+  "row_counts": {
+    "wells": 1,
+    "wellbores": 1,
+    "trajectories": 428,
+    "formations": 0,
+    "lithology": 65,
+    "drilling_timeseries": 124497,
+    "events": 44,
+    "documents": 219,
+    "drilling_runs": 376,
+    "casings": 158,
+    "bha_runs": 64,
+    "bits": 0,
+    "mud_properties": 72,
+    "mud_temperature_depth": 457104,
+    "cement_jobs": 0,
+    "reservoirs": 0,
+    "locations": 1
+  },
+  "findings": [
+    {
+      "check": "table_empty",
+      "severity": "MEDIUM",
+      "table": "formations",
+      "message": "formations.csv has header only (0 rows)",
+      "evidence": "",
+      "n_affected": 0,
+      "fatal": false
+    },
+    {
+      "check": "table_empty",
+      "severity": "MEDIUM",
+      "table": "bits",
+      "message": "bits.csv has header only (0 rows)",
+      "evidence": "",
+      "n_affected": 0,
+      "fatal": false
+    },
+    {
+      "check": "table_empty",
+      "severity": "MEDIUM",
+      "table": "cement_jobs",
+      "message": "cement_jobs.csv has header only (0 rows)",
+      "evidence": "",
+      "n_affected": 0,
+      "fatal": false
+    },
+    {
+      "check": "table_empty",
+      "severity": "MEDIUM",
+      "table": "reservoirs",
+      "message": "reservoirs.csv has header only (0 rows)",
+      "evidence": "",
+      "n_affected": 0,
+      "fatal": false
+    },
+    {
+      "check": "fk_parent_empty",
+      "severity": "MEDIUM",
+      "table": "drilling_runs",
+      "message": "bit_id -> bits.bit_id cannot be checked: parent table is empty",
+      "evidence": "",
+      "n_affected": 0,
+      "fatal": false
+    },
+    {
+      "check": "event_document_join",
+      "severity": "LOW",
+      "table": "events",
+      "message": "all 44 linked events resolve to a document",
+      "evidence": "",
+      "n_affected": 0,
+      "fatal": false
+    },
+    {
+      "check": "depth_all_null",
+      "severity": "MEDIUM",
+      "table": "events",
+      "message": "column start_md is present but entirely null",
+      "evidence": "",
+      "n_affected": 0,
+      "fatal": false
+    },
+    {
+      "check": "depth_all_null",
+      "severity": "MEDIUM",
+      "table": "events",
+      "message": "column start_tvd is present but entirely null",
+      "evidence": "",
+      "n_affected": 0,
+      "fatal": false
+    },
+    {
+      "check": "depth_all_null",
+      "severity": "MEDIUM",
+      "table": "events",
+      "message": "column end_tvd is present but entirely null",
+      "evidence": "",
+      "n_affected": 0,
+      "fatal": false
+    }
+  ]
+}

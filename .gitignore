@@ -1,0 +1,19 @@
+# Raw source archives and extracted source data are retained locally.
+# Their provenance is committed through the two manifest files below.
+data/raw/*
+!data/raw/download_log.csv
+!data/raw/git_clone_log.csv
+
+# Reproducible intermediate outputs.
+# This is the ONLY place generated ML artifacts may land. data/ml/ is a
+# contract-only scaffold (see ml/README.md) and data/processed/ is frozen, so
+# neither may hold generated data. External datasets use their own subtree, e.g.
+# data/interim/ml/force2020_litho/ for FORCE 2020 (ml/external_datasets.yaml).
+data/interim/
+
+# Local/editor files
+.DS_Store
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+data/processed/mud_temperature_depth.csv

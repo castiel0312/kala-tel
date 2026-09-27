@@ -1,0 +1,465 @@
+# NWIS canonical feature registry
+#
+# This file is the single contract for feature naming, units, provenance, and
+# leakage. Nine model owners work in parallel; without one shared registry the
+# same physical quantity ends up named three different ways and three different
+# units appear in three models.
+#
+# Rules encoded here:
+#   1. A feature is either MEASURED, DERIVED, or CONTEXT. Never INFERRED.
+#   2. A feature may not be added to this registry if its source column is
+#      entirely null in the current canonical dataset. See `available_now`.
+#   3. Derived features must name their inputs so leakage can be audited.
+#   4. Units are the canonical units of data/processed, not source units.
+#      Original source units live in `original_units` / `conversion_rule`.
+#   5. Anything not in this registry is not a canonical feature. A model that
+#      needs a new feature adds it here first, in a reviewable diff.
+
+registry_version: 1
+dataset_version: nwis-forge16b-v0.2
+canonical_root: data/processed
+data_origin_policy: PUBLIC_REAL
+
+# ---------------------------------------------------------------------------
+# Global conventions that apply to every feature
+# ---------------------------------------------------------------------------
+conventions:
+  depth:
+    unit: m
+    datum: measured_depth (MD)
+    columns: [md, tvd, tvdss]
+    rules:
+      - md, tvd and tvdss are separate columns and are never collapsed.
+      - tvd is null below the survey floor (3336.6456 m for FORGE16B7832-01).
+        Features must not extrapolate it.
+      - drilling_timeseries.tvd is INTERPOLATED between survey stations. Any
+        feature using it must set derived.uses_interpolated_tvd = true.
+  time:
+    unit: ISO-8601 naive local timestamp
+    timezone: null
+    rules:
+      - The source declares no timezone. Timestamps are naive local.
+      - Do not attach UTC to a timestamp. Do not compute UTC-offset features.
+      - Elapsed-time features (dt_hours) are valid; absolute clock features
+        that assume a timezone are not.
+  missingness:
+    policy: explicit_null
+    rules:
+      - A null source value produces a null feature, never 0 and never a mean.
+      - Imputation, if used, must happen inside a fold-fitted pipeline so the
+        imputation statistics never see the validation or test well.
+      - Every feature column must record its null rate in the feature manifest.
+  provenance:
+    required_columns: [source, data_origin]
+    rules:
+      - A feature row that cannot name its source table and data_origin is not
+        loadable. See ml/README.md for the enforcement test.
+
+# ---------------------------------------------------------------------------
+# Leakage rules. These are the failure modes that silently inflate scores.
+# ---------------------------------------------------------------------------
+leakage_rules:
+  - id: L1_label_window
+    severity: blocking
+    rule: >
+      A sample may not use any observation at or after the event onset time.
+      Features are built strictly from the window [onset - lookback, onset).
+  - id: L2_label_column
+    severity: blocking
+    rule: >
+      No column in events may be used as a feature. This forbids event_type,
+      severity, cause, npt_hours, depth_source, confidence and extraction_method.
+  - id: L3_post_event_persistence
+    severity: blocking
+    rule: >
+      A channel that is a consequence of the event (for example pit_volume
+      during a mud loss, or standpipe_pressure after a pack-off) must be
+      excluded from that event's own feature window, or truncated at onset.
+  - id: L4_interpolation_uses_label
+    severity: blocking
+    rule: >
+      Interpolating a feature across a labelled event using values on both
+      sides of it leaks the label. Interpolation must be causal (past only).
+  - id: L5_well_grouping
+    severity: blocking
+    rule: >
+      All rows from one wellbore_id must fall entirely in one split. A
+      time-based split inside a single well leaks well identity and near-
+      duplicate samples across the boundary.
+  - id: L6_document_provenance
+    severity: advisory
+    rule: >
+      If a feature is derived from a document that also produced the label, the
+      model may learn the document, not the physics. Record this in the model
+      README.
+
+# ---------------------------------------------------------------------------
+# Feature groups. `available_now: true` means the backing column has at least
+# one non-null value in the current dataset.
+# ---------------------------------------------------------------------------
+feature_groups:
+
+  context_static:
+    description: Well-level constants. Safe to join; identical across all samples.
+    available_now: true
+    features:
+      - name: kb_elevation
+        unit: m
+        source_table: wells
+        source_column: kb_elevation
+        kind: MEASURED
+        available_now: true
+      - name: spud_date
+        unit: date
+        source_table: wells
+        source_column: spud_date
+        kind: MEASURED
+        available_now: true
+      - name: planned_td
+        unit: m
+        source_table: wells
+        source_column: planned_td
+        kind: MEASURED
+        available_now: false
+        note: Column exists but is 100% null. Do not use.
+      - name: epsg
+        unit: code
+        source_table: wells
+        source_column: epsg
+        kind: MEASURED
+        available_now: false
+        note: Not published by the source. Do not synthesise a code.
+
+  geometry:
+    description: Trajectory-derived position. Joined on md, never forward-filled past the survey floor.
+    available_now: true
+    features:
+      - name: inclination
+        unit: deg
+        source_table: trajectories
+        source_column: inclination
+        kind: MEASURED
+        available_now: true
+      - name: azimuth
+        unit: deg
+        source_table: trajectories
+        source_column: azimuth
+        kind: MEASURED
+        available_now: true
+      - name: dogleg_severity
+        unit: deg/30m
+        source_table: trajectories
+        source_column: dogleg_severity
+        kind: DERIVED
+        derived_from: [inclination, azimuth, md]
+        available_now: true
+      - name: vertical_section
+        unit: m
+        source_table: trajectories
+        source_column: vertical_section
+        kind: DERIVED
+        derived_from: [inclination, md]
+        available_now: true
+      - name: northing
+        unit: m
+        source_table: trajectories
+        source_column: northing
+        kind: MEASURED
+        available_now: true
+      - name: easting
+        unit: m
+        source_table: trajectories
+        source_column: easting
+        kind: MEASURED
+        available_now: true
+
+  drilling_mechanics:
+    description: >
+      The only high-frequency channels with real data. Seven channels, all from
+      the Pason 10-second source resampled to 1 minute.
+    available_now: true
+    features:
+      - name: rop
+        unit: m/h
+        source_table: drilling_timeseries
+        source_column: rop
+        kind: MEASURED
+        available_now: true
+        coverage: 124485/124497
+      - name: wob
+        unit: kN
+        source_table: drilling_timeseries
+        source_column: wob
+        kind: MEASURED
+        available_now: true
+        coverage: 124496/124497
+      - name: rpm
+        unit: rpm
+        source_table: drilling_timeseries
+        source_column: rpm
+        kind: MEASURED
+        available_now: true
+        coverage: 123474/124497
+      - name: hookload
+        unit: kN
+        source_table: drilling_timeseries
+        source_column: hookload
+        kind: MEASURED
+        available_now: true
+        coverage: 124425/124497
+      - name: pump_rate
+        unit: L/min
+        source_table: drilling_timeseries
+        source_column: pump_rate
+        kind: MEASURED
+        available_now: true
+        coverage: 124462/124497
+      - name: standpipe_pressure
+        unit: MPa
+        source_table: drilling_timeseries
+        source_column: standpipe_pressure
+        kind: MEASURED
+        available_now: true
+        coverage: 124482/124497
+      - name: pit_volume
+        unit: m3
+        source_table: drilling_timeseries
+        source_column: pit_volume
+        kind: MEASURED
+        available_now: true
+        coverage: 124462/124497
+        note: >
+          L3 applies. pit_volume is the direct consequence of a mud loss and
+          must not be read inside a mud-loss label window at or after onset.
+      - name: rig_state
+        unit: category
+        source_table: drilling_timeseries
+        source_column: rig_state
+        kind: MEASURED
+        available_now: true
+
+  drilling_mechanics_absent:
+    description: >
+      Declared in the canonical schema, entirely null in this dataset. Listed so
+      a model owner sees the gap instead of silently dropping it from a chart.
+    available_now: false
+    features:
+      - {name: torque, unit: kN_m, source_table: drilling_timeseries, source_column: torque, kind: MEASURED, available_now: false, note: "100% null. No torque_spike model is possible on this dataset."}
+      - {name: drag, unit: kN, source_table: drilling_timeseries, source_column: drag, kind: MEASURED, available_now: false, note: "100% null."}
+      - {name: flow_in, unit: L/min, source_table: drilling_timeseries, source_column: flow_in, kind: MEASURED, available_now: false, note: "100% null."}
+      - {name: flow_out, unit: L/min, source_table: drilling_timeseries, source_column: flow_out, kind: MEASURED, available_now: false, note: "100% null."}
+      - {name: ecd, unit: g/cm3, source_table: drilling_timeseries, source_column: ecd, kind: MEASURED, available_now: false, note: "100% null. Blocks kick and overpressure."}
+      - {name: mud_weight, unit: g/cm3, source_table: drilling_timeseries, source_column: mud_weight, kind: MEASURED, available_now: false, note: "100% null per sample; see mud_properties_daily for the daily-grain value."}
+      - {name: gas_total, unit: units_unspecified, source_table: drilling_timeseries, source_column: gas_total, kind: MEASURED, available_now: false, note: "100% null. Blocks kick detection."}
+      - {name: h2s, unit: ppm, source_table: drilling_timeseries, source_column: h2s, kind: MEASURED, available_now: false, note: "100% null."}
+
+  mud_daily:
+    description: >
+      Daily grain from the DDR mud report. 72 rows, so roughly one per day. It
+      is a daily value and must never be broadcast onto minute-level samples as
+      if it were measured at that minute.
+    available_now: true
+    features:
+      - name: mud_weight_daily
+        unit: g/cm3
+        source_table: mud_properties
+        source_column: mud_weight
+        kind: MEASURED
+        available_now: true
+        join: same-day, latest record at or before the sample timestamp
+        note: Range 0.9946 to 1.0185 g/cm3.
+      - name: mud_type
+        unit: category
+        source_table: mud_properties
+        source_column: mud_type
+        kind: MEASURED
+        available_now: true
+      - name: mud_temperature_depth
+        unit: degC
+        source_table: mud_temperature_depth
+        source_column: mud_temp_in
+        kind: MEASURED
+        available_now: true
+        coverage: 445710/457104
+        note: Depth-indexed LAS. Join on md, never on time. See depth-indexed note below.
+      - name: mud_temperature_depth_out
+        unit: degC
+        source_table: mud_temperature_depth
+        source_column: mud_temp_out
+        kind: MEASURED
+        available_now: true
+        coverage: 456488/457104
+        note: Depth-indexed LAS. Join on md, never on time.
+
+  depth_indexed_note:
+    description: >
+      mud_temperature_depth is depth-indexed, not time-indexed. It has no
+      timestamp and must never be joined to drilling_timeseries on time. Join on
+      md within the survey floor, or not at all.
+    available_now: true
+
+  drilling_context:
+    description: Run and hole geometry.
+    available_now: true
+    features:
+      - name: run_id
+        unit: key
+        source_table: drilling_timeseries
+        source_column: run_id
+        kind: MEASURED
+        available_now: true
+        coverage: 8458/124497
+        note: Only 7% populated. Usable as a categorical, not as a numeric.
+      - name: run_type
+        unit: category
+        source_table: drilling_runs
+        source_column: run_type
+        kind: MEASURED
+        available_now: true
+      - name: run_start_md
+        unit: m
+        source_table: drilling_runs
+        source_column: start_md
+        kind: MEASURED
+        available_now: true
+      - name: run_end_md
+        unit: m
+        source_table: drilling_runs
+        source_column: end_md
+        kind: MEASURED
+        available_now: true
+      - name: casing_shoe_md
+        unit: m
+        source_table: casings
+        source_column: shoe_md
+        kind: MEASURED
+        available_now: true
+      - name: hole_diameter
+        unit: m
+        source_table: casings
+        source_column: hole_diameter
+        kind: MEASURED
+        available_now: true
+        note: Available on the casings table. The drilling_runs copy is 100% null.
+      - name: formation
+        unit: category
+        source_table: drilling_timeseries
+        source_column: formation
+        kind: MEASURED
+        available_now: false
+        note: 100% null. The formations table is empty. No formation-aware feature exists.
+
+  derived_causal:
+    description: >
+      Rolling statistics. All must be computed causally: a window may only use
+      samples strictly before the prediction timestamp.
+    available_now: true
+    rules:
+      - Rolling windows are trailing. Never centred. A centred window is L4 leakage.
+      - Every derived feature names its inputs and its window.
+    features:
+      - name: rop_ma_5m
+        unit: m/h
+        kind: DERIVED
+        derived_from: [rop, md]
+        window: trailing 5 m of MD
+        available_now: true
+      - name: rop_ma_15m
+        unit: m/h
+        kind: DERIVED
+        derived_from: [rop, md]
+        window: trailing 15 m of MD
+        available_now: true
+      - name: rop_std_15m
+        unit: m/h
+        kind: DERIVED
+        derived_from: [rop, md]
+        window: trailing 15 m of MD
+        available_now: true
+      - name: wob_ma_15m
+        unit: kN
+        kind: DERIVED
+        derived_from: [wob, md]
+        window: trailing 15 m of MD
+        available_now: true
+      - name: hookload_ma_15m
+        unit: kN
+        kind: DERIVED
+        derived_from: [hookload, md]
+        window: trailing 15 m of MD
+        available_now: true
+      - name: pump_rate_ma_15m
+        unit: L/min
+        kind: DERIVED
+        derived_from: [pump_rate, md]
+        window: trailing 15 m of MD
+        available_now: true
+      - name: spp_ma_15m
+        unit: MPa
+        kind: DERIVED
+        derived_from: [standpipe_pressure, md]
+        window: trailing 15 m of MD
+        available_now: true
+      - name: on_bottom_fraction_15m
+        unit: fraction
+        kind: DERIVED
+        derived_from: [rig_state, md]
+        window: trailing 15 m of MD
+        available_now: true
+      - name: d_rop_d_md
+        unit: m/h/m
+        kind: DERIVED
+        derived_from: [rop, md]
+        window: instantaneous causal difference
+        available_now: true
+      - name: d_pump_rate_d_md
+        unit: L/min/m
+        kind: DERIVED
+        derived_from: [pump_rate, md]
+        window: instantaneous causal difference
+        available_now: true
+      - name: dt_hours_since_run_start
+        unit: h
+        kind: DERIVED
+        derived_from: [timestamp, run_id]
+        available_now: true
+        note: Elapsed time only. Valid despite the missing timezone.
+
+  geology:
+    description: Lithology and formation context.
+    available_now: partial
+    features:
+      - name: lithology_label_raw
+        unit: free_text
+        source_table: lithology
+        source_column: lithology
+        kind: MEASURED
+        available_now: true
+        coverage: 65/65
+        note: >
+          65 rows but 57 distinct free-text strings describing cuttings.
+          This is NOT a controlled vocabulary and must be normalised into a
+          taxonomy before it is used as either a feature or a label.
+      - name: lithology_md
+        unit: m
+        source_table: lithology
+        source_column: md
+        kind: MEASURED
+        available_now: true
+
+# ---------------------------------------------------------------------------
+# Entities that do not exist. No feature may be built on these.
+# ---------------------------------------------------------------------------
+unavailable_entities:
+  formations:
+    rows: 0
+    reason: No formation tops or markers in the FORGE source set.
+  bits:
+    rows: 0
+    reason: No bit identity, type, IADC or run-interval records.
+  cement_jobs:
+    rows: 0
+    reason: No machine-readable cement job records.
+  reservoirs:
+    rows: 0
+    reason: No reservoir interval records.

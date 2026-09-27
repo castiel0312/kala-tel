@@ -1,0 +1,531 @@
+{
+  "report_id": "force2020-model-comparison",
+  "stage": "modelling / cross-model comparison",
+  "model_status": "Comparison of three untuned baselines. None of them is the best model on this dataset, none is production-ready, and none is deployed or served.",
+  "purpose": "Place the two gradient-boosted tree baselines next to the existing Random Forest baseline on identical data, features, target, split, preprocessing and metrics, and state what the comparison can and cannot support.",
+  "derivation": {
+    "entrypoint": "scripts/reports/build_model_comparison.py",
+    "fits_anything": false,
+    "note": "Every number here is read out of a committed baseline report. This script recomputes nothing, so the comparison cannot silently disagree with the reports it compares.",
+    "sources": [
+      {
+        "model": "rf",
+        "label": "Random Forest",
+        "report": "reports/force2020_rf_baseline.json"
+      },
+      {
+        "model": "xgb",
+        "label": "XGBoost",
+        "report": "reports/force2020_gbdt_baseline.json"
+      },
+      {
+        "model": "lgbm",
+        "label": "LightGBM",
+        "report": "reports/force2020_gbdt_baseline.json"
+      }
+    ]
+  },
+  "held_identical": {
+    "dataset_id": "force2020-litho-logs-v0.1",
+    "dataset_sha256": "5dbbb114e2c543a89ea980c1c9b6d0cdecc12c7acd35112d6da47fa40ce1fbb0",
+    "primary_features": [
+      "CALI",
+      "RDEP",
+      "RMED",
+      "DTC",
+      "GR"
+    ],
+    "target": "TARGET_ENCODED",
+    "target_classes": 12,
+    "split_policy": "The split is the source's own published well-level partition, inherited unchanged by the dataset-construction stage. No well is reshuffled, no depth row is reshuffled, and no split is re-derived here.",
+    "split_manifest": "data/force2020_split_manifest.csv",
+    "split_manifest_sha256": "d01e93d005c2fdda88c15bbc4ecca3e276ebe782cc6aacd80c1e1777985d1068",
+    "wells_by_split": {
+      "train": 98,
+      "hidden_test": 10,
+      "leaderboard_test": 10
+    },
+    "rows_by_split": {
+      "train": 1170511,
+      "hidden_test": 122397,
+      "leaderboard_test": 136786
+    },
+    "imputation": "median",
+    "imputation_fitted_on": "training wells only",
+    "metrics": [
+      "macro_f1",
+      "macro_f1_supported_only",
+      "weighted_f1",
+      "balanced_accuracy",
+      "penalty_score"
+    ],
+    "metric_implementation": "one shared module, data/ml/common/force2020_lithology.py",
+    "model_selection_performed": false
+  },
+  "what_differs_and_why": [
+    "The estimator and its fixed configuration. That is the subject of the comparison.",
+    "The class-balancing mechanism. A forest takes class_weight='balanced_subsample'; neither boosting library has that argument, so the same intent is per-row sample weights. Each library was measured, not assumed to behave like the forest.",
+    "LightGBM's deterministic=True and force_row_wise=True, which are reproducibility settings rather than accuracy choices."
+  ],
+  "models": {
+    "rf": {
+      "label": "Random Forest",
+      "source_report": "reports/force2020_rf_baseline.json",
+      "experiment_id": "force2020-litho-rf-v0.1",
+      "results": {
+        "hidden_test": {
+          "rows": 122397,
+          "wells": 10,
+          "metrics": {
+            "macro_f1": 0.360901,
+            "macro_f1_supported_only": 0.39371,
+            "weighted_f1": 0.663559,
+            "balanced_accuracy": 0.405585
+          },
+          "penalty_score": -0.93799,
+          "classes_zero_support": [
+            10
+          ]
+        },
+        "leaderboard_test": {
+          "rows": 136786,
+          "wells": 10,
+          "metrics": {
+            "macro_f1": 0.23316,
+            "macro_f1_supported_only": 0.279792,
+            "weighted_f1": 0.634422,
+            "balanced_accuracy": 0.330265
+          },
+          "penalty_score": -1.041775,
+          "classes_zero_support": [
+            8,
+            10
+          ]
+        }
+      }
+    },
+    "xgb": {
+      "label": "XGBoost",
+      "source_report": "reports/force2020_gbdt_baseline.json",
+      "experiment_id": "force2020-litho-xgb-v0.1",
+      "results": {
+        "hidden_test": {
+          "rows": 122397,
+          "wells": 10,
+          "metrics": {
+            "macro_f1": 0.328824,
+            "macro_f1_supported_only": 0.358718,
+            "weighted_f1": 0.573701,
+            "balanced_accuracy": 0.434784
+          },
+          "penalty_score": -1.355588,
+          "classes_zero_support": [
+            10
+          ]
+        },
+        "leaderboard_test": {
+          "rows": 136786,
+          "wells": 10,
+          "metrics": {
+            "macro_f1": 0.190448,
+            "macro_f1_supported_only": 0.228537,
+            "weighted_f1": 0.498896,
+            "balanced_accuracy": 0.365965
+          },
+          "penalty_score": -1.545335,
+          "classes_zero_support": [
+            8,
+            10
+          ]
+        }
+      }
+    },
+    "lgbm": {
+      "label": "LightGBM",
+      "source_report": "reports/force2020_gbdt_baseline.json",
+      "experiment_id": "force2020-litho-lgbm-v0.1",
+      "results": {
+        "hidden_test": {
+          "rows": 122397,
+          "wells": 10,
+          "metrics": {
+            "macro_f1": 0.294835,
+            "macro_f1_supported_only": 0.321639,
+            "weighted_f1": 0.546103,
+            "balanced_accuracy": 0.40741
+          },
+          "penalty_score": -1.466151,
+          "classes_zero_support": [
+            10
+          ]
+        },
+        "leaderboard_test": {
+          "rows": 136786,
+          "wells": 10,
+          "metrics": {
+            "macro_f1": 0.164598,
+            "macro_f1_supported_only": 0.197518,
+            "weighted_f1": 0.478562,
+            "balanced_accuracy": 0.322875
+          },
+          "penalty_score": -1.641773,
+          "classes_zero_support": [
+            8,
+            10
+          ]
+        }
+      }
+    }
+  },
+  "spread": {
+    "macro_f1": {
+      "between_models_by_split": {
+        "hidden_test": {
+          "values": [
+            0.360901,
+            0.328824,
+            0.294835
+          ],
+          "spread": 0.066066
+        },
+        "leaderboard_test": {
+          "values": [
+            0.23316,
+            0.190448,
+            0.164598
+          ],
+          "spread": 0.068562
+        }
+      },
+      "within_model_between_partitions": {
+        "rf": 0.127741,
+        "xgb": 0.138376,
+        "lgbm": 0.130237
+      },
+      "between_models_max": 0.068562,
+      "within_model_between_partitions_max": 0.138376,
+      "partition_effect_dominates": true,
+      "reading": "For macro_f1, the three models sit within 0.0686 of each other on either partition, while a single model moves by up to 0.1384 between the two partitions. The partition choice is the larger effect."
+    },
+    "macro_f1_supported_only": {
+      "between_models_by_split": {
+        "hidden_test": {
+          "values": [
+            0.39371,
+            0.358718,
+            0.321639
+          ],
+          "spread": 0.072071
+        },
+        "leaderboard_test": {
+          "values": [
+            0.279792,
+            0.228537,
+            0.197518
+          ],
+          "spread": 0.082274
+        }
+      },
+      "within_model_between_partitions": {
+        "rf": 0.113918,
+        "xgb": 0.130181,
+        "lgbm": 0.124121
+      },
+      "between_models_max": 0.082274,
+      "within_model_between_partitions_max": 0.130181,
+      "partition_effect_dominates": true,
+      "reading": "For macro_f1_supported_only, the three models sit within 0.0823 of each other on either partition, while a single model moves by up to 0.1302 between the two partitions. The partition choice is the larger effect."
+    },
+    "weighted_f1": {
+      "between_models_by_split": {
+        "hidden_test": {
+          "values": [
+            0.663559,
+            0.573701,
+            0.546103
+          ],
+          "spread": 0.117456
+        },
+        "leaderboard_test": {
+          "values": [
+            0.634422,
+            0.498896,
+            0.478562
+          ],
+          "spread": 0.15586
+        }
+      },
+      "within_model_between_partitions": {
+        "rf": 0.029137,
+        "xgb": 0.074805,
+        "lgbm": 0.067541
+      },
+      "between_models_max": 0.15586,
+      "within_model_between_partitions_max": 0.074805,
+      "partition_effect_dominates": false,
+      "reading": "For weighted_f1, the three models sit within 0.1559 of each other on either partition, while a single model moves by up to 0.0748 between the two partitions. Here the model choice is the larger effect, so this metric does separate the three models more than the partition choice does. It is still not a ranking: one number per model on ten wells carries no interval, and the ordering on the other partition is not tested."
+    },
+    "balanced_accuracy": {
+      "between_models_by_split": {
+        "hidden_test": {
+          "values": [
+            0.405585,
+            0.434784,
+            0.40741
+          ],
+          "spread": 0.029199
+        },
+        "leaderboard_test": {
+          "values": [
+            0.330265,
+            0.365965,
+            0.322875
+          ],
+          "spread": 0.04309
+        }
+      },
+      "within_model_between_partitions": {
+        "rf": 0.07532,
+        "xgb": 0.068819,
+        "lgbm": 0.084535
+      },
+      "between_models_max": 0.04309,
+      "within_model_between_partitions_max": 0.084535,
+      "partition_effect_dominates": true,
+      "reading": "For balanced_accuracy, the three models sit within 0.0431 of each other on either partition, while a single model moves by up to 0.0845 between the two partitions. The partition choice is the larger effect."
+    }
+  },
+  "diagnostics": {
+    "xgb": {
+      "primary": {
+        "title": "Primary: five log curves",
+        "features": [
+          "CALI",
+          "RDEP",
+          "RMED",
+          "DTC",
+          "GR"
+        ],
+        "class_weighting": "balanced per-row sample weights from the training partition",
+        "results": {
+          "hidden_test": {
+            "macro_f1": 0.328824,
+            "balanced_accuracy": 0.434784
+          },
+          "leaderboard_test": {
+            "macro_f1": 0.190448,
+            "balanced_accuracy": 0.365965
+          }
+        }
+      },
+      "depth_only": {
+        "title": "Depth-only diagnostic",
+        "features": [
+          "DEPTH_MD"
+        ],
+        "class_weighting": "balanced per-row sample weights from the training partition",
+        "results": {
+          "hidden_test": {
+            "macro_f1": 0.062952,
+            "balanced_accuracy": 0.142801
+          },
+          "leaderboard_test": {
+            "macro_f1": 0.024795,
+            "balanced_accuracy": 0.116876
+          }
+        }
+      },
+      "logs_plus_masks": {
+        "title": "Logs plus missingness masks",
+        "features": [
+          "CALI",
+          "RDEP",
+          "RMED",
+          "DTC",
+          "GR",
+          "CALI_MISSING",
+          "RDEP_MISSING",
+          "RMED_MISSING",
+          "DTC_MISSING",
+          "GR_MISSING"
+        ],
+        "class_weighting": "balanced per-row sample weights from the training partition",
+        "results": {
+          "hidden_test": {
+            "macro_f1": 0.320439,
+            "balanced_accuracy": 0.427596
+          },
+          "leaderboard_test": {
+            "macro_f1": 0.191031,
+            "balanced_accuracy": 0.369507
+          }
+        }
+      },
+      "primary_unweighted": {
+        "title": "Primary, unweighted refit",
+        "features": [
+          "CALI",
+          "RDEP",
+          "RMED",
+          "DTC",
+          "GR"
+        ],
+        "class_weighting": null,
+        "results": {
+          "hidden_test": {
+            "macro_f1": 0.359421,
+            "balanced_accuracy": 0.356406
+          },
+          "leaderboard_test": {
+            "macro_f1": 0.252957,
+            "balanced_accuracy": 0.304008
+          }
+        }
+      }
+    },
+    "lgbm": {
+      "primary": {
+        "title": "Primary: five log curves",
+        "features": [
+          "CALI",
+          "RDEP",
+          "RMED",
+          "DTC",
+          "GR"
+        ],
+        "class_weighting": "balanced per-row sample weights from the training partition",
+        "results": {
+          "hidden_test": {
+            "macro_f1": 0.294835,
+            "balanced_accuracy": 0.40741
+          },
+          "leaderboard_test": {
+            "macro_f1": 0.164598,
+            "balanced_accuracy": 0.322875
+          }
+        }
+      },
+      "depth_only": {
+        "title": "Depth-only diagnostic",
+        "features": [
+          "DEPTH_MD"
+        ],
+        "class_weighting": "balanced per-row sample weights from the training partition",
+        "results": {
+          "hidden_test": {
+            "macro_f1": 0.049918,
+            "balanced_accuracy": 0.135273
+          },
+          "leaderboard_test": {
+            "macro_f1": 0.028218,
+            "balanced_accuracy": 0.122872
+          }
+        }
+      },
+      "logs_plus_masks": {
+        "title": "Logs plus missingness masks",
+        "features": [
+          "CALI",
+          "RDEP",
+          "RMED",
+          "DTC",
+          "GR",
+          "CALI_MISSING",
+          "RDEP_MISSING",
+          "RMED_MISSING",
+          "DTC_MISSING",
+          "GR_MISSING"
+        ],
+        "class_weighting": "balanced per-row sample weights from the training partition",
+        "results": {
+          "hidden_test": {
+            "macro_f1": 0.131181,
+            "balanced_accuracy": 0.237861
+          },
+          "leaderboard_test": {
+            "macro_f1": 0.102926,
+            "balanced_accuracy": 0.270843
+          }
+        }
+      },
+      "primary_unweighted": {
+        "title": "Primary, unweighted refit",
+        "features": [
+          "CALI",
+          "RDEP",
+          "RMED",
+          "DTC",
+          "GR"
+        ],
+        "class_weighting": null,
+        "results": {
+          "hidden_test": {
+            "macro_f1": 0.314162,
+            "balanced_accuracy": 0.319466
+          },
+          "leaderboard_test": {
+            "macro_f1": 0.232449,
+            "balanced_accuracy": 0.27496
+          }
+        }
+      }
+    }
+  },
+  "feature_importance_pattern": {
+    "features": [
+      "CALI",
+      "RDEP",
+      "RMED",
+      "DTC",
+      "GR"
+    ],
+    "random_forest_impurity_share": {
+      "CALI": 0.198661,
+      "RDEP": 0.164365,
+      "RMED": 0.159272,
+      "DTC": 0.274795,
+      "GR": 0.202907
+    },
+    "xgboost_gain_share": {
+      "CALI": 0.143994,
+      "RDEP": 0.131279,
+      "RMED": 0.152512,
+      "DTC": 0.33699,
+      "GR": 0.235225
+    },
+    "lightgbm_gain_share": {
+      "CALI": 0.121272,
+      "RDEP": 0.10369,
+      "RMED": 0.24681,
+      "DTC": 0.119047,
+      "GR": 0.409181
+    },
+    "caution": "The forest's number is mean decrease in impurity; the boosters' is total loss reduction over a different number of trees with a different growth rule. These are three different quantities and are not ranked against each other. Only the pattern is comparable: which curve each model leans on most."
+  },
+  "no_winner": {
+    "declared": true,
+    "metrics_where_partition_effect_dominates": [
+      "Balanced accuracy",
+      "Macro F1 (all 12 classes)",
+      "Macro F1 (classes with support)"
+    ],
+    "metrics_where_model_effect_dominates": [
+      "Weighted F1"
+    ],
+    "reason": "Each model is scored on two ten-well partitions. For Balanced accuracy, Macro F1 (all 12 classes), Macro F1 (classes with support) the gap between the two partitions, for a single model, is larger than the gap between the three models, so a difference of the size seen here does not distinguish the models: it distinguishes which ten wells were held out. A model that leads on one partition and trails on the other is reporting the wells, not its own quality. No model is called best, and no average across the two partitions is computed, because that average would hide the disagreement it exists to resolve.",
+    "exceptions_stated_plainly": "This is not true of every metric. On Weighted F1 the gap between the models is larger than the gap between the partitions, so that metric does separate the three models more than the partition choice does. It is reported as a difference, not as a ranking, for two reasons: a single number per model on ten wells carries no interval, and weighted F1 is dominated by the two large classes, so it is the metric least able to see the rare classes that account for most of the difficulty in this task. Where the metric and the reading disagree, the reading above is the one that governs."
+  },
+  "limitations": [
+    "Three fixed configurations on one dataset. Nothing here bounds how much a tuned model of any of these three families could reach.",
+    "Each model is fitted once on 98 wells. No repeated split, no cross-validation inside the training wells, and therefore no confidence interval on any number here.",
+    "The two evaluation partitions disagree with each other by more than most of the differences between the three models, so small gaps are not interpretable.",
+    "Feature importance is reported per library and is not comparable across the three as a number.",
+    "The comparison covers five log curves. It says nothing about any other feature set, and in particular nothing about a model that uses DEPTH_MD, which the Random Forest stage found to be strong on its own."
+  ],
+  "reproducibility": {
+    "regenerate": "python scripts/reports/build_model_comparison.py",
+    "verify": "python scripts/reports/build_model_comparison.py --check",
+    "deterministic": true,
+    "contains_timings": false
+  }
+}

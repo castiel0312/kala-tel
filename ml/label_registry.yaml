@@ -1,0 +1,269 @@
+# NWIS canonical label registry
+#
+# A label is a documented, source-backed fact about a known point in time or
+# depth. This registry exists to stop the most expensive mistake in this
+# project: quietly manufacturing labels so a model has something to fit.
+#
+# Current reality, stated once so nobody has to rediscover it:
+#   1 populated well, 44 events total, 0 formation rows, 0 cement job rows.
+#   Event types present: EQUIPMENT_FAILURE 26, STUCK_PIPE 10, CEMENT_FAILURE 4,
+#   WASHOUT 1, WELLBORE_INSTABILITY 1, MUD_LOSS 1, PACK_OFF 1.
+#
+# Consequence: no hazard model here is trainable on this dataset. The registry
+# records what each model WOULD need, and marks it unavailable. It does not
+# invent it.
+
+registry_version: 1
+dataset_version: nwis-forge16b-v0.2
+label_source_table: events
+identity_column: event_id
+time_column: start_time
+depth_columns: {start_md: null_all_rows, end_md: populated}
+
+# ---------------------------------------------------------------------------
+# Label status vocabulary
+# ---------------------------------------------------------------------------
+status_values:
+  AVAILABLE:
+    meaning: Labels exist in the canonical data and can be built today.
+  AVAILABLE_NORMALISATION_REQUIRED:
+    meaning: >
+      Labels exist but are not yet in a usable form. A documented
+      normalisation step must be written first, and it must be reviewed.
+  INSUFFICIENT_COUNT:
+    meaning: >
+      Labels exist but the count is far below the minimum for a defensible
+      model. Building a model anyway is not prohibited; reporting a performance
+      number from it is.
+  ABSENT:
+    meaning: >
+      No source-backed labels exist in the canonical dataset. Do not construct
+      labels by rule, threshold, or proxy.
+  BLOCKED_NO_MULTIPLE_WELLS:
+    meaning: >
+      The task is structurally impossible on one well regardless of label count.
+
+# Minimum label counts. These are engineering floors for reporting a number,
+# not scientific claims of sufficiency.
+minimum_usable_labels:
+  binary_hazard: 200
+  multiclass_event: 500
+  well_grouped_evaluation: 5
+  note: >
+    well_grouped_evaluation is the binding constraint for this project. A
+    Leave-One-Well-Out score with 1 well is not an evaluation, it is a
+    training score.
+
+label_construction_rules:
+  - id: R1
+    rule: A label must trace to a source_document and source_page in events.
+  - id: R2
+    rule: >
+      Labels may only be derived from columns that are populated. events.start_md,
+      events.start_tvd, events.end_tvd, events.formation, events.mitigation and
+      events.outcome are 100% null and yield no label.
+  - id: R3
+    rule: >
+      A positive window is defined as [start_time - lookback, start_time). A
+      sample is positive only if it falls in that window. The negative class is
+      drawn from the same well, same hole section, and outside every positive
+      window.
+  - id: R4
+    rule: >
+      Negatives are not "the absence of an event row". A period of no recorded
+      event is only a negative if the daily report covering that period was
+      itself ingested. Provenance of the negative matters as much as the positive.
+  - id: R5
+    rule: >
+      Every label row carries data_origin and the event_id it derives from.
+  - id: R6
+    rule: >
+      No label may be created by thresholding a feature. If a rule can produce
+      the label from the features, the model learns the rule, not the physics.
+
+# ---------------------------------------------------------------------------
+# Per-model label contract
+# ---------------------------------------------------------------------------
+models:
+
+  mud_loss:
+    status: INSUFFICIENT_COUNT
+    available_labels: 1
+    label_ids: [FORGE16B7832-01-EVT-00001 family, event_type=MUD_LOSS]
+    observed_types: {MUD_LOSS: 1}
+    well_count: 1
+    positives_needed_for_binary_hazard: 200
+    target_definition: >
+      Binary. Positive = a sample in the trailing window before a confirmed
+      MUD_LOSS event onset. Negative = a sample in an ingested daily-report
+      period with no MUD_LOSS onset.
+    event_time_column: start_time
+    event_depth_column: end_md
+    depth_usable: false
+    depth_note: >
+      Only end_md is populated. A depth window cannot be built, so the label is
+      time-anchored only.
+    notes: >
+      1 positive. A model fitted on this would memorise a single event. The
+      pit_volume channel exists and is the physically correct signal, but the
+      label count is the blocker, not the data.
+    leakage_notes:
+      - pit_volume is a direct consequence of mud loss (L3). It must be
+        excluded from the label window or truncated at onset.
+    required_external_data: >
+      A multi-well drilling dataset with mud-loss event logs, e.g. Petrobras 3W
+      or DataDRILL (see data/ml_task_registry.csv). Both are PLANNED and neither
+      has been downloaded.
+
+  stuck_pipe:
+    status: INSUFFICIENT_COUNT
+    available_labels: 11
+    observed_types: {STUCK_PIPE: 10, PACK_OFF: 1}
+    well_count: 1
+    positives_needed_for_binary_hazard: 200
+    target_definition: >
+      Binary. Positive = trailing window before a STUCK_PIPE onset.
+      PACK_OFF is tracked separately because data/event_types.csv records that
+      pack-off in this source is usually a casing or wellhead pack-off, not a
+      stuck-pipe pack-off.
+    event_time_column: start_time
+    event_depth_column: end_md
+    depth_usable: false
+    notes: >
+      11 positives against a floor of 200, from a single well. The mechanical
+      signal (rop, wob, rpm, hookload) is present and is the right signal. The
+      blocker is label count and well count, not features.
+    leakage_notes:
+      - rpm and rop collapse at onset as a consequence of the sticking (L3).
+        Truncate at onset rather than including the stalled interval.
+    required_external_data: >
+      Stuck-pipe labelled multi-well data, e.g. HaythamElmousalami/Drilling-Stuck-Pipe-Prediction.
+
+  kick:
+    status: ABSENT
+    available_labels: 0
+    observed_types: {}
+    well_count: 1
+    target_definition: >
+      Binary kick detection. Would require gas influx or flow-out imbalance as
+      the label source.
+    notes: >
+      Zero kick events, and the physical channels that would carry the signal
+      are all 100% null: gas_total, ecd, flow_in, flow_out, h2s. Neither the
+      label nor the signal exists. This is the least ready model in the set.
+    leakage_notes:
+      - gas_total is a consequence of a kick (L3). It is a label source, never
+        a feature, in any kick model.
+    required_external_data: >
+      A dataset with gas and flow channels plus kick logs. DataDRILL is the
+      candidate recorded in data/ml_task_registry.csv.
+
+  overpressure:
+    status: ABSENT
+    available_labels: 0
+    observed_types: {}
+    well_count: 1
+    target_definition: >
+      Predict pore pressure or an ECD-derived overpressure margin against a
+      measured formation pressure.
+    notes: >
+      No ECD column, no measured formation pressure, no porosity or permeability
+      (reservoirs is empty). Overpressure modelling is normally a
+      petrophysical task and the petrophysical inputs are absent.
+    required_external_data: >
+      Formation pressure test data plus wireline logs. FORCE 2020 supplies logs
+      for the geology side but not formation pressure tests.
+
+  torque_spike:
+    status: ABSENT
+    available_labels: 0
+    observed_types: {}
+    well_count: 1
+    target_definition: >
+      Detect abnormal torque-and-drag excursions against a mechanical baseline.
+    notes: >
+      drilling_timeseries.torque is 100% null and drag is 100% null. The model
+      name is the signal. There is no signal.
+    required_external_data: >
+      A torque and drag channel. pro-well-plan/torque_drag is a physics model,
+      not a labelled dataset, and would supply a simulator rather than labels.
+
+  wellbore_instability:
+    status: INSUFFICIENT_COUNT
+    available_labels: 2
+    observed_types: {WELLBORE_INSTABILITY: 1, WASHOUT: 1}
+    well_count: 1
+    target_definition: >
+      Binary. Positive = trailing window before a confirmed wellbore
+      instability or washout onset.
+    notes: >
+      2 positives. A washout at 349.30 m is a real report but it is one report.
+    leakage_notes:
+      - A washout reduces the effective hole gauge, which changes WOB response.
+        Do not include post-onset caliper-affected WOB (L3).
+    required_external_data: >
+      Caliper and image logs plus instability reports, multi-well.
+
+  lithology:
+    status: AVAILABLE_NORMALISATION_REQUIRED
+    available_labels: 65
+    label_ids_column: lithology.lithology
+    well_count: 1
+    positives_needed_for_multiclass: 500
+    target_definition: >
+      Multiclass classification of lithology at depth. 65 labelled depths in
+      one well.
+    normalisation_required: true
+    normalisation_note: >
+      The 65 lithology values are 57 distinct free-text cuttings descriptions
+      with heavy near-duplication, for example "HRNBLNDE: 30% CLAY: LHT TAN,
+      NON-SWELLING CLAY" and "MD HRNBLNDE, TR BIOTIE, TR CHLOR." A controlled
+      taxonomy must be built and reviewed before this is either a label set or
+      a feature. Building that taxonomy is a geology task, not an ML task, and
+      it must be versioned the same way conversion_version is.
+    notes: >
+      This is the only model in the set with real labels at a usable count. It
+      is still blocked on taxonomy and on well count, and it has no log curves:
+      the only features available are depth, trajectory and mud temperature.
+    required_external_data: >
+      FORCE 2020 for a real multi-well log population, which also supplies the
+      standard evaluation protocol this dataset cannot support alone.
+
+  cementing:
+    status: INSUFFICIENT_COUNT
+    available_labels: 4
+    observed_types: {CEMENT_FAILURE: 4}
+    well_count: 1
+    target_definition: >
+      Binary cementing risk, or a classifier over cement job outcomes.
+    notes: >
+      cement_jobs is 0 rows, so there is no slurry density, volume, pressure or
+      placement record to model from. The 4 CEMENT_FAILURE events carry no
+      numeric attributes beyond depth and duration. casings provides 158 rows
+      of hole geometry, which is context but not a cementing outcome.
+    required_external_data: >
+      Machine-readable cement job records with results, multi-well.
+
+  historical_analogue:
+    status: BLOCKED_NO_MULTIPLE_WELLS
+    available_labels: 0
+    well_count: 1
+    target_definition: >
+      Retrieve and rank historically similar wells or intervals using curve
+      shape and drilling-response similarity.
+    notes: >
+      An analogue model is structurally impossible on one well: there is nothing
+      to be analogous to. The FORGE well is a geothermal research well, so even
+      a second FORGE well would not substitute for an oil-well population.
+      This is the one model where the blocker is well population, not labels.
+    required_external_data: >
+      A multi-well population. FORCE 2020 is the recorded candidate.
+
+# ---------------------------------------------------------------------------
+# Entity status, for cross-reference with feature_registry.yaml
+# ---------------------------------------------------------------------------
+absent_entities:
+  formations: {rows: 0, status: SOURCE_NOT_AVAILABLE}
+  bits: {rows: 0, status: SOURCE_NOT_AVAILABLE}
+  cement_jobs: {rows: 0, status: SOURCE_NOT_AVAILABLE}
+  reservoirs: {rows: 0, status: SOURCE_NOT_AVAILABLE}

@@ -1,0 +1,246 @@
+{
+  "bundle": "kickdet",
+  "version": "1.0.0",
+  "generated_utc": "2026-09-27T16:11:20+00:00",
+  "model": {
+    "artifact": "model/kick_detector_35f.joblib",
+    "n_features": 35,
+    "alarm_threshold": 0.22,
+    "warmup": 60,
+    "seconds_per_sample": 0.3595890410958904,
+    "feature_config": {
+      "use_depth": false,
+      "use_fpress": false,
+      "include_derived": true,
+      "only": [
+        "FOut",
+        "FIn",
+        "DPPress",
+        "WBoPress",
+        "WoBit",
+        "HLoad",
+        "RoPen",
+        "CircFlow",
+        "SMSpeed",
+        "FOut_minus_FIn",
+        "FOut_over_FIn",
+        "WoBit_over_HLoad",
+        "DPPress_minus_WBoPress",
+        "RoPen_over_WoBit",
+        "FOut_mean20",
+        "FOut_z20",
+        "FIn_mean20",
+        "FIn_z20",
+        "DPPress_mean20",
+        "DPPress_z20",
+        "WBoPress_mean20",
+        "WBoPress_z20",
+        "WoBit_mean20",
+        "WoBit_z20",
+        "HLoad_mean20",
+        "HLoad_z20",
+        "RoPen_mean20",
+        "RoPen_z20",
+        "CircFlow_mean20",
+        "CircFlow_z20",
+        "SMSpeed_mean20",
+        "SMSpeed_z20",
+        "FOut_minus_FIn_z20",
+        "WoBit_kickdir_z20",
+        "HLoad_kickdir_z20"
+      ]
+    },
+    "feature_names": [
+      "FOut",
+      "FIn",
+      "DPPress",
+      "WBoPress",
+      "WoBit",
+      "HLoad",
+      "RoPen",
+      "CircFlow",
+      "SMSpeed",
+      "FOut_minus_FIn",
+      "FOut_over_FIn",
+      "WoBit_over_HLoad",
+      "DPPress_minus_WBoPress",
+      "RoPen_over_WoBit",
+      "FOut_mean20",
+      "FOut_z20",
+      "FIn_mean20",
+      "FIn_z20",
+      "DPPress_mean20",
+      "DPPress_z20",
+      "WBoPress_mean20",
+      "WBoPress_z20",
+      "WoBit_mean20",
+      "WoBit_z20",
+      "HLoad_mean20",
+      "HLoad_z20",
+      "RoPen_mean20",
+      "RoPen_z20",
+      "CircFlow_mean20",
+      "CircFlow_z20",
+      "SMSpeed_mean20",
+      "SMSpeed_z20",
+      "FOut_minus_FIn_z20",
+      "WoBit_kickdir_z20",
+      "HLoad_kickdir_z20"
+    ]
+  },
+  "environment": {
+    "python": "3.13.2",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "packages": {
+      "numpy": "2.2.4",
+      "pandas": "2.2.3",
+      "sklearn": "1.9.0",
+      "joblib": "1.6.0",
+      "catboost": "1.2.10",
+      "lightgbm": "4.7.0"
+    }
+  },
+  "data": {
+    "file": "data/Kick_Detection.csv",
+    "rows": 2337,
+    "columns": 28,
+    "note": "row 0 is a startup artifact and is excluded; the feature builder additionally drops a 60-sample warm-up, leaving 2276 scored samples",
+    "licence": "CC-BY-4.0"
+  },
+  "n_files": 22,
+  "total_bytes": 987817,
+  "files": [
+    {
+      "path": "data/Kick_Detection.csv",
+      "bytes": 581598,
+      "sha256": "fea381a1aa3facb13b0ebbe7de1d9dd91e941acaf39c75feb07ae54de55e13d8",
+      "description": "DataDRILL source data, 2337 rows, CC-BY-4.0"
+    },
+    {
+      "path": "data/PROVENANCE.json",
+      "bytes": 1073,
+      "sha256": "aa87ff90ffd357ec6f9feadf0c1af2816a27b2256f578e2d8cdeb9dad1c523ba",
+      "description": "Data origin, DOI, licence"
+    },
+    {
+      "path": "docs/ARCHITECTURE.md",
+      "bytes": 5068,
+      "sha256": "3b28152b93f9eae51b613219f0e6596f30a94a72adecdb0b74a01878e42adf8c",
+      "description": "Pipeline diagram and rationale"
+    },
+    {
+      "path": "examples/example_run.py",
+      "bytes": 2996,
+      "sha256": "698f6cd1498e08978593d3342243eb7cd035543ece6816485c0543f8bce88958",
+      "description": "Worked example"
+    },
+    {
+      "path": "kickdet/__init__.py",
+      "bytes": 1234,
+      "sha256": "f8639619b5675dbd0af09921bc7543ed8300cc68e935ebcb60002e98623adf31",
+      "description": ""
+    },
+    {
+      "path": "kickdet/columns.py",
+      "bytes": 4556,
+      "sha256": "3827c5a12dd78ed36bfef69eee87d570a3c6cddbbed6a5730c40cfb6a02744e8",
+      "description": "Channel registry, banned and dead channels"
+    },
+    {
+      "path": "kickdet/detector.py",
+      "bytes": 12227,
+      "sha256": "f5900f617ca704af4fba74e30a6c64772fa543c8e5145991bae1376752d6d532",
+      "description": "KickDetector: load, score, DetectorReport"
+    },
+    {
+      "path": "kickdet/ensemble.py",
+      "bytes": 2305,
+      "sha256": "9c5475b23d5a9b0b773510ca2045e7d3d14c3ead0ae3c7ca5a3452a17cffbbc1",
+      "description": "MeanEnsemble: equal-weight mean of the three members"
+    },
+    {
+      "path": "kickdet/episodes.py",
+      "bytes": 2725,
+      "sha256": "9d70b5406ddf50f6745212189f2409663a5a9a546298b3de8412df709950d4af",
+      "description": "Operator-visible alarm-episode accounting"
+    },
+    {
+      "path": "kickdet/features.py",
+      "bytes": 14894,
+      "sha256": "cc88c2f878325a460b0ec33ffae11ae6b1a3513a55665bd5bbbebbfded6ff911",
+      "description": "The 35 causal features"
+    },
+    {
+      "path": "kickdet/onset.py",
+      "bytes": 4141,
+      "sha256": "13ac053aedb74afdbc25708fc1847772d7c95813119fa85e10c8739f8abfe4e2",
+      "description": "Physical-influx onset detection"
+    },
+    {
+      "path": "kickdet/stress.py",
+      "bytes": 7746,
+      "sha256": "645a7b27630ed0a9c6e70966f7f38efefbce43416717bd04d450c4342ae56622",
+      "description": "240-event synthetic grid; false-alarm counting"
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 1509,
+      "sha256": "5443aa28528a8ddf176c580d522f4b9b67cd6f64b48d315716c9e3e56843670d",
+      "description": "MIT for code; CC-BY-4.0 for the bundled data and derived model"
+    },
+    {
+      "path": "model/kick_detector_35f.joblib",
+      "bytes": 301206,
+      "sha256": "a1988a5a65b998fffc46cd1b32e8b70f1eafb89b03cff7605f02af873d526b4e",
+      "description": "The model artifact"
+    },
+    {
+      "path": "MODEL_CARD.md",
+      "bytes": 6560,
+      "sha256": "a8feb5338f87aabfe652bf0cc6532798ea10ddbd3c399a2fde25f1d96e2383e2",
+      "description": "Data, features, model, metrics, limitations, intended use"
+    },
+    {
+      "path": "README.md",
+      "bytes": 6935,
+      "sha256": "ce99cbab09a7cafe2cce88ff42bd57408ad070a277213ac1c267654476658dc2",
+      "description": "Quick start, layout, measured-vs-claimed summary"
+    },
+    {
+      "path": "requirements.txt",
+      "bytes": 346,
+      "sha256": "ecb1b0d6af1a920a929cc2b9037f2dee1740cd4e34b88b29635ef294c6860e63",
+      "description": "Pinned dependency versions"
+    },
+    {
+      "path": "scripts/build_manifest.py",
+      "bytes": 4395,
+      "sha256": "57c2fc60067a95fce0423ff409fb9acc29b4c708d64366a12bfc7aec01e6d16a",
+      "description": "This script"
+    },
+    {
+      "path": "scripts/finalize_bundle.py",
+      "bytes": 2782,
+      "sha256": "d2da8f350cda3d4a879bff2435b605ad1cfb1ca659c343d3779028659c77b876",
+      "description": "One-time artifact finaliser (research repo only)"
+    },
+    {
+      "path": "scripts/predict.py",
+      "bytes": 4327,
+      "sha256": "916d56400f3fa8580639b1aa53bf9492403ca19dc61f9fa730682a524edf1cc3",
+      "description": "Command-line inference"
+    },
+    {
+      "path": "scripts/retrain.py",
+      "bytes": 13745,
+      "sha256": "8930989751f5791484f8ad3d3217e71768c787beb6effbe63b60a9e512181602",
+      "description": "Full reproduction from the raw CSV"
+    },
+    {
+      "path": "scripts/verify.py",
+      "bytes": 5449,
+      "sha256": "23a19390ff3ce3183d3ed33496ec0e08c55940bd5f726a3af8c59b38485246fa",
+      "description": "Self-contained verification checks"
+    }
+  ]
+}

@@ -1,0 +1,388 @@
+# External dataset registry
+#
+# Datasets that are NOT the NWIS canonical dataset. This file exists to keep that
+# boundary explicit and machine-checkable, because the two failure modes are
+# symmetric and both are expensive:
+#
+#   1. Pretending an external dataset is in the canonical set, so a report cites
+#      row counts it does not have.
+#   2. Writing external rows into data/processed/ or into a canonical label
+#      vocabulary, so a frozen dataset stops being frozen.
+#
+# Nothing here authorises ingestion. A dataset listed here is a candidate with a
+# recorded provenance and a recorded status; turning it into a dataset is a
+# separate, explicit decision, recorded by moving the entry's status to INGESTED
+# and adding the dataset block that names the built artifact.
+#
+# The counterpart to this file is ml/label_registry.yaml, which covers the
+# canonical nwis-forge16b-v0.2 dataset only. A model may appear in one or both,
+# never with a shared label vocabulary unless a mapping file exists and says so.
+
+registry_version: 1
+canonical_dataset_version: nwis-forge16b-v0.2
+
+# Vocabulary for `status`. Deliberately narrower than a free-text field.
+status_values:
+  PLANNED:
+    meaning: Identified as a candidate. No bytes fetched.
+  FETCHED:
+    meaning: >
+      Bytes are present locally and pinned to a commit or checksum, but nothing
+      has been read end to end.
+  INSPECTED:
+    meaning: >
+      Every published file has been read and its schema, counts, missing-value
+      convention and licence recorded. No dataset has been built and no model
+      has been trained.
+  INGESTED:
+    meaning: >
+      A dataset has been built from this source under a generated-artifact root.
+      Requires an entry in `artifact_root` and a transform script. This is the
+      current state of FORCE2020. Ingested is not modelled: building the table
+      says nothing about whether a model was trained on it.
+
+# Rules that hold for every entry. These are the testable statements in
+# tests/test_force2020_inspection.py and tests/test_ml_scaffolding.py.
+rules:
+  - id: X1
+    rule: >
+      An external dataset is never written to data/processed/ or data/ml/. Those
+      paths are frozen and contract-only respectively.
+  - id: X2
+    rule: >
+      An external label vocabulary is never mapped onto a canonical vocabulary
+      without a separate, reviewed mapping file that is committed.
+  - id: X3
+    rule: >
+      A source is only INGESTED if it declares an artifact_root under
+      data/interim/, which is gitignored.
+  - id: X4
+    rule: >
+      Every entry carries a licence and, where the source has none, says so
+      explicitly rather than inheriting a neighbour's licence.
+  - id: X5
+    rule: >
+      Inspection reports the bytes. It does not repair them: sentinel values,
+      missing values and disagreements with the source's own documentation are
+      recorded, not silently corrected.
+
+datasets:
+  FORCE2020:
+    task: lithology prediction from well logs
+    relevant_to_models: [lithology, historical_analogue]
+    status: INGESTED
+
+    source:
+      name: FORCE 2020 Machine Learning Competition - lithofacies prediction
+      repository: https://github.com/bolgebrygg/Force-2020-Machine-Learning-competition
+      resolved_commit_sha: c8d01ee92c1c8e1ecba36f96cca6ea7b689338a1
+      access_method: partial git clone (blobless) + sparse checkout
+      local_path: data/raw/force2020
+      archive_doi: 10.5281/zenodo.4351156
+      archive_concept_doi: 10.5281/zenodo.4351155
+      citation: >
+        Bormann P., Aursand P., Dilib F., Dischington P., Manral S. 2020.
+        FORCE Machine Learning Competition.
+        https://github.com/bolgebrygg/Force-2020-Machine-Learning-competition
+      licence: CC-BY-4.0
+      licence_evidence: >
+        Zenodo record 10.5281/zenodo.4351156 declares cc-by-4.0 for the whole
+        deposit.
+      licence_upstream: NPD/Equinor Norwegian Petroleum Directorate licence NLOD 2.0
+      licence_gap: >
+        The GitHub repository carries no dataset-level LICENSE file. The CC-BY-4.0
+        above is the Zenodo deposit licence; the upstream Norwegian log data is
+        NLOD 2.0. Both are permissive and require attribution. Recorded rather
+        than resolved, because resolving it is a legal question, not a data one.
+
+    what_it_is:
+      kind: well_log_lithofacies_supervised
+      geography: Norwegian Continental Shelf (NPD)
+      wells: 118
+      well_disjoint_across_splits: true
+      log_curves: 20
+      classes: 12
+      labelled_rows: 1429694
+      splits:
+        train: {rows: 1170511, wells: 98, labelled: true}
+        hidden_test: {rows: 122397, wells: 10, labelled: true}
+        leaderboard_test_features: {rows: 136786, wells: 10, labelled: false}
+        leaderboard_test_target: {rows: 136786, wells: 10, labelled: true}
+      identifiers:
+        well: WELL
+        depth: DEPTH_MD
+        depth_unit: m
+      target_column: FORCE_2020_LITHOFACIES_LITHOLOGY
+      target_metadata_columns: [FORCE_2020_LITHOFACIES_CONFIDENCE]
+      missing_value_convention:
+        csv: empty field
+        las: -999.25
+    evaluation_metric: >
+      A geologically motivated penalty matrix, published as penalty_matrix.npy.
+      Accuracy or F1 is not comparable to the published competition results.
+
+    # The published matrix, now recorded in the repository so scores can be
+    # computed at all. Read from the pinned source, not reconstructed.
+    penalty_matrix:
+      status: RECORDED
+      is_authoritative: true
+      is_homemade: false
+      recorded_at: ml/force2020_penalty_matrix.json
+      npy_present_in_checkout: false
+      values_source: >
+        penalty_matrix.npy is not in the pinned checkout. The published values are
+        the stored output of the pinned starter notebook's cell 50, the cell that
+        printed the matrix loaded by cell 49. Read verbatim from there; nothing
+        estimated, rounded or reconstructed.
+      scoring: S = -(1/N) * sum_i A[y_true_i, y_pred_i]; perfect score 0
+      index_order: >
+        The matrix is indexed in the COMPETITION's class order, from its own
+        lithology_numbers dict, which is NOT this repository's encoded target.
+        data/ml/common/force2020_lithology.py owns the mapping.
+
+    # Three baseline models, all built from the ingested table, all on identical
+    # data, features, target, split, preprocessing, metrics and penalty matrix.
+    # Not tuned, no model is the best available model, none is production-ready,
+    # none is deployed.
+    models:
+      force2020-litho-rf-v0.1:
+        task: lithology
+        role: baseline
+        family: sklearn.ensemble.RandomForestClassifier
+        status: BASELINE_TRAINED_AND_SCORED
+        tuned: false
+        deployed: false
+        features: [CALI, RDEP, RMED, DTC, GR]
+        depth_feature: false
+        target: TARGET_ENCODED
+        class_count: 12
+        split: the source's own well-level 98/10/10 partition, unchanged
+        missing_values: median imputed inside the pipeline, fitted on train rows only
+        report: reports/force2020_rf_baseline.md
+        code: data/ml/lithology/training/train_rf_baseline.py
+        artifacts: data/interim/ml/force2020_litho/ (gitignored, regenerated)
+        not_done: >
+          No CNN, neural network, hyperparameter search, feature selection, API,
+          frontend or additional dataset.
+
+      force2020-litho-xgb-v0.1:
+        task: lithology
+        role: baseline
+        family: xgboost.XGBClassifier
+        status: BASELINE_TRAINED_AND_SCORED
+        tuned: false
+        deployed: false
+        features: [CALI, RDEP, RMED, DTC, GR]
+        depth_feature: false
+        target: TARGET_ENCODED
+        class_count: 12
+        split: the source's own well-level 98/10/10 partition, unchanged
+        missing_values: median imputed inside the pipeline, fitted on train rows only
+        class_imbalance: balanced per-row sample weights, computed from train rows only
+        report: reports/force2020_gbdt_baseline.md
+        code: data/ml/lithology/training/train_gbdt_baseline.py
+        artifacts: data/interim/ml/force2020_litho/ (gitignored, regenerated)
+        build_command: make train-force2020-gbdt
+        verify_command: make verify-force2020-gbdt
+        score_command: make score-force2020-gbdt
+        diagnostics: DEPTH_MD alone, the five missingness masks, an unweighted refit
+        not_done: >
+          No CNN, neural network, hyperparameter search, feature selection, API,
+          frontend or additional dataset. num_class is stated rather than inferred
+          so a silently missing rare class cannot produce a narrower model.
+
+      force2020-litho-lgbm-v0.1:
+        task: lithology
+        role: baseline
+        family: lightgbm.LGBMClassifier
+        status: BASELINE_TRAINED_AND_SCORED
+        tuned: false
+        deployed: false
+        features: [CALI, RDEP, RMED, DTC, GR]
+        depth_feature: false
+        target: TARGET_ENCODED
+        class_count: 12
+        split: the source's own well-level 98/10/10 partition, unchanged
+        missing_values: median imputed inside the pipeline, fitted on train rows only
+        class_imbalance: balanced per-row sample weights, computed from train rows only
+        report: reports/force2020_gbdt_baseline.md
+        code: data/ml/lithology/training/train_gbdt_baseline.py
+        artifacts: data/interim/ml/force2020_litho/ (gitignored, regenerated)
+        build_command: make train-force2020-gbdt
+        verify_command: make verify-force2020-gbdt
+        score_command: make score-force2020-gbdt
+        diagnostics: DEPTH_MD alone, the five missingness masks, an unweighted refit
+        portability_note: >
+          LightGBM must be imported before scikit-learn on this Windows host or
+          the process dies with an access violation. The shared module enforces
+          the order and a test guards it.
+        not_done: >
+          No CNN, neural network, hyperparameter search, feature selection, API,
+          frontend or additional dataset.
+
+    # The three baselines read side by side. Derived entirely from the reports
+    # above, so it cannot disagree with them.
+    comparison:
+      report_id: force2020-model-comparison
+      report: reports/force2020_model_comparison.md
+      code: scripts/reports/build_model_comparison.py
+      build_command: make build-force2020-model-comparison
+      verify_command: make check-force2020-model-comparison
+      fits_anything: false
+      winner: none
+      winner_note: >
+        Each model is scored on two ten-well partitions. On macro F1,
+        supported-only macro F1 and balanced accuracy the gap between the
+        partitions exceeds the gap between the models, so those metrics do not
+        separate the models. Weighted F1 is the exception and the report says so
+        rather than averaging it away. No model is called best.
+      metrics_where_partition_effect_dominates:
+        - macro_f1
+        - macro_f1_supported_only
+        - balanced_accuracy
+      metrics_where_model_effect_dominates:
+        - weighted_f1
+      not_done: >
+        No cross-validation, no repeated runs, no confidence intervals, no model
+        promoted to production.
+
+    # X2 in force. The vocabularies are different geological objects and this
+    # file records that rather than papering over it.
+    label_vocabulary:
+      name: NPD lithostratigraphic lithofacies
+      distinct_from_canonical: true
+      canonical_vocabulary: FORGE_UTAH_16B
+      mapping_to_canonical: null
+      mapping_note: >
+        No mapping exists and none is proposed. FORCE 2020 classes are
+        lithostratigraphic units interpreted across a whole shelf; FORGE_UTAH_16B
+        is a cuttings description from one Utah well. Mapping one onto the other
+        would invent geology.
+      codes:
+        '30000': Sandstone
+        '65030': Sandstone/Shale
+        '65000': Shale
+        '80000': Marl
+        '74000': Dolomite
+        '70000': Limestone
+        '70032': Chalk
+        '88000': Halite
+        '86000': Anhydrite
+        '99000': Tuff
+        '90000': Coal
+        '93000': Basement
+
+    # X3. Declared before the transform was written, and honoured by it: the
+    # builder refuses any --artifact-root that is not under data/interim/.
+    artifact_root: data/interim/ml/force2020_litho
+    generated_subdirs: [source, labels, features, training, evaluation]
+    artifact_root_note: >
+      Gitignored, so the built table is reproduced by a command rather than
+      committed. Populated by scripts/ingest/build_force2020_dataset.py, which
+      wrote only the features/ subtree. source/, labels/, training/ and
+      evaluation/ are still empty, because the stage that would fill them has
+      not been run.
+
+    committed_artifacts:
+      - reports/force2020_inspection.json
+      - reports/force2020_inspection.md
+      - data/force2020_wells.csv
+      - reports/force2020_characterization.json
+      - reports/force2020_characterization.md
+      - data/force2020_well_missingness.csv
+      - reports/force2020_dataset.json
+      - reports/force2020_dataset.md
+      - data/force2020_split_manifest.csv
+
+    # The built table, as the registry sees it. The generated CSV itself is not
+    # listed: it lives under the gitignored artifact_root and is described here
+    # and in the sidecar manifest instead.
+    dataset:
+      dataset_id: force2020-litho-logs-v0.1
+      transform_script: scripts/ingest/build_force2020_dataset.py
+      build_command: make build-force2020-dataset
+      verify_command: make verify-force2020-dataset
+      generated_files:
+        table: data/interim/ml/force2020_litho/features/force2020_litho_logs_v0_1.csv
+        sidecar_manifest: data/interim/ml/force2020_litho/features/force2020_litho_logs_v0_1.manifest.json
+        exclusion_ledger: data/interim/ml/force2020_litho/features/force2020_litho_logs_v0_1.exclusions.csv
+      grain: one row per (WELL, DEPTH_MD) at source grain
+      rows: 1429694
+      wells: 118
+      source_rows_read: 1429694
+      rows_excluded: 0
+      column_count: 20
+      numeric_feature_columns: [CALI, RDEP, RMED, DTC, GR]
+      missing_mask_columns:
+        [CALI_MISSING, RDEP_MISSING, RMED_MISSING, DTC_MISSING, GR_MISSING]
+      identifier_columns: [WELL, DEPTH_MD]
+      target_columns:
+        raw: TARGET_LABEL_RAW
+        class_name: TARGET_CLASS
+        encoded: TARGET_ENCODED
+      provenance_columns:
+        - SOURCE_ID
+        - SOURCE_COMMIT
+        - SOURCE_FILE
+        - SPLIT
+        - SOURCE_SPLIT
+      split_manifest: data/force2020_split_manifest.csv
+      split_unit: WELL
+      reshuffled: false
+      split_note: >
+        The source's own published partition, inherited unchanged. It is already
+        well-disjoint, so a random well-level split would only discard it.
+      taxonomy_id: FORCE2020_NPD_LITHOSTRATIGRAPHIC_LITHOFACIES
+      taxonomy_version_rule: the pinned source commit
+      label_encoding: zero-based ascending rank of the numeric NPD code
+      label_encoding_note: >
+        A pure function of the published 12-class list, so it does not drift with
+        row counts or class frequency. All 12 classes are preserved; none is
+        collapsed, renamed or dropped.
+      missing_value_policy:
+        convention: empty cell, never a substituted value
+        null_test: nwis_lib.is_sentinel
+        depth_key_exempt_from_null_test: true
+        depth_key_exemption_note: >
+          DEPTH_MD is the row key, not a measurement. The shared sentinel set
+          contains +999.25 within a 1e-6 tolerance, which would swallow the real
+          depth 999.25000061 in well 25/2-7. Every measured cell, including the
+          target, is still sentinel-tested.
+        imputed: false
+      qc_checks_passed: 9
+      model_trained_on_it: false
+
+    known_source_issues:
+      - >
+        The starter notebook states 83 training wells; the pinned train.csv
+        contains 98. The file is authoritative.
+      - >
+        Residual -999.25 values survive in a small number of CSV cells after the
+        source's own resampling. Recorded, not removed.
+      - >
+        GROUP and FORMATION are NPD stratigraphy assigned by the same campaign
+        that produced the label, so they are label-adjacent (leakage rule L6).
+      - >
+        The LAS ~Curve sections list the label columns as curves, so a LAS-based
+        transform must drop them explicitly.
+      - >
+        Well 25/2-7 has a real measured depth of 999.25000061, which falls within
+        1e-6 of the positive sentinel +999.25. The built table keeps the row and
+        does not sentinel-test the depth key; see dataset.missing_value_policy.
+      - >
+        Two classes are thin: 93000 Basement appears in 103 rows of one training
+        well, and 88000 Halite in 3. They are preserved rather than merged, so
+        any later model has to cope with them.
+
+    not_done:
+      - no model was trained, fitted, tuned, compared or evaluated
+      - no accuracy, F1 or other score was computed
+      - no interpolation, resampling or imputation was performed
+      - no value was smoothed, rolled or windowed
+      - no CNN code or sequence input was created
+      - no prediction endpoint was created
+      - nothing was merged with data/processed/
+      - FORCE 2020 was not merged with the FORGE Utah canonical data
+      - no FORCE 2020 class was mapped onto the FORGE Utah vocabulary
+      - source/, labels/, training/ and evaluation/ under the artifact root are
+        still empty; only features/ was written
