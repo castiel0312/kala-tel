@@ -4,7 +4,11 @@ data/raw/*
 !data/raw/download_log.csv
 !data/raw/git_clone_log.csv
 
-# Reproducible intermediate outputs
+# Reproducible intermediate outputs.
+# This is the ONLY place generated ML artifacts may land. data/ml/ is a
+# contract-only scaffold (see ml/README.md) and data/processed/ is frozen, so
+# neither may hold generated data. External datasets use their own subtree, e.g.
+# data/interim/ml/force2020_litho/ for FORCE 2020 (ml/external_datasets.yaml).
 data/interim/
 
 # Local/editor files

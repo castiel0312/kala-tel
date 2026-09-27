@@ -29,6 +29,9 @@ SOURCE_REGISTRY_COLUMNS = [
 
 # ingestion_status is a controlled vocabulary -- no more prose overload.
 ST_PLANNED = "PLANNED"
+# Source bytes are present and pinned, and have been read end to end, but no
+# dataset has been built from them. Distinct from INGESTED on purpose.
+ST_INSPECTED = "INSPECTED"
 ST_INGESTED = "INGESTED"
 ST_PARTIAL = "PARTIALLY_INGESTED"
 ST_BLOCKED = "BLOCKED_AUTH"
@@ -127,13 +130,21 @@ SOURCES = [
          notes="licence is incompatible with commercial deployment by OIL; "
                "flag before any use"),
     dict(source_id="FORCE2020", source="FORCE 2020 lithology competition",
-         source_type="competition", geography="Norway", well_scope="118 wells",
-         data_types="LAS logs, lithofacies/lithology labels, per-sample x/y/z",
-         ingestion_status=ST_PLANNED, access_method="git clone",
+         source_type="competition", geography="Norway (NPD, Norwegian "
+         "Continental Shelf)", well_scope="118 wells, well-disjoint across the "
+         "three published splits",
+         data_types="4 semicolon CSVs (1,429,694 labelled rows), 118 LAS logs, "
+                    "20 log curves, NPD lithostratigraphic lithofacies labels",
+         ingestion_status=ST_INSPECTED,
+         access_method="partial git clone (blobless) + sparse checkout, pinned to "
+                       "one commit",
          url="https://github.com/bolgebrygg/Force-2020-Machine-Learning-competition",
-         license="NLOD 2.0 (logs), CC-BY-4.0 (labels)",
-         notes="largest public well population; use for geology/analogue work only, "
-               "explicitly NOT for the drilling time-series"),
+         license="CC-BY-4.0 (Zenodo deposit); upstream NPD logs NLOD 2.0",
+         notes="INSPECTED ONLY, NOT INGESTED. No dataset built, no model trained. "
+               "Own 12-class lithofacies vocabulary, kept separate from "
+               "FORGE_UTAH_16B; never merged into data/processed/. "
+               "reports/force2020_inspection.md + "
+               "data/force2020_wells.csv record the findings"),
     dict(source_id="FORCE2020_KAGGLE", source="FORCE 2020 well logs (Kaggle mirror)",
          source_type="competition", geography="Norway",
          well_scope="15/9-14, 15/9-15, 16/1-2, 16/10-2, 25/11-19S, 25/11-24, "
@@ -262,12 +273,18 @@ DOWNLOADS = [
          license="NLOD 2.0 / CC-BY-4.0", access_status="ABSENT",
          local_path="", notes="blocked on Kaggle auth; redundant with FORCE2020 git"),
     dict(source="FORCE2020", url="https://github.com/bolgebrygg/Force-2020-Machine-Learning-competition",
-         file_name="force2020_official/", file_type="git", size_bytes="",
-         download_date="", checksum="", checksum_algorithm="",
-         resolved_commit_sha="", license="NLOD 2.0 / CC-BY-4.0",
-         access_status="ABSENT", local_path="",
-         notes="v0.1 log recorded 'not-checksummed-directory'; a commit SHA is now "
-               "required and must be recorded at fetch time"),
+         file_name="force2020/", file_type="git", size_bytes="",
+         download_date="2026-09-26", checksum="", checksum_algorithm="",
+         resolved_commit_sha="c8d01ee92c1c8e1ecba36f96cca6ea7b689338a1",
+         license="CC-BY-4.0 (Zenodo deposit); upstream NPD logs NLOD 2.0",
+         access_status="VERIFIED", local_path="data/raw/force2020",
+         notes="partial clone (--filter=blob:none) + sparse checkout: 4 CSVs, "
+               "train.zip and 1 of 118 LAS fetched, the rest left unfetched. "
+               "No checksum column value: file identity is the commit tree, and "
+               "reports/force2020_inspection.json records the blob id of every "
+               "source file. GitHub carries no dataset LICENSE; the licence above "
+               "is Zenodo record 10.5281/zenodo.4351156. Inspected only, not "
+               "ingested."),
     dict(source="KICK_3W_PETROBRAS", url="https://github.com/petrobras/3W",
          file_name="petrobras_3W/", file_type="git", size_bytes="",
          download_date="", checksum="", checksum_algorithm="",
@@ -310,9 +327,14 @@ ML_TASKS = [
          ingestion_status=ST_PLANNED, local_path=""),
     dict(task_id="FORCE2020_LITHO", task="lithology prediction from well logs",
          repo_or_dataset="FORCE 2020", url="https://github.com/bolgebrygg/Force-2020-Machine-Learning-competition",
-         access_method="git clone",
-         relevance_to_nwis="largest public well population for geology + analogue work",
-         ingestion_status=ST_PLANNED, local_path=""),
+         access_method="partial git clone + sparse checkout, commit-pinned",
+         relevance_to_nwis="largest public well population for geology + analogue "
+                           "work. External dataset: its 12-class NPD "
+                           "lithofacies vocabulary is NOT the FORGE_UTAH_16B "
+                           "cuttings vocabulary and is not mapped to it",
+         ingestion_status=ST_INSPECTED,
+         local_path="data/raw/force2020 (gitignored, unfetched blobs on demand); "
+                    "findings in reports/force2020_inspection.md"),
     dict(task_id="XAI_DRILLING", task="explainable ML on drilling data",
          repo_or_dataset="XAI Drilling Dataset", url="https://www.kaggle.com",
          access_method="Kaggle API",

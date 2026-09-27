@@ -22,8 +22,11 @@ internet connection instead.
   pressure/mud density/trajectory). Raw only — not yet normalized into `data/processed/`.
 - **Utah FORGE 78B-32 Daily Drilling Reports** (6/27–7/31) — `data/raw/utah_forge/78B-32-DailyDrillingReports-6-27thru7-31.pdf`
   (93 pages, text-layer extractable). Pason/logs for this well still need to be pulled separately.
-- **FORCE 2020 well logs** (Kaggle mirror, 11 wells) — `data/raw/force2020/force2020_well_logs.zip`
-  (confirmed via `FORCE_2020_LITHOFACIES_LITHOLOGY` + `X_LOC/Y_LOC/Z_LOC` columns).
+- **FORCE 2020 well logs, official source** — `data/raw/force2020/` (gitignored partial clone
+  pinned to commit `c8d01ee9`). Confirmed via `FORCE_2020_LITHOFACIES_LITHOLOGY` +
+  `X_LOC/Y_LOC/Z_LOC` columns. Status `INSPECTED`; see SOURCE C below.
+  The Kaggle mirror of 11 wells is registered as `FORCE2020_KAGGLE` and was **not** downloaded:
+  it is redundant with the official source, which is also clearer on licence.
 - **DataDRILL paper** (Arifeen et al. 2024) kept for reference only at `docs/reference_papers/` —
   it's documentation, not data; the actual CSVs are on Zenodo (DOI 10.5281/zenodo.12759014) and
   haven't been pulled yet.
@@ -57,7 +60,12 @@ Day-1 scope: four primary source families. See `data/source_registry.csv` for th
 ## SOURCE C — FORCE 2020
 **Purpose:** formation / lithology / well-log layer only — do not force it into the Volve/Utah drilling time-series.
 - 118 Norwegian wells: GR, density, neutron, sonic, ROP, mud weight + formation labels, per-sample x/y/z.
-- Licence: NLOD 2.0 (logs), CC-BY-4.0 (labels).
+- Licence: CC-BY-4.0 (Zenodo deposit 10.5281/zenodo.4351156); upstream NPD logs are NLOD 2.0. The GitHub repository carries no dataset-level LICENSE file.
+- **Status: `INGESTED`, not modelled.** The source bytes have been read end to end and pinned to commit `c8d01ee92c1c8e1ecba36f96cca6ea7b689338a1` in a local, gitignored partial clone at `data/raw/force2020/`. A logs-only table has been built from it under the gitignored `data/interim/ml/force2020_litho/`; no model has been trained on it.
+- Findings: `reports/force2020_inspection.md`, `reports/force2020_characterization.md`, `reports/force2020_dataset.md`, `data/force2020_wells.csv`, `data/force2020_well_missingness.csv`, `data/force2020_split_manifest.csv`. Registry: `FORCE2020` in `ml/external_datasets.yaml`. Rebuild: `make build-force2020-dataset`; check: `make verify-force2020-dataset`.
+- Verified contents: 4 semicolon CSVs, 118 well-disjoint wells, 1,429,694 labelled rows, 20 log curves, a 12-class NPD lithostratigraphic lithofacies vocabulary, and a published penalty-matrix metric.
+- Built table: 1,429,694 rows, one per (WELL, DEPTH_MD), 5 log features (`CALI`, `RDEP`, `RMED`, `DTC`, `GR`) plus a 0/1 missing mask per feature, no row dropped, no value filled, the source's own well-level split kept unchanged.
+- Its label vocabulary is **not** `FORGE_UTAH_16B` and is not mapped to it. No FORCE 2020 row, label or file was written to `data/processed/` or `data/ml/`.
 
 ## SOURCE D — BSEE
 **Purpose:** large-scale well metadata / spatial source for later nearby-well expansion — **not ingested in bulk on Day 1** (~57,500 API records available).

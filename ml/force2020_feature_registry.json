@@ -1,0 +1,203 @@
+{
+  "excluded_by_role": {
+    "coordinates": [
+      "X_LOC",
+      "Y_LOC",
+      "Z_LOC"
+    ],
+    "depth": [
+      "DEPTH_MD"
+    ],
+    "stratigraphy": [
+      "GROUP",
+      "FORMATION"
+    ],
+    "target": [
+      "FORCE_2020_LITHOFACIES_LITHOLOGY"
+    ]
+  },
+  "feature_sets": {
+    "v0.1": {
+      "curves": [
+        "CALI",
+        "RDEP",
+        "RMED",
+        "DTC",
+        "GR"
+      ],
+      "note": "the shipped five-curve baseline. Its curves are carried into v0.2 unchanged; only the mask set and the added curves are new.",
+      "status": "frozen"
+    },
+    "v0.2": {
+      "added_relative_to_v0_1": [
+        "DTS",
+        "NPHI",
+        "PEF",
+        "RHOB",
+        "DRHO"
+      ],
+      "curves": [
+        "CALI",
+        "RDEP",
+        "RMED",
+        "DTC",
+        "GR",
+        "DTS",
+        "NPHI",
+        "PEF",
+        "RHOB",
+        "DRHO"
+      ],
+      "note": "v0.1 plus every curve that cleared gates 1 to 3. The builder emits a mask column per curve alongside the curve, so the mask set follows the curve list and is not enumerated separately here. The ablation separates the curves from the masks.",
+      "status": "new"
+    },
+    "v0.3": {
+      "curves": [
+        "CALI",
+        "RDEP",
+        "RMED",
+        "DTC",
+        "GR",
+        "DTS",
+        "NPHI",
+        "PEF",
+        "RHOB",
+        "DRHO"
+      ],
+      "local_statistics": [
+        "mean",
+        "std"
+      ],
+      "note": "v0.2 plus same-well local context. Every local column is computed inside one well only, uses no target and no other well, and is invalidated across a logging gap rather than averaged over it. The builder owns the column names.",
+      "status": "new",
+      "windows": [
+        {
+          "description": "same-well mean and standard deviation of the selected curves over +/-0.76 m (+/-5 rows at the measured 0.1520 m step)",
+          "full_width_m": 1.52,
+          "full_width_rows": 11,
+          "half_width_m": 0.76,
+          "half_width_rows": 5
+        },
+        {
+          "description": "same-well mean and standard deviation of the selected curves over +/-1.52 m (+/-10 rows at the measured 0.1520 m step)",
+          "full_width_m": 3.04,
+          "full_width_rows": 21,
+          "half_width_m": 1.52,
+          "half_width_rows": 10
+        }
+      ]
+    }
+  },
+  "flags": [
+    {
+      "caveat": "hidden_test is 40.5% missing, so a median-imputed column is mostly imputation there",
+      "curve": "DTS"
+    },
+    {
+      "caveat": "leaderboard_test is 68.4% missing, so a median-imputed column is mostly imputation there",
+      "curve": "DTS"
+    }
+  ],
+  "gates": {
+    "G1_role": "only source columns whose role is log_curve are candidates. DEPTH_MD, the coordinates, GROUP, FORMATION, the target and the target confidence column are excluded by role.",
+    "G2_measurement_kind": "a candidate must measure the formation. Operational and mud-system curves, and hole-geometry curves, are rejected unless they are already in the frozen v0.1 set.",
+    "G3_evaluation_coverage": "a candidate must be present in at least 50% of the wells of both evaluation partitions, each of which has 10 wells.",
+    "caveat_threshold": "a selected curve missing more than 40% of an evaluation partition is flagged, and the flag is carried into the report."
+  },
+  "generated_by": "scripts/ingest/select_force2020_features.py",
+  "local_context": {
+    "measured": {
+      "fraction_over_gap_tolerance": 0.00010936,
+      "gap_tolerance_m": 0.456,
+      "iqr_m": 0.0,
+      "max_m": 269.344,
+      "median_m": 0.152,
+      "min_m": 0.152,
+      "non_increasing_steps": 0,
+      "p05_m": 0.152,
+      "p25_m": 0.152,
+      "p75_m": 0.152,
+      "p95_m": 0.152,
+      "steps": 1170413,
+      "steps_over_gap_tolerance": 128,
+      "strictly_increasing": true
+    },
+    "reason": "DEPTH_MD advances by a constant 0.1520 m inside every well in every split (interquartile range 0.0 m, strictly increasing: True), so a fixed row window is a fixed depth window. 128 of 1170413 steps exceed 0.4560 m and are logging gaps, so windows are invalidated across them rather than averaged over them.",
+    "status": "supported",
+    "windows": [
+      {
+        "description": "same-well mean and standard deviation of the selected curves over +/-0.76 m (+/-5 rows at the measured 0.1520 m step)",
+        "full_width_m": 1.52,
+        "full_width_rows": 11,
+        "half_width_m": 0.76,
+        "half_width_rows": 5
+      },
+      {
+        "description": "same-well mean and standard deviation of the selected curves over +/-1.52 m (+/-10 rows at the measured 0.1520 m step)",
+        "full_width_m": 3.04,
+        "full_width_rows": 21,
+        "half_width_m": 1.52,
+        "half_width_rows": 10
+      }
+    ]
+  },
+  "rejected": [
+    {
+      "curve": "BS",
+      "gate": "G2_measurement_kind",
+      "reason": "BS records the drilling or mud operation rather than the rock. Its value also tracks which crews and programmes instrumented a well, so it can encode well history instead of lithology."
+    },
+    {
+      "curve": "ROPA",
+      "gate": "G2_measurement_kind",
+      "reason": "ROPA records the drilling or mud operation rather than the rock. Its value also tracks which crews and programmes instrumented a well, so it can encode well history instead of lithology."
+    },
+    {
+      "curve": "ROP",
+      "gate": "G2_measurement_kind",
+      "reason": "ROP records the drilling or mud operation rather than the rock. Its value also tracks which crews and programmes instrumented a well, so it can encode well history instead of lithology."
+    },
+    {
+      "curve": "RSHA",
+      "gate": "G3_evaluation_coverage",
+      "reason": "RSHA is present in 4 of 10 hidden_test wells (40%), below the 50% floor. Anything it contributes on training wells could not be confirmed on the partitions used to decide retention."
+    },
+    {
+      "curve": "RXO",
+      "gate": "G2_measurement_kind",
+      "reason": "RXO records the drilling or mud operation rather than the rock. Its value also tracks which crews and programmes instrumented a well, so it can encode well history instead of lithology."
+    },
+    {
+      "curve": "RMIC",
+      "gate": "G2_measurement_kind",
+      "reason": "RMIC records the drilling or mud operation rather than the rock. Its value also tracks which crews and programmes instrumented a well, so it can encode well history instead of lithology."
+    },
+    {
+      "curve": "DCAL",
+      "gate": "G2_measurement_kind",
+      "reason": "DCAL measures hole geometry, which follows the drilling contract rather than the formation."
+    },
+    {
+      "curve": "SP",
+      "gate": "G3_evaluation_coverage",
+      "reason": "SP is present in 4 of 10 hidden_test wells (40%), below the 50% floor. Anything it contributes on training wells could not be confirmed on the partitions used to decide retention."
+    },
+    {
+      "curve": "MUDWEIGHT",
+      "gate": "G2_measurement_kind",
+      "reason": "MUDWEIGHT records the drilling or mud operation rather than the rock. Its value also tracks which crews and programmes instrumented a well, so it can encode well history instead of lithology."
+    },
+    {
+      "curve": "SGR",
+      "gate": "G3_evaluation_coverage",
+      "reason": "SGR is present in 1 of 10 hidden_test wells (10%), below the 50% floor. Anything it contributes on training wells could not be confirmed on the partitions used to decide retention."
+    }
+  ],
+  "schema_version": 1,
+  "sha256": "35e752ecfff4aa7233b3c1c479b5a601925ff1c786e1064f8c9db3a2a85f4552",
+  "source": {
+    "dataset": "force2020-lithology",
+    "delimiter": ";",
+    "subdir": "lithology_competition/data"
+  }
+}

@@ -1,0 +1,1666 @@
+{
+  "curve_count": 20,
+  "curves": [
+    {
+      "caveats": [],
+      "envelope": {
+        "basis": "in hole diameter",
+        "high": 30.0,
+        "low": 2.0
+      },
+      "gate_failed": null,
+      "kind": "borehole_geometry",
+      "name": "CALI",
+      "reason": "already in the frozen v0.1 set; retained unchanged",
+      "splits": {
+        "hidden_test": {
+          "finite_observed": 118954,
+          "max": 23.093700409,
+          "median": 12.4537525175,
+          "min": 8.0251922607,
+          "missing": 3443,
+          "missing_fraction": 0.02812977,
+          "missing_via_sentinel": 0,
+          "non_null": 118954,
+          "outside_envelope": 0,
+          "outside_envelope_fraction": 0.0,
+          "rows": 122397,
+          "well_coverage_fraction": 1.0,
+          "wells": 10,
+          "wells_fully_missing": 0,
+          "wells_with_data": 10
+        },
+        "leaderboard_test": {
+          "finite_observed": 131141,
+          "max": 27.344881058,
+          "median": 12.428941727,
+          "min": 6.6825222969,
+          "missing": 5645,
+          "missing_fraction": 0.04126884,
+          "missing_via_sentinel": 0,
+          "non_null": 131141,
+          "outside_envelope": 0,
+          "outside_envelope_fraction": 0.0,
+          "rows": 136786,
+          "well_coverage_fraction": 1.0,
+          "wells": 10,
+          "wells_fully_missing": 0,
+          "wells_with_data": 10
+        },
+        "train": {
+          "finite_observed": 1082634,
+          "max": 28.278999329,
+          "median": 12.555751800500001,
+          "min": 2.3440001011,
+          "missing": 87877,
+          "missing_fraction": 0.07507576,
+          "missing_via_sentinel": 0,
+          "non_null": 1082634,
+          "outside_envelope": 0,
+          "outside_envelope_fraction": 0.0,
+          "rows": 1170511,
+          "well_coverage_fraction": 0.98979592,
+          "wells": 98,
+          "wells_fully_missing": 1,
+          "wells_with_data": 97
+        }
+      },
+      "status": "retained_from_v0_1",
+      "unit": "in",
+      "unit_verified_from_local_las": true
+    },
+    {
+      "caveats": [],
+      "envelope": {
+        "basis": "in bit size",
+        "high": 30.0,
+        "low": 4.0
+      },
+      "gate_failed": "G2_measurement_kind",
+      "kind": "operational_or_mud",
+      "name": "BS",
+      "reason": "BS records the drilling or mud operation rather than the rock. Its value also tracks which crews and programmes instrumented a well, so it can encode well history instead of lithology.",
+      "splits": {
+        "hidden_test": {
+          "finite_observed": 74489,
+          "max": 17.5,
+          "median": 12.250000954,
+          "min": 8.5,
+          "missing": 47908,
+          "missing_fraction": 0.39141482,
+          "missing_via_sentinel": 0,
+          "non_null": 74489,
+          "outside_envelope": 0,
+          "outside_envelope_fraction": 0.0,
+          "rows": 122397,
+          "well_coverage_fraction": 0.7,
+          "wells": 10,
+          "wells_fully_missing": 3,
+          "wells_with_data": 7
+        },
+        "leaderboard_test": {
+          "finite_observed": 66964,
+          "max": 17.5,
+          "median": 12.250000954,
+          "min": 8.5,
+          "missing": 69822,
+          "missing_fraction": 0.51044698,
+          "missing_via_sentinel": 0,
+          "non_null": 66964,
+          "outside_envelope": 0,
+          "outside_envelope_fraction": 0.0,
+          "rows": 136786,
+          "well_coverage_fraction": 0.7,
+          "wells": 10,
+          "wells_fully_missing": 3,
+          "wells_with_data": 7
+        },
+        "train": {
+          "finite_observed": 682657,
+          "max": 26.000001907,
+          "median": 12.250000954,
+          "min": 6.0,
+          "missing": 487854,
+          "missing_fraction": 0.4167872,
+          "missing_via_sentinel": 0,
+          "non_null": 682657,
+          "outside_envelope": 0,
+          "outside_envelope_fraction": 0.0,
+          "rows": 1170511,
+          "well_coverage_fraction": 0.70408163,
+          "wells": 98,
+          "wells_fully_missing": 29,
+          "wells_with_data": 69
+        }
+      },
+      "status": "rejected",
+      "unit": "in",
+      "unit_verified_from_local_las": true
+    },
+    {
+      "caveats": [],
+      "envelope": {
+        "basis": "rotations per minute",
+        "high": 500.0,
+        "low": 0.0
+      },
+      "gate_failed": "G2_measurement_kind",
+      "kind": "operational_or_mud",
+      "name": "ROPA",
+      "reason": "ROPA records the drilling or mud operation rather than the rock. Its value also tracks which crews and programmes instrumented a well, so it can encode well history instead of lithology.",
+      "splits": {
+        "hidden_test": {
+          "finite_observed": 64221,
+          "max": 439.48574829,
+          "median": 24.024316788,
+          "min": 0.1158602461,
+          "missing": 58176,
+          "missing_fraction": 0.47530577,
+          "missing_via_sentinel": 0,
+          "non_null": 64221,
+          "outside_envelope": 0,
+          "outside_envelope_fraction": 0.0,
+          "rows": 122397,
+          "well_coverage_fraction": 0.6,
+          "wells": 10,
+          "wells_fully_missing": 4,
+          "wells_with_data": 6
+        },
+        "leaderboard_test": {
+          "finite_observed": 55790,
+          "max": 131.99090576,
+          "median": 19.9278268815,
+          "min": 0.5723290443,
+          "missing": 80996,
+          "missing_fraction": 0.59213662,
+          "missing_via_sentinel": 0,
+          "non_null": 55790,
+          "outside_envelope": 0,
+          "outside_envelope_fraction": 0.0,
+          "rows": 136786,
+          "well_coverage_fraction": 0.6,
+          "wells": 10,
+          "wells_fully_missing": 4,
+          "wells_with_data": 6
+        },
+        "train": {
+          "finite_observed": 192325,
+          "max": 742.79785156,
+          "median": 20.131153107,
+          "min": -999.2501221,
+          "missing": 978186,
+          "missing_fraction": 0.83569142,
+          "missing_via_sentinel": 0,
+          "non_null": 192325,
+          "outside_envelope": 51,
+          "outside_envelope_fraction": 0.00026518,
+          "rows": 1170511,
+          "well_coverage_fraction": 0.25510204,
+          "wells": 98,
+          "wells_fully_missing": 73,
+          "wells_with_data": 25
+        }
+      },
+      "status": "rejected",
+      "unit": null,
+      "unit_verified_from_local_las": true
+    },
+    {
+      "caveats": [],
+      "envelope": {
+        "basis": "m/h rate of penetration",
+        "high": 5000.0,
+        "low": 0.0
+      },
+      "gate_failed": "G2_measurement_kind",
+      "kind": "operational_or_mud",
+      "name": "ROP",
+      "reason": "ROP records the drilling or mud operation rather than the rock. Its value also tracks which crews and programmes instrumented a well, so it can encode well history instead of lithology.",
+      "splits": {
+        "hidden_test": {
+          "finite_observed": 91150,
+          "max": 694.25457764,
+          "median": 24.080531120499998,
+          "min": 0.0,
+          "missing": 31247,
+          "missing_fraction": 0.2552922,
+          "missing_via_sentinel": 0,
+          "non_null": 91150,
+          "outside_envelope": 0,
+          "outside_envelope_fraction": 0.0,
+          "rows": 122397,
+          "well_coverage_fraction": 0.8,
+          "wells": 10,
+          "wells_fully_missing": 2,
+          "wells_with_data": 8
+        },
+        "leaderboard_test": {
+          "finite_observed": 68316,
+          "max": 621.07824707,
+          "median": 20.8788986205,
+          "min": 0.0042973193,
+          "missing": 68470,
+          "missing_fraction": 0.50056292,
+          "missing_via_sentinel": 0,
+          "non_null": 68316,
+          "outside_envelope": 0,
+          "outside_envelope_fraction": 0.0,
+          "rows": 136786,
+          "well_coverage_fraction": 0.6,
+          "wells": 10,
+          "wells_fully_missing": 4,
+          "wells_with_data": 6
+        },
+        "train": {
+          "finite_observed": 535071,
+          "max": 47015.125,
+          "median": 17.799999237,
+          "min": -0.117977008,
+          "missing": 635440,
+          "missing_fraction": 0.54287401,
+          "missing_via_sentinel": 0,
+          "non_null": 535071,
+          "outside_envelope": 2866,
+          "outside_envelope_fraction": 0.0053563,
+          "rows": 1170511,
+          "well_coverage_fraction": 0.54081633,
+          "wells": 98,
+          "wells_fully_missing": 45,
+          "wells_with_data": 53
+        }
+      },
+      "status": "rejected",
+      "unit": "m/h",
+      "unit_verified_from_local_las": true
+    },
+    {
+      "caveats": [],
+      "envelope": {
+        "basis": "ohm.m deep resistivity",
+        "high": 5000.0,
+        "low": 0.0
+      },
+      "gate_failed": null,
+      "kind": "formation_measurement",
+      "name": "RDEP",
+      "reason": "already in the frozen v0.1 set; retained unchanged",
+      "splits": {
+        "hidden_test": {
+          "finite_observed": 122386,
+          "max": 1755.5310059,
+          "median": 1.3813973069499998,
+          "min": 0.0371626578,
+          "missing": 11,
+          "missing_fraction": 8.987e-05,
+          "missing_via_sentinel": 0,
+          "non_null": 122386,
+          "outside_envelope": 0,
+          "outside_envelope_fraction": 0.0,
+          "rows": 122397,
+          "well_coverage_fraction": 1.0,
+          "wells": 10,
+          "wells_fully_missing": 0,
+          "wells_with_data": 10
+        },
+        "leaderboard_test": {
+          "finite_observed": 136727,
+          "max": 1582.0944824,
+          "median": 1.6576639414,
+          "min": 0.1523174793,
+          "missing": 59,
+          "missing_fraction": 0.00043133,
+          "missing_via_sentinel": 0,
+          "non_null": 136727,
+          "outside_envelope": 0,
+          "outside_envelope_fraction": 0.0,
+          "rows": 136786,
+          "well_coverage_fraction": 1.0,
+          "wells": 10,
+          "wells_fully_missing": 0,
+          "wells_with_data": 10
+        },
+        "train": {
+          "finite_observed": 1159496,
+          "max": 1999.887085,
+          "median": 1.4390000105,
+          "min": 0.031700559,
+          "missing": 11015,
+          "missing_fraction": 0.00941042,
+          "missing_via_sentinel": 0,
+          "non_null": 1159496,
+          "outside_envelope": 0,
+          "outside_envelope_fraction": 0.0,
+          "rows": 1170511,
+          "well_coverage_fraction": 1.0,
+          "wells": 98,
+          "wells_fully_missing": 0,
+          "wells_with_data": 98
+        }
+      },
+      "status": "retained_from_v0_1",
+      "unit": "ohm.m",
+      "unit_verified_from_local_las": true
+    },
+    {
+      "caveats": [],
+      "envelope": {
+        "basis": "ohm.m shallow resistivity",
+        "high": 5000.0,
+        "low": 0.0
+      },
+      "gate_failed": "G3_evaluation_coverage",
+      "kind": "formation_measurement",
+      "name": "RSHA",
+      "reason": "RSHA is present in 4 of 10 hidden_test wells (40%), below the 50% floor. Anything it contributes on training wells could not be confirmed on the partitions used to decide retention.",
+      "splits": {
+        "hidden_test": {
+          "finite_observed": 25683,
+          "max": 1999.717041,
+          "median": 1.2875658274,
+          "min": 0.1191057935,
+          "missing": 96714,
+          "missing_fraction": 0.79016643,
+          "missing_via_sentinel": 0,
+          "non_null": 25683,
+          "outside_envelope": 0,
+          "outside_envelope_fraction": 0.0,
+          "rows": 122397,
+          "well_coverage_fraction": 0.4,
+          "wells": 10,
+          "wells_fully_missing": 6,
+          "wells_with_data": 4
+        },
+        "leaderboard_test": {
+          "finite_observed": 39097,
+          "max": 1566.168457,
+          "median": 1.4160000086,
+          "min": 0.2551464438,
+          "missing": 97689,
+          "missing_fraction": 0.71417397,
+          "missing_via_sentinel": 0,
+          "non_null": 39097,
+          "outside_envelope": 0,
+          "outside_envelope_fraction": 0.0,
+          "rows": 136786,
+          "well_coverage_fraction": 0.4,
+          "wells": 10,
+          "wells_fully_missing": 6,
+          "wells_with_data": 4
+        },
+        "train": {
+          "finite_observed": 630650,
+          "max": 2193.904541,
+          "median": 1.39902031425,
+          "min": 0.0001,
+          "missing": 539861,
+          "missing_fraction": 0.46121822,
+          "missing_via_sentinel": 0,
+          "non_null": 630650,
+          "outside_envelope": 0,
+          "outside_envelope_fraction": 0.0,
+          "rows": 1170511,
+          "well_coverage_fraction": 0.75510204,
+          "wells": 98,
+          "wells_fully_missing": 24,
+          "wells_with_data": 74
+        }
+      },
+      "status": "rejected",
+      "unit": "ohm.m",
+      "unit_verified_from_local_las": true
+    },
+    {
+      "caveats": [],
+      "envelope": {
+        "basis": "ohm.m medium resistivity",
+        "high": 5000.0,
+        "low": 0.0
+      },
+      "gate_failed": null,
+      "kind": "formation_measurement",
+      "name": "RMED",
+      "reason": "already in the frozen v0.1 set; retained unchanged",
+      "splits": {
+        "hidden_test": {
+          "finite_observed": 112580,
+          "max": 1573.6560059,
+          "median": 1.33729696275,
+          "min": 0.1589951962,
+          "missing": 9817,
+          "missing_fraction": 0.08020621,
+          "missing_via_sentinel": 0,
+          "non_null": 112580,
+          "outside_envelope": 0,
+          "outside_envelope_fraction": 0.0,
+          "rows": 122397,
+          "well_coverage_fraction": 1.0,
+          "wells": 10,
+          "wells_fully_missing": 0,
+          "wells_with_data": 10
+        },
+        "leaderboard_test": {
+          "finite_observed": 136199,
+          "max": 1901.7666016,
+          "median": 1.6699261665,
+          "min": 0.1484740376,
+          "missing": 587,
+          "missing_fraction": 0.00429137,
+          "missing_via_sentinel": 0,
+          "non_null": 136199,
+          "outside_envelope": 0,
+          "outside_envelope_fraction": 0.0,
+          "rows": 136786,
+          "well_coverage_fraction": 1.0,
+          "wells": 10,
+          "wells_fully_missing": 0,
+          "wells_with_data": 10
+        },
+        "train": {
+          "finite_observed": 1131518,
+          "max": 1988.616333,
+          "median": 1.4435837865,
+          "min": -0.008418695,
+          "missing": 38993,
+          "missing_fraction": 0.0333128,
+          "missing_via_sentinel": 0,
+          "non_null": 1131518,
+          "outside_envelope": 7,
+          "outside_envelope_fraction": 6.19e-06,
+          "rows": 1170511,
+          "well_coverage_fraction": 0.98979592,
+          "wells": 98,
+          "wells_fully_missing": 1,
+          "wells_with_data": 97
+        }
+      },
+      "status": "retained_from_v0_1",
+      "unit": "ohm.m",
+      "unit_verified_from_local_las": true
+    },
+    {
+      "caveats": [],
+      "envelope": {
+        "basis": "ohm.m flushed zone",
+        "high": 5000.0,
+        "low": 0.0
+      },
+      "gate_failed": "G2_measurement_kind",
+      "kind": "operational_or_mud",
+      "name": "RXO",
+      "reason": "RXO records the drilling or mud operation rather than the rock. Its value also tracks which crews and programmes instrumented a well, so it can encode well history instead of lithology.",
+      "splits": {
+        "hidden_test": {
+          "finite_observed": 8894,
+          "max": 2030.9261475,
+          "median": 1.2041354775,
+          "min": 0.1205513179,
+          "missing": 113503,
+          "missing_fraction": 0.92733482,
+          "missing_via_sentinel": 0,
+          "non_null": 8894,
+          "outside_envelope": 0,
+          "outside_envelope_fraction": 0.0,
+          "rows": 122397,
+          "well_coverage_fraction": 0.2,
+          "wells": 10,
+          "wells_fully_missing": 8,
+          "wells_with_data": 2
+        },
+        "leaderboard_test": {
+          "finite_observed": 29848,
+          "max": 2000.0,
+          "median": 1.58768337965,
+          "min": 0.2620563805,
+          "missing": 106938,
+          "missing_fraction": 0.78179053,
+          "missing_via_sentinel": 0,
+          "non_null": 29848,
+          "outside_envelope": 0,
+          "outside_envelope_fraction": 0.0,
+          "rows": 136786,
+          "well_coverage_fraction": 0.3,
+          "wells": 10,
+          "wells_fully_missing": 7,
+          "wells_with_data": 3
+        },
+        "train": {
+          "finite_observed": 327427,
+          "max": 35930.671875,
+          "median": 1.3666716814,
+          "min": -999.9000244,
+          "missing": 843084,
+          "missing_fraction": 0.72027004,
+          "missing_via_sentinel": 0,
+          "non_null": 327427,
+          "outside_envelope": 34627,
+          "outside_envelope_fraction": 0.10575487,
+          "rows": 1170511,
+          "well_coverage_fraction": 0.3877551,
+          "wells": 98,
+          "wells_fully_missing": 60,
+          "wells_with_data": 38
+        }
+      },
+      "status": "rejected",
+      "unit": "ohm.m",
+      "unit_verified_from_local_las": false
+    },
+    {
+      "caveats": [],
+      "envelope": {
+        "basis": "ohm.m microresistivity",
+        "high": 5000.0,
+        "low": 0.0
+      },
+      "gate_failed": "G2_measurement_kind",
+      "kind": "operational_or_mud",
+      "name": "RMIC",
+      "reason": "RMIC records the drilling or mud operation rather than the rock. Its value also tracks which crews and programmes instrumented a well, so it can encode well history instead of lithology.",
+      "splits": {
+        "hidden_test": {
+          "finite_observed": 15181,
+          "max": 621.15838623,
+          "median": 1.4746865034,
+          "min": 0.1327598244,
+          "missing": 107216,
+          "missing_fraction": 0.87596918,
+          "missing_via_sentinel": 0,
+          "non_null": 15181,
+          "outside_envelope": 0,
+          "outside_envelope_fraction": 0.0,
+          "rows": 122397,
+          "well_coverage_fraction": 0.3,
+          "wells": 10,
+          "wells_fully_missing": 7,
+          "wells_with_data": 3
+        },
+        "leaderboard_test": {
+          "finite_observed": 11316,
+          "max": 957.98443604,
+          "median": 1.43596953155,
+          "min": 0.0632578582,
+          "missing": 125470,
+          "missing_fraction": 0.91727224,
+          "missing_via_sentinel": 0,
+          "non_null": 11316,
+          "outside_envelope": 0,
+          "outside_envelope_fraction": 0.0,
+          "rows": 136786,
+          "well_coverage_fraction": 0.3,
+          "wells": 10,
+          "wells_fully_missing": 7,
+          "wells_with_data": 3
+        },
+        "train": {
+          "finite_observed": 176160,
+          "max": 10000.0,
+          "median": 1.9671560526,
+          "min": 0.0565855578,
+          "missing": 994351,
+          "missing_fraction": 0.84950163,
+          "missing_via_sentinel": 0,
+          "non_null": 176160,
+          "outside_envelope": 9,
+          "outside_envelope_fraction": 5.109e-05,
+          "rows": 1170511,
+          "well_coverage_fraction": 0.2755102,
+          "wells": 98,
+          "wells_fully_missing": 71,
+          "wells_with_data": 27
+        }
+      },
+      "status": "rejected",
+      "unit": "ohm.m",
+      "unit_verified_from_local_las": false
+    },
+    {
+      "caveats": [
+        "hidden_test is 40.5% missing, so a median-imputed column is mostly imputation there",
+        "leaderboard_test is 68.4% missing, so a median-imputed column is mostly imputation there"
+      ],
+      "envelope": {
+        "basis": "us/ft sonic, fluid check",
+        "high": 700.0,
+        "low": 30.0
+      },
+      "gate_failed": null,
+      "kind": "formation_measurement",
+      "name": "DTS",
+      "reason": "a formation measurement present in at least half the wells of both evaluation partitions, with the missingness it carries recorded",
+      "splits": {
+        "hidden_test": {
+          "finite_observed": 72871,
+          "max": 562.03710938,
+          "median": 213.50213623,
+          "min": 86.628219604,
+          "missing": 49526,
+          "missing_fraction": 0.4046341,
+          "missing_via_sentinel": 0,
+          "non_null": 72871,
+          "outside_envelope": 0,
+          "outside_envelope_fraction": 0.0,
+          "rows": 122397,
+          "well_coverage_fraction": 0.8,
+          "wells": 10,
+          "wells_fully_missing": 2,
+          "wells_with_data": 8
+        },
+        "leaderboard_test": {
+          "finite_observed": 43220,
+          "max": 494.09680176,
+          "median": 175.51527405000002,
+          "min": 79.327354431,
+          "missing": 93566,
+          "missing_fraction": 0.68403199,
+          "missing_via_sentinel": 0,
+          "non_null": 43220,
+          "outside_envelope": 0,
+          "outside_envelope_fraction": 0.0,
+          "rows": 136786,
+          "well_coverage_fraction": 0.6,
+          "wells": 10,
+          "wells_fully_missing": 4,
+          "wells_with_data": 6
+        },
+        "train": {
+          "finite_observed": 174613,
+          "max": 676.578125,
+          "median": 188.20065308,
+          "min": 69.16317749,
+          "missing": 995898,
+          "missing_fraction": 0.85082327,
+          "missing_via_sentinel": 0,
+          "non_null": 174613,
+          "outside_envelope": 0,
+          "outside_envelope_fraction": 0.0,
+          "rows": 1170511,
+          "well_coverage_fraction": 0.32653061,
+          "wells": 98,
+          "wells_fully_missing": 66,
+          "wells_with_data": 32
+        }
+      },
+      "status": "added_in_v0_2",
+      "unit": "us/ft",
+      "unit_verified_from_local_las": true
+    },
+    {
+      "caveats": [],
+      "envelope": {
+        "basis": "us/ft sonic; 55 water, 190 limestone, 60 air",
+        "high": 700.0,
+        "low": 30.0
+      },
+      "gate_failed": null,
+      "kind": "formation_measurement",
+      "name": "DTC",
+      "reason": "already in the frozen v0.1 set; retained unchanged",
+      "splits": {
+        "hidden_test": {
+          "finite_observed": 118291,
+          "max": 178.81799316,
+          "median": 105.70867157,
+          "min": 48.268531799,
+          "missing": 4106,
+          "missing_fraction": 0.03354657,
+          "missing_via_sentinel": 0,
+          "non_null": 118291,
+          "outside_envelope": 0,
+          "outside_envelope_fraction": 0.0,
+          "rows": 122397,
+          "well_coverage_fraction": 1.0,
+          "wells": 10,
+          "wells_fully_missing": 0,
+          "wells_with_data": 10
+        },
+        "leaderboard_test": {
+          "finite_observed": 135963,
+          "max": 183.48077393,
+          "median": 102.93289185,
+          "min": 45.682781219,
+          "missing": 823,
+          "missing_fraction": 0.0060167,
+          "missing_via_sentinel": 0,
+          "non_null": 135963,
+          "outside_envelope": 0,
+          "outside_envelope_fraction": 0.0,
+          "rows": 136786,
+          "well_coverage_fraction": 1.0,
+          "wells": 10,
+          "wells_fully_missing": 0,
+          "wells_with_data": 10
+        },
+        "train": {
+          "finite_observed": 1089648,
+          "max": 320.47888184,
+          "median": 109.585163115,
+          "min": 7.4151320457,
+          "missing": 80863,
+          "missing_fraction": 0.0690835,
+          "missing_via_sentinel": 0,
+          "non_null": 1089648,
+          "outside_envelope": 108,
+          "outside_envelope_fraction": 9.911e-05,
+          "rows": 1170511,
+          "well_coverage_fraction": 1.0,
+          "wells": 98,
+          "wells_fully_missing": 0,
+          "wells_with_data": 98
+        }
+      },
+      "status": "retained_from_v0_1",
+      "unit": "us/ft",
+      "unit_verified_from_local_las": true
+    },
+    {
+      "caveats": [],
+      "envelope": {
+        "basis": "m3/m3 neutron porosity; above 0.55 is gas or cased",
+        "high": 0.6,
+        "low": -0.15
+      },
+      "gate_failed": null,
+      "kind": "formation_measurement",
+      "name": "NPHI",
+      "reason": "a formation measurement present in at least half the wells of both evaluation partitions, with the missingness it carries recorded",
+      "splits": {
+        "hidden_test": {
+          "finite_observed": 96560,
+          "max": 0.9062569141,
+          "median": 0.32399731875,
+          "min": -0.015034582,
+          "missing": 25837,
+          "missing_fraction": 0.21109178,
+          "missing_via_sentinel": 0,
+          "non_null": 96560,
+          "outside_envelope": 641,
+          "outside_envelope_fraction": 0.00663836,
+          "rows": 122397,
+          "well_coverage_fraction": 1.0,
+          "wells": 10,
+          "wells_fully_missing": 0,
+          "wells_with_data": 10
+        },
+        "leaderboard_test": {
+          "finite_observed": 104043,
+          "max": 0.8504427075,
+          "median": 0.303586632,
+          "min": -0.008744007,
+          "missing": 32743,
+          "missing_fraction": 0.23937391,
+          "missing_via_sentinel": 0,
+          "non_null": 104043,
+          "outside_envelope": 754,
+          "outside_envelope_fraction": 0.007247,
+          "rows": 136786,
+          "well_coverage_fraction": 1.0,
+          "wells": 10,
+          "wells_fully_missing": 0,
+          "wells_with_data": 10
+        },
+        "train": {
+          "finite_observed": 765409,
+          "max": 0.9995702505,
+          "median": 0.3267999887,
+          "min": -0.03582247,
+          "missing": 405102,
+          "missing_fraction": 0.34608987,
+          "missing_via_sentinel": 0,
+          "non_null": 765409,
+          "outside_envelope": 11311,
+          "outside_envelope_fraction": 0.01477772,
+          "rows": 1170511,
+          "well_coverage_fraction": 1.0,
+          "wells": 98,
+          "wells_fully_missing": 0,
+          "wells_with_data": 98
+        }
+      },
+      "status": "added_in_v0_2",
+      "unit": "m3/m3",
+      "unit_verified_from_local_las": true
+    },
+    {
+      "caveats": [],
+      "envelope": {
+        "basis": "b/e; 0.1 water, 1.8 sandstone, 5 limestone, 13.4 barite",
+        "high": 12.0,
+        "low": 0.0
+      },
+      "gate_failed": null,
+      "kind": "formation_measurement",
+      "name": "PEF",
+      "reason": "a formation measurement present in at least half the wells of both evaluation partitions, with the missingness it carries recorded",
+      "splits": {
+        "hidden_test": {
+          "finite_observed": 100439,
+          "max": 320.09759521,
+          "median": 4.7915058136,
+          "min": 0.6414029002,
+          "missing": 21958,
+          "missing_fraction": 0.17939982,
+          "missing_via_sentinel": 0,
+          "non_null": 100439,
+          "outside_envelope": 3194,
+          "outside_envelope_fraction": 0.0318004,
+          "rows": 122397,
+          "well_coverage_fraction": 0.9,
+          "wells": 10,
+          "wells_fully_missing": 1,
+          "wells_with_data": 9
+        },
+        "leaderboard_test": {
+          "finite_observed": 113503,
+          "max": 382.12182617,
+          "median": 4.3369531631,
+          "min": 0.6095501184,
+          "missing": 23283,
+          "missing_fraction": 0.17021479,
+          "missing_via_sentinel": 0,
+          "non_null": 113503,
+          "outside_envelope": 6848,
+          "outside_envelope_fraction": 0.06033321,
+          "rows": 136786,
+          "well_coverage_fraction": 1.0,
+          "wells": 10,
+          "wells_fully_missing": 0,
+          "wells_with_data": 10
+        },
+        "train": {
+          "finite_observed": 671692,
+          "max": 383.12997437,
+          "median": 4.31352972985,
+          "min": 0.0997178704,
+          "missing": 498819,
+          "missing_fraction": 0.4261549,
+          "missing_via_sentinel": 0,
+          "non_null": 671692,
+          "outside_envelope": 44270,
+          "outside_envelope_fraction": 0.06590818,
+          "rows": 1170511,
+          "well_coverage_fraction": 0.70408163,
+          "wells": 98,
+          "wells_fully_missing": 29,
+          "wells_with_data": 69
+        }
+      },
+      "status": "added_in_v0_2",
+      "unit": "b/e",
+      "unit_verified_from_local_las": true
+    },
+    {
+      "caveats": [],
+      "envelope": {
+        "basis": "gAPI; 0 salt water, 200 granite, 400 hot shale",
+        "high": 400.0,
+        "low": 0.0
+      },
+      "gate_failed": null,
+      "kind": "formation_measurement",
+      "name": "GR",
+      "reason": "already in the frozen v0.1 set; retained unchanged",
+      "splits": {
+        "hidden_test": {
+          "finite_observed": 122397,
+          "max": 1141.2921143,
+          "median": 74.382141113,
+          "min": 1.1322999001,
+          "missing": 0,
+          "missing_fraction": 0.0,
+          "missing_via_sentinel": 0,
+          "non_null": 122397,
+          "outside_envelope": 24,
+          "outside_envelope_fraction": 0.00019608,
+          "rows": 122397,
+          "well_coverage_fraction": 1.0,
+          "wells": 10,
+          "wells_fully_missing": 0,
+          "wells_with_data": 10
+        },
+        "leaderboard_test": {
+          "finite_observed": 136786,
+          "max": 500.87835693,
+          "median": 60.1104717255,
+          "min": 6.342400074,
+          "missing": 0,
+          "missing_fraction": 0.0,
+          "missing_via_sentinel": 0,
+          "non_null": 136786,
+          "outside_envelope": 26,
+          "outside_envelope_fraction": 0.00019008,
+          "rows": 136786,
+          "well_coverage_fraction": 1.0,
+          "wells": 10,
+          "wells_fully_missing": 0,
+          "wells_with_data": 10
+        },
+        "train": {
+          "finite_observed": 1170511,
+          "max": 1076.9638672,
+          "median": 68.367630005,
+          "min": 0.1092843339,
+          "missing": 0,
+          "missing_fraction": 0.0,
+          "missing_via_sentinel": 0,
+          "non_null": 1170511,
+          "outside_envelope": 161,
+          "outside_envelope_fraction": 0.00013755,
+          "rows": 1170511,
+          "well_coverage_fraction": 1.0,
+          "wells": 98,
+          "wells_fully_missing": 0,
+          "wells_with_data": 98
+        }
+      },
+      "status": "retained_from_v0_1",
+      "unit": "gAPI",
+      "unit_verified_from_local_las": true
+    },
+    {
+      "caveats": [],
+      "envelope": {
+        "basis": "g/cm3; 0.5 sand, 2.7 limestone, 3.2 basalt",
+        "high": 5.0,
+        "low": 0.5
+      },
+      "gate_failed": null,
+      "kind": "formation_measurement",
+      "name": "RHOB",
+      "reason": "a formation measurement present in at least half the wells of both evaluation partitions, with the missingness it carries recorded",
+      "splits": {
+        "hidden_test": {
+          "finite_observed": 112869,
+          "max": 3.3531529903,
+          "median": 2.3701016903,
+          "min": 1.1279368401,
+          "missing": 9528,
+          "missing_fraction": 0.07784505,
+          "missing_via_sentinel": 0,
+          "non_null": 112869,
+          "outside_envelope": 0,
+          "outside_envelope_fraction": 0.0,
+          "rows": 122397,
+          "well_coverage_fraction": 1.0,
+          "wells": 10,
+          "wells_fully_missing": 0,
+          "wells_with_data": 10
+        },
+        "leaderboard_test": {
+          "finite_observed": 119826,
+          "max": 3.0734298229,
+          "median": 2.3762848377,
+          "min": 1.289988637,
+          "missing": 16960,
+          "missing_fraction": 0.1239893,
+          "missing_via_sentinel": 0,
+          "non_null": 119826,
+          "outside_envelope": 0,
+          "outside_envelope_fraction": 0.0,
+          "rows": 136786,
+          "well_coverage_fraction": 1.0,
+          "wells": 10,
+          "wells_fully_missing": 0,
+          "wells_with_data": 10
+        },
+        "train": {
+          "finite_observed": 1009242,
+          "max": 3.4578199387,
+          "median": 2.32122790815,
+          "min": 0.7209711671,
+          "missing": 161269,
+          "missing_fraction": 0.13777658,
+          "missing_via_sentinel": 0,
+          "non_null": 1009242,
+          "outside_envelope": 0,
+          "outside_envelope_fraction": 0.0,
+          "rows": 1170511,
+          "well_coverage_fraction": 1.0,
+          "wells": 98,
+          "wells_fully_missing": 0,
+          "wells_with_data": 98
+        }
+      },
+      "status": "added_in_v0_2",
+      "unit": "g/cm3",
+      "unit_verified_from_local_las": true
+    },
+    {
+      "caveats": [],
+      "envelope": {
+        "basis": "g/cm3 density-porosity excess; 0 means no gas effect",
+        "high": 1.0,
+        "low": -0.6
+      },
+      "gate_failed": null,
+      "kind": "formation_measurement",
+      "name": "DRHO",
+      "reason": "a formation measurement present in at least half the wells of both evaluation partitions, with the missingness it carries recorded",
+      "splits": {
+        "hidden_test": {
+          "finite_observed": 112267,
+          "max": 0.6751814485,
+          "median": 0.0151076121,
+          "min": -1.453413129,
+          "missing": 10130,
+          "missing_fraction": 0.08276347,
+          "missing_via_sentinel": 0,
+          "non_null": 112267,
+          "outside_envelope": 572,
+          "outside_envelope_fraction": 0.005095,
+          "rows": 122397,
+          "well_coverage_fraction": 1.0,
+          "wells": 10,
+          "wells_fully_missing": 0,
+          "wells_with_data": 10
+        },
+        "leaderboard_test": {
+          "finite_observed": 111556,
+          "max": 0.4046138525,
+          "median": 0.009202919,
+          "min": -1.213720322,
+          "missing": 25230,
+          "missing_fraction": 0.1844487,
+          "missing_via_sentinel": 0,
+          "non_null": 111556,
+          "outside_envelope": 145,
+          "outside_envelope_fraction": 0.0012998,
+          "rows": 136786,
+          "well_coverage_fraction": 0.9,
+          "wells": 10,
+          "wells_fully_missing": 1,
+          "wells_with_data": 9
+        },
+        "train": {
+          "finite_observed": 987857,
+          "max": 2.8369383812,
+          "median": 0.0017520001,
+          "min": -7429.338867,
+          "missing": 182654,
+          "missing_fraction": 0.15604638,
+          "missing_via_sentinel": 0,
+          "non_null": 987857,
+          "outside_envelope": 9778,
+          "outside_envelope_fraction": 0.00989819,
+          "rows": 1170511,
+          "well_coverage_fraction": 0.96938776,
+          "wells": 98,
+          "wells_fully_missing": 3,
+          "wells_with_data": 95
+        }
+      },
+      "status": "added_in_v0_2",
+      "unit": "g/cm3",
+      "unit_verified_from_local_las": true
+    },
+    {
+      "caveats": [],
+      "envelope": {
+        "basis": "in caliper",
+        "high": 30.0,
+        "low": -5.0
+      },
+      "gate_failed": "G2_measurement_kind",
+      "kind": "borehole_geometry",
+      "name": "DCAL",
+      "reason": "DCAL measures hole geometry, which follows the drilling contract rather than the formation.",
+      "splits": {
+        "hidden_test": {
+          "finite_observed": 43104,
+          "max": 8.3800773621,
+          "median": 0.17295775559999998,
+          "min": -5.5,
+          "missing": 79293,
+          "missing_fraction": 0.64783451,
+          "missing_via_sentinel": 0,
+          "non_null": 43104,
+          "outside_envelope": 317,
+          "outside_envelope_fraction": 0.00735431,
+          "rows": 122397,
+          "well_coverage_fraction": 0.4,
+          "wells": 10,
+          "wells_fully_missing": 6,
+          "wells_with_data": 4
+        },
+        "leaderboard_test": {
+          "finite_observed": 13515,
+          "max": 7.3629117012,
+          "median": 0.1247141063,
+          "min": -6.402187347,
+          "missing": 123271,
+          "missing_fraction": 0.90119603,
+          "missing_via_sentinel": 0,
+          "non_null": 13515,
+          "outside_envelope": 22,
+          "outside_envelope_fraction": 0.00162782,
+          "rows": 136786,
+          "well_coverage_fraction": 0.2,
+          "wells": 10,
+          "wells_fully_missing": 8,
+          "wells_with_data": 2
+        },
+        "train": {
+          "finite_observed": 298833,
+          "max": 10011.422852,
+          "median": 0.5573196411,
+          "min": -12.21545887,
+          "missing": 871678,
+          "missing_fraction": 0.74469868,
+          "missing_via_sentinel": 0,
+          "non_null": 298833,
+          "outside_envelope": 2523,
+          "outside_envelope_fraction": 0.00844284,
+          "rows": 1170511,
+          "well_coverage_fraction": 0.2244898,
+          "wells": 98,
+          "wells_fully_missing": 76,
+          "wells_with_data": 22
+        }
+      },
+      "status": "rejected",
+      "unit": "in",
+      "unit_verified_from_local_las": false
+    },
+    {
+      "caveats": [],
+      "envelope": {
+        "basis": "mV; sand to shale separation",
+        "high": 250.0,
+        "low": -250.0
+      },
+      "gate_failed": "G3_evaluation_coverage",
+      "kind": "formation_measurement",
+      "name": "SP",
+      "reason": "SP is present in 4 of 10 hidden_test wells (40%), below the 50% floor. Anything it contributes on training wells could not be confirmed on the partitions used to decide retention.",
+      "splits": {
+        "hidden_test": {
+          "finite_observed": 46725,
+          "max": 157.72410583,
+          "median": 32.659351349,
+          "min": -171.9113617,
+          "missing": 75672,
+          "missing_fraction": 0.61825045,
+          "missing_via_sentinel": 0,
+          "non_null": 46725,
+          "outside_envelope": 0,
+          "outside_envelope_fraction": 0.0,
+          "rows": 122397,
+          "well_coverage_fraction": 0.4,
+          "wells": 10,
+          "wells_fully_missing": 6,
+          "wells_with_data": 4
+        },
+        "leaderboard_test": {
+          "finite_observed": 66627,
+          "max": 125.52278137,
+          "median": 48.967998505,
+          "min": -24.13223267,
+          "missing": 70159,
+          "missing_fraction": 0.51291068,
+          "missing_via_sentinel": 0,
+          "non_null": 66627,
+          "outside_envelope": 0,
+          "outside_envelope_fraction": 0.0,
+          "rows": 136786,
+          "well_coverage_fraction": 0.4,
+          "wells": 10,
+          "wells_fully_missing": 6,
+          "wells_with_data": 4
+        },
+        "train": {
+          "finite_observed": 864247,
+          "max": 526.54730225,
+          "median": 55.39094162,
+          "min": -999.0,
+          "missing": 306264,
+          "missing_fraction": 0.26164983,
+          "missing_via_sentinel": 0,
+          "non_null": 864247,
+          "outside_envelope": 9187,
+          "outside_envelope_fraction": 0.01063006,
+          "rows": 1170511,
+          "well_coverage_fraction": 0.69387755,
+          "wells": 98,
+          "wells_fully_missing": 30,
+          "wells_with_data": 68
+        }
+      },
+      "status": "rejected",
+      "unit": "mV",
+      "unit_verified_from_local_las": false
+    },
+    {
+      "caveats": [],
+      "envelope": {
+        "basis": "g/cm3 mud weight",
+        "high": 2.5,
+        "low": 0.7
+      },
+      "gate_failed": "G2_measurement_kind",
+      "kind": "operational_or_mud",
+      "name": "MUDWEIGHT",
+      "reason": "MUDWEIGHT records the drilling or mud operation rather than the rock. Its value also tracks which crews and programmes instrumented a well, so it can encode well history instead of lithology.",
+      "splits": {
+        "hidden_test": {
+          "finite_observed": 0,
+          "max": null,
+          "median": null,
+          "min": null,
+          "missing": 122397,
+          "missing_fraction": 1.0,
+          "missing_via_sentinel": 0,
+          "non_null": 0,
+          "outside_envelope": 0,
+          "outside_envelope_fraction": null,
+          "rows": 122397,
+          "well_coverage_fraction": 0.0,
+          "wells": 10,
+          "wells_fully_missing": 10,
+          "wells_with_data": 0
+        },
+        "leaderboard_test": {
+          "finite_observed": 20269,
+          "max": 426.9213562,
+          "median": 0.1437916905,
+          "min": 0.129412517,
+          "missing": 116517,
+          "missing_fraction": 0.85181963,
+          "missing_via_sentinel": 0,
+          "non_null": 20269,
+          "outside_envelope": 20269,
+          "outside_envelope_fraction": 1.0,
+          "rows": 136786,
+          "well_coverage_fraction": 0.1,
+          "wells": 10,
+          "wells_fully_missing": 9,
+          "wells_with_data": 1
+        },
+        "train": {
+          "finite_observed": 316151,
+          "max": 185.73092651,
+          "median": 0.1557743102,
+          "min": 0.1258177161,
+          "missing": 854360,
+          "missing_fraction": 0.72990344,
+          "missing_via_sentinel": 0,
+          "non_null": 316151,
+          "outside_envelope": 209839,
+          "outside_envelope_fraction": 0.66373031,
+          "rows": 1170511,
+          "well_coverage_fraction": 0.28571429,
+          "wells": 98,
+          "wells_fully_missing": 70,
+          "wells_with_data": 28
+        }
+      },
+      "status": "rejected",
+      "unit": "g/cm3",
+      "unit_verified_from_local_las": false
+    },
+    {
+      "caveats": [],
+      "envelope": {
+        "basis": "gAPI computed gamma ray",
+        "high": 300.0,
+        "low": 0.0
+      },
+      "gate_failed": "G3_evaluation_coverage",
+      "kind": "formation_measurement",
+      "name": "SGR",
+      "reason": "SGR is present in 1 of 10 hidden_test wells (10%), below the 50% floor. Anything it contributes on training wells could not be confirmed on the partitions used to decide retention.",
+      "splits": {
+        "hidden_test": {
+          "finite_observed": 1139,
+          "max": 344.23059082,
+          "median": 66.158409119,
+          "min": 26.544502258,
+          "missing": 121258,
+          "missing_fraction": 0.99069422,
+          "missing_via_sentinel": 0,
+          "non_null": 1139,
+          "outside_envelope": 3,
+          "outside_envelope_fraction": 0.00263389,
+          "rows": 122397,
+          "well_coverage_fraction": 0.1,
+          "wells": 10,
+          "wells_fully_missing": 9,
+          "wells_with_data": 1
+        },
+        "leaderboard_test": {
+          "finite_observed": 0,
+          "max": null,
+          "median": null,
+          "min": null,
+          "missing": 136786,
+          "missing_fraction": 1.0,
+          "missing_via_sentinel": 0,
+          "non_null": 0,
+          "outside_envelope": 0,
+          "outside_envelope_fraction": null,
+          "rows": 136786,
+          "well_coverage_fraction": 0.0,
+          "wells": 10,
+          "wells_fully_missing": 10,
+          "wells_with_data": 0
+        },
+        "train": {
+          "finite_observed": 69353,
+          "max": 963.60858154,
+          "median": 69.562713623,
+          "min": -777.9859619,
+          "missing": 1101158,
+          "missing_fraction": 0.94074981,
+          "missing_via_sentinel": 0,
+          "non_null": 69353,
+          "outside_envelope": 62,
+          "outside_envelope_fraction": 0.00089398,
+          "rows": 1170511,
+          "well_coverage_fraction": 0.13265306,
+          "wells": 98,
+          "wells_fully_missing": 85,
+          "wells_with_data": 13
+        }
+      },
+      "status": "rejected",
+      "unit": "gAPI",
+      "unit_verified_from_local_las": false
+    }
+  ],
+  "feature_registry": {
+    "excluded_by_role": {
+      "coordinates": [
+        "X_LOC",
+        "Y_LOC",
+        "Z_LOC"
+      ],
+      "depth": [
+        "DEPTH_MD"
+      ],
+      "stratigraphy": [
+        "GROUP",
+        "FORMATION"
+      ],
+      "target": [
+        "FORCE_2020_LITHOFACIES_LITHOLOGY"
+      ]
+    },
+    "feature_sets": {
+      "v0.1": {
+        "curves": [
+          "CALI",
+          "RDEP",
+          "RMED",
+          "DTC",
+          "GR"
+        ],
+        "note": "the shipped five-curve baseline. Its curves are carried into v0.2 unchanged; only the mask set and the added curves are new.",
+        "status": "frozen"
+      },
+      "v0.2": {
+        "added_relative_to_v0_1": [
+          "DTS",
+          "NPHI",
+          "PEF",
+          "RHOB",
+          "DRHO"
+        ],
+        "curves": [
+          "CALI",
+          "RDEP",
+          "RMED",
+          "DTC",
+          "GR",
+          "DTS",
+          "NPHI",
+          "PEF",
+          "RHOB",
+          "DRHO"
+        ],
+        "note": "v0.1 plus every curve that cleared gates 1 to 3. The builder emits a mask column per curve alongside the curve, so the mask set follows the curve list and is not enumerated separately here. The ablation separates the curves from the masks.",
+        "status": "new"
+      },
+      "v0.3": {
+        "curves": [
+          "CALI",
+          "RDEP",
+          "RMED",
+          "DTC",
+          "GR",
+          "DTS",
+          "NPHI",
+          "PEF",
+          "RHOB",
+          "DRHO"
+        ],
+        "local_statistics": [
+          "mean",
+          "std"
+        ],
+        "note": "v0.2 plus same-well local context. Every local column is computed inside one well only, uses no target and no other well, and is invalidated across a logging gap rather than averaged over it. The builder owns the column names.",
+        "status": "new",
+        "windows": [
+          {
+            "description": "same-well mean and standard deviation of the selected curves over +/-0.76 m (+/-5 rows at the measured 0.1520 m step)",
+            "full_width_m": 1.52,
+            "full_width_rows": 11,
+            "half_width_m": 0.76,
+            "half_width_rows": 5
+          },
+          {
+            "description": "same-well mean and standard deviation of the selected curves over +/-1.52 m (+/-10 rows at the measured 0.1520 m step)",
+            "full_width_m": 3.04,
+            "full_width_rows": 21,
+            "half_width_m": 1.52,
+            "half_width_rows": 10
+          }
+        ]
+      }
+    },
+    "flags": [
+      {
+        "caveat": "hidden_test is 40.5% missing, so a median-imputed column is mostly imputation there",
+        "curve": "DTS"
+      },
+      {
+        "caveat": "leaderboard_test is 68.4% missing, so a median-imputed column is mostly imputation there",
+        "curve": "DTS"
+      }
+    ],
+    "gates": {
+      "G1_role": "only source columns whose role is log_curve are candidates. DEPTH_MD, the coordinates, GROUP, FORMATION, the target and the target confidence column are excluded by role.",
+      "G2_measurement_kind": "a candidate must measure the formation. Operational and mud-system curves, and hole-geometry curves, are rejected unless they are already in the frozen v0.1 set.",
+      "G3_evaluation_coverage": "a candidate must be present in at least 50% of the wells of both evaluation partitions, each of which has 10 wells.",
+      "caveat_threshold": "a selected curve missing more than 40% of an evaluation partition is flagged, and the flag is carried into the report."
+    },
+    "generated_by": "scripts/ingest/select_force2020_features.py",
+    "local_context": {
+      "measured": {
+        "fraction_over_gap_tolerance": 0.00010936,
+        "gap_tolerance_m": 0.456,
+        "iqr_m": 0.0,
+        "max_m": 269.344,
+        "median_m": 0.152,
+        "min_m": 0.152,
+        "non_increasing_steps": 0,
+        "p05_m": 0.152,
+        "p25_m": 0.152,
+        "p75_m": 0.152,
+        "p95_m": 0.152,
+        "steps": 1170413,
+        "steps_over_gap_tolerance": 128,
+        "strictly_increasing": true
+      },
+      "reason": "DEPTH_MD advances by a constant 0.1520 m inside every well in every split (interquartile range 0.0 m, strictly increasing: True), so a fixed row window is a fixed depth window. 128 of 1170413 steps exceed 0.4560 m and are logging gaps, so windows are invalidated across them rather than averaged over them.",
+      "status": "supported",
+      "windows": [
+        {
+          "description": "same-well mean and standard deviation of the selected curves over +/-0.76 m (+/-5 rows at the measured 0.1520 m step)",
+          "full_width_m": 1.52,
+          "full_width_rows": 11,
+          "half_width_m": 0.76,
+          "half_width_rows": 5
+        },
+        {
+          "description": "same-well mean and standard deviation of the selected curves over +/-1.52 m (+/-10 rows at the measured 0.1520 m step)",
+          "full_width_m": 3.04,
+          "full_width_rows": 21,
+          "half_width_m": 1.52,
+          "half_width_rows": 10
+        }
+      ]
+    },
+    "rejected": [
+      {
+        "curve": "BS",
+        "gate": "G2_measurement_kind",
+        "reason": "BS records the drilling or mud operation rather than the rock. Its value also tracks which crews and programmes instrumented a well, so it can encode well history instead of lithology."
+      },
+      {
+        "curve": "ROPA",
+        "gate": "G2_measurement_kind",
+        "reason": "ROPA records the drilling or mud operation rather than the rock. Its value also tracks which crews and programmes instrumented a well, so it can encode well history instead of lithology."
+      },
+      {
+        "curve": "ROP",
+        "gate": "G2_measurement_kind",
+        "reason": "ROP records the drilling or mud operation rather than the rock. Its value also tracks which crews and programmes instrumented a well, so it can encode well history instead of lithology."
+      },
+      {
+        "curve": "RSHA",
+        "gate": "G3_evaluation_coverage",
+        "reason": "RSHA is present in 4 of 10 hidden_test wells (40%), below the 50% floor. Anything it contributes on training wells could not be confirmed on the partitions used to decide retention."
+      },
+      {
+        "curve": "RXO",
+        "gate": "G2_measurement_kind",
+        "reason": "RXO records the drilling or mud operation rather than the rock. Its value also tracks which crews and programmes instrumented a well, so it can encode well history instead of lithology."
+      },
+      {
+        "curve": "RMIC",
+        "gate": "G2_measurement_kind",
+        "reason": "RMIC records the drilling or mud operation rather than the rock. Its value also tracks which crews and programmes instrumented a well, so it can encode well history instead of lithology."
+      },
+      {
+        "curve": "DCAL",
+        "gate": "G2_measurement_kind",
+        "reason": "DCAL measures hole geometry, which follows the drilling contract rather than the formation."
+      },
+      {
+        "curve": "SP",
+        "gate": "G3_evaluation_coverage",
+        "reason": "SP is present in 4 of 10 hidden_test wells (40%), below the 50% floor. Anything it contributes on training wells could not be confirmed on the partitions used to decide retention."
+      },
+      {
+        "curve": "MUDWEIGHT",
+        "gate": "G2_measurement_kind",
+        "reason": "MUDWEIGHT records the drilling or mud operation rather than the rock. Its value also tracks which crews and programmes instrumented a well, so it can encode well history instead of lithology."
+      },
+      {
+        "curve": "SGR",
+        "gate": "G3_evaluation_coverage",
+        "reason": "SGR is present in 1 of 10 hidden_test wells (10%), below the 50% floor. Anything it contributes on training wells could not be confirmed on the partitions used to decide retention."
+      }
+    ],
+    "schema_version": 1,
+    "source": {
+      "dataset": "force2020-lithology",
+      "delimiter": ";",
+      "subdir": "lithology_competition/data"
+    }
+  },
+  "generated_by": "scripts/ingest/select_force2020_features.py",
+  "not_performed": [
+    "no model of any kind was trained, fitted, tuned, evaluated or compared",
+    "no feature table, label table, checkpoint or model artifact was written",
+    "no value was imputed, interpolated, smoothed, back-filled, rolled or windowed",
+    "no value was clipped, trimmed or set to missing for falling outside an envelope",
+    "no curve was renamed, merged, rescaled or re-derived",
+    "no FORCE label was mapped onto any canonical vocabulary",
+    "no write to data/processed/ or data/ml/ except the registry path named above",
+    "no download, no external dataset, no network access"
+  ],
+  "source": {
+    "delimiter": ";",
+    "subdir": "lithology_competition/data"
+  },
+  "splits": {
+    "hidden_test": {
+      "depth_spacing": {
+        "fraction_over_gap_tolerance": 0.00017976,
+        "gap_tolerance_m": 0.456,
+        "iqr_m": 0.0,
+        "max_m": 37.696,
+        "median_m": 0.152,
+        "min_m": 0.152,
+        "non_increasing_steps": 0,
+        "p05_m": 0.152,
+        "p25_m": 0.152,
+        "p75_m": 0.152,
+        "p95_m": 0.152,
+        "steps": 122387,
+        "steps_over_gap_tolerance": 22,
+        "strictly_increasing": true
+      },
+      "depth_strictly_increasing": true,
+      "file": "hidden_test.csv",
+      "role": "held-out evaluation; never used to fit or select",
+      "rows": 122397,
+      "wells": 10
+    },
+    "leaderboard_test": {
+      "depth_spacing": {
+        "fraction_over_gap_tolerance": 0.00011698,
+        "gap_tolerance_m": 0.456,
+        "iqr_m": 0.0,
+        "max_m": 39.368,
+        "median_m": 0.152,
+        "min_m": 0.152,
+        "non_increasing_steps": 0,
+        "p05_m": 0.152,
+        "p25_m": 0.152,
+        "p75_m": 0.152,
+        "p95_m": 0.152,
+        "steps": 136776,
+        "steps_over_gap_tolerance": 16,
+        "strictly_increasing": true
+      },
+      "depth_strictly_increasing": true,
+      "file": "leaderboard_test_features.csv",
+      "role": "held-out evaluation; never used to fit or select",
+      "rows": 136786,
+      "wells": 10
+    },
+    "train": {
+      "depth_spacing": {
+        "fraction_over_gap_tolerance": 0.00010936,
+        "gap_tolerance_m": 0.456,
+        "iqr_m": 0.0,
+        "max_m": 269.344,
+        "median_m": 0.152,
+        "min_m": 0.152,
+        "non_increasing_steps": 0,
+        "p05_m": 0.152,
+        "p25_m": 0.152,
+        "p75_m": 0.152,
+        "p95_m": 0.152,
+        "steps": 1170413,
+        "steps_over_gap_tolerance": 128,
+        "strictly_increasing": true
+      },
+      "depth_strictly_increasing": true,
+      "file": "extracted/train.csv",
+      "role": "training and model selection",
+      "rows": 1170511,
+      "wells": 98
+    }
+  },
+  "stage": "force2020_curve_inventory",
+  "thresholds": {
+    "caveat_missing_fraction": 0.4,
+    "gap_tolerance_factor": 3.0,
+    "local_context_half_width_m": [
+      0.76,
+      1.52
+    ],
+    "min_evaluation_well_coverage": 0.5
+  }
+}

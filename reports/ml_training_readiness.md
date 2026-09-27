@@ -5,8 +5,27 @@
 - **`data_origin`:** `PUBLIC_REAL` on every populated row
 - **Validator state:** `PARTIAL` — 0 critical, 0 high, 9 advisories
 - **Wells available:** 1 (`FORGE16B7832`, wellbore `FORGE16B7832-01`)
-- **External datasets downloaded:** none. `data/ml_task_registry.csv` candidates are all `PLANNED`.
-- **Models trained:** none.
+- **External datasets ingested:** one, and now **three baseline models trained on
+  it**. FORCE 2020 (`INGESTED` in `ml/external_datasets.yaml`; inspection,
+  characterization and construction findings in
+  `reports/force2020_inspection.md`, `reports/force2020_characterization.md`
+  and `reports/force2020_dataset.md`). The source bytes were profiled and
+  pinned to a commit; the class, curve and missingness distributions were
+  measured and a logs-only feature set was derived from them; a
+  1,429,694-row logs-only table was then built from those approved curves, with
+  a well-grouped split manifest and a QC report. Three baselines were then fitted
+  on the source's own 98 train wells and scored on the two held-out well-disjoint
+  partitions: a Random Forest (`force2020-litho-rf-v0.1`), an XGBoost booster
+  (`force2020-litho-xgb-v0.1`) and a LightGBM booster
+  (`force2020-litho-lgbm-v0.1`), each with `DEPTH_MD`-only, missingness-mask and
+  class-weighting diagnostics. Their reports are
+  `reports/force2020_rf_baseline.md` and `reports/force2020_gbdt_baseline.md`.
+  They are **baselines**: untuned, none is the best available model, not
+  production-ready, not deployed.
+- **Models trained:** three, on the external dataset only
+  (`force2020-litho-rf-v0.1`, `force2020-litho-xgb-v0.1`,
+  `force2020-litho-lgbm-v0.1`). No canonical FORGE model has been trained, and no
+  model in the table below has changed status because of it.
 
 ## How to read the STATUS column
 
@@ -160,10 +179,22 @@ review.
 2. **Stand up `data/ml/common/`** — the grouped splitter, causal rolling window,
    leakage guard and evaluation harness. Every later model depends on it and it
    should exist before any model is written.
-3. **Acquire one multi-well labelled dataset.** FORCE 2020 serves lithology,
-   overpressure-geology, cementing context and analogue retrieval.
-   `KICK_DATADRILL` serves kick and overpressure. This single step is worth more
-   than any modelling work available now.
+3. **Decide what to model from FORCE 2020.** It is licence-clear (CC-BY-4.0),
+   pinned to a commit, ingested, and it is the only candidate that actually
+   removes the binding constraint for `lithology`: 118 well-disjoint wells
+   against the 1 available here. The characterization is in
+   `reports/force2020_characterization.md`: 12 classes over 1,429,694 labelled
+   rows, 20 log curves, a measured 5-curve core set (`CALI`, `RDEP`, `RMED`,
+   `DTC`, `GR`) with 13 masked and 2 sparse candidates held back pending an
+   availability-mask decision, and `GROUP`/`FORMATION` flagged as label-adjacent.
+   The dataset is in `reports/force2020_dataset.md`: 1,429,694 rows, no row
+   dropped, all 12 classes preserved, the source's own well-level split kept
+   unchanged, missingness made explicit with a 0/1 mask per curve and nothing
+   filled. What is left is a modelling decision, and the same limit still
+   applies: its label vocabulary must not be mapped onto `FORGE_UTAH_16B`, and
+   two classes (`93000` Basement, one well; `88000` Halite, three wells) are
+   thin enough to shape how they are handled. `KICK_DATADRILL` still has to be
+   acquired for kick and overpressure.
 4. **Then** mud_loss, stuck_pipe, wellbore_instability in that order — they
    share the mechanical feature base, so the second and third are cheap once the
    first exists.
@@ -172,10 +203,43 @@ review.
 
 ## What was deliberately not done
 
-- No external dataset was downloaded. All candidates remain `PLANNED` in
+- One external dataset was **ingested**: FORCE 2020 is `INGESTED` in
+  `ml/external_datasets.yaml`, meaning a table was built from it under
+  `data/interim/ml/force2020_litho/` by `scripts/ingest/build_force2020_dataset.py`.
+  Every other external candidate remains `PLANNED` in
   `data/ml_task_registry.csv`.
-- No model was trained and no model artefact was produced.
+- Three **baseline** models were trained on that table, and nothing beyond them:
+  `force2020-litho-rf-v0.1` (Random Forest), `force2020-litho-xgb-v0.1`
+  (XGBoost) and `force2020-litho-lgbm-v0.1` (LightGBM), all on the same five
+  approved log curves, the same target, the same split and the same metrics. Their
+  reports are `reports/force2020_rf_baseline.md` and
+  `reports/force2020_gbdt_baseline.md`; their artifacts live under
+  `data/interim/ml/force2020_litho/{training,evaluation}` and are gitignored.
+- A three-model comparison, `reports/force2020_model_comparison.md`, places them
+  side by side. It is derived entirely from the reports above by a script that
+  fits nothing and imports no ML library, and it names **no winner**: on macro F1,
+  supported-only macro F1 and balanced accuracy the spread between the two
+  ten-well partitions exceeds the spread between the three models, and weighted F1
+  is the one metric where it does not, which the report states outright.
+- **No canonical model was trained.** No model in the table above is trainable on
+  `nwis-forge16b-v0.2`, and none has changed status.
+- No model family beyond those three tree ensembles: no CNN, neural network or
+  any other estimator. No hyperparameter search, no feature selection, no tuning
+  of any kind, and the one weighting comparison reported is a single diagnostic
+  refit, not a search. `num_class=12` was stated rather than inferred for both
+  boosters, so a silently missing rare class could not narrow the output.
+- No API endpoint, no frontend, no serving of any model anywhere.
+- No FORCE 2020 row, label or file was written into `data/processed/` or
+  `data/ml/`, and its 12-class vocabulary was not mapped onto a canonical one.
+  `data/processed/` and `data/ml/lithology/lithology.csv` are unchanged.
+- No imputation in the stored table: the table keeps empty cells and 0/1 masks.
+  The model's imputation happens inside its fitted pipeline, on training rows
+  only, and is not written back.
+- The competition's published penalty matrix was read from the pinned source and
+  used as published (`ml/force2020_penalty_matrix.json`). No homemade or
+  approximate substitute was used.
 - No label was fabricated, and no label was derived by thresholding a feature
   (rule R6).
 - No canonical FORGE file was modified.
-- No model was marked ready when it is not.
+- No model was marked ready when it is not, and the baseline is not described as
+  the best, optimal or production-ready model anywhere.
