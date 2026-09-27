@@ -1,0 +1,14 @@
+# Exact versions used to build and verify this bundle.
+# The serialised estimators are version-sensitive: use these, not "latest".
+#
+#   python -m pip install -r requirements.txt
+#
+# Python 3.13 required (built and verified on 3.13.2).
+
+numpy==2.2.4
+pandas==2.2.3
+scikit-learn==1.9.0
+scipy>=1.14,<2
+joblib==1.6.0
+catboost==1.2.10
+lightgbm==4.7.0

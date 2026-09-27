@@ -1,0 +1,31 @@
+{
+  "dataset_name": "DataDRILL - Kick Detection",
+  "publisher": "Zenodo",
+  "doi": "10.5281/zenodo.12759014",
+  "concept_doi": "10.5281/zenodo.12759013",
+  "record_url": "https://zenodo.org/records/12759014",
+  "publication_date": "2024-07-17",
+  "version": "1 Dataset Files",
+  "creators": [
+    "Arifeen, Murshedul",
+    "Petrovski, Andrei",
+    "Hasan, Md Junayed",
+    "Kotenko, Igor",
+    "Sletov, Maksim",
+    "Hassard, Phil"
+  ],
+  "license": "cc-by-4.0",
+  "source_platform": "OTR (On-The-Rig) simulator, Robert Gordon University, Aberdeen, UK",
+  "data_nature": "SIMULATED / synthetic digital-twin output. NOT measured oilfield data.",
+  "paper": {
+    "title": "DataDRILL: Formation Pressure Prediction and Kick Detection for Drilling Rigs",
+    "arxiv": "https://arxiv.org/abs/2409.19724",
+    "venue": "IEEE DataPort (pending DOI form DD.20XX.XXXXX)"
+  },
+  "file": {
+    "name": "Kick_Detection.csv",
+    "bytes": 581598,
+    "md5": "8bbd611ca9d66c397d43c61a152bed93"
+  },
+  "downloaded_utc": "2026-09-26T15:01:34.970123+00:00"
+}
