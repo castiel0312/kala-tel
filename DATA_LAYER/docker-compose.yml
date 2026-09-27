@@ -1,0 +1,133 @@
+version: '3.8'
+
+services:
+  # Neo4j Knowledge Graph
+  neo4j:
+    image: neo4j:5.15
+    container_name: nwis-neo4j
+    environment:
+      - NEO4J_AUTH=neo4j/nwis_password
+      - NEO4J_PLUGINS=["apoc"]
+      - NEO4J_dbms_memory_heap_initial__size=1G
+      - NEO4J_dbms_memory_heap_max__size=4G
+      - NEO4J_dbms_memory_pagecache_size=2G
+    ports:
+      - "7474:7474"  # Browser
+      - "7687:7687"  # Bolt
+    volumes:
+      - neo4j_data:/data
+      - neo4j_logs:/logs
+      - neo4j_import:/var/lib/neo4j/import
+    healthcheck:
+      test: ["CMD", "cypher-shell", "-u", "neo4j", "-p", "nwis_password", "RETURN 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # ChromaDB Vector Store
+  chromadb:
+    image: chromadb/chroma:0.4.22
+    container_name: nwis-chromadb
+    environment:
+      - CHROMA_SERVER_HOST=0.0.0.0
+      - CHROMA_SERVER_HTTP_PORT=8000
+      - ALLOW_RESET=TRUE
+      - ANONYMIZED_TELEMETRY=FALSE
+    ports:
+      - "8000:8000"
+    volumes:
+      - chromadb_data:/chroma/chroma
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/heartbeat"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # Redis for caching/sessions (optional)
+  redis:
+    image: redis:7-alpine
+    container_name: nwis-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # MinIO for object storage (alternative to Supabase Storage)
+  minio:
+    image: minio/minio:latest
+    container_name: nwis-minio
+    command: server /data --console-address ":9001"
+    environment:
+      - MINIO_ROOT_USER=nwisadmin
+      - MINIO_ROOT_PASSWORD=nwis_password
+    ports:
+      - "9000:9000"   # API
+      - "9001:9001"   # Console
+    volumes:
+      - minio_data:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # PostgreSQL (if not using Supabase)
+  postgres:
+    image: postgres:16-alpine
+    container_name: nwis-postgres
+    environment:
+      - POSTGRES_USER=nwis
+      - POSTGRES_PASSWORD=nwis_password
+      - POSTGRES_DB=nwis
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./src/models/supabase_schema.py:/docker-entrypoint-initdb.d/schema.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nwis -d nwis"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # InfluxDB for time-series (eRTMAC data)
+  influxdb:
+    image: influxdb:2.7
+    container_name: nwis-influxdb
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=admin
+      - DOCKER_INFLUXDB_INIT_PASSWORD=nwis_password
+      - DOCKER_INFLUXDB_INIT_ORG=nwis
+      - DOCKER_INFLUXDB_INIT_BUCKET=drilling-data
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=nwis_admin_token
+    ports:
+      - "8086:8086"
+    volumes:
+      - influxdb_data:/var/lib/influxdb2
+      - influxdb_config:/etc/influxdb2
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8086/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+volumes:
+  neo4j_data:
+  neo4j_logs:
+  neo4j_import:
+  chromadb_data:
+  redis_data:
+  minio_data:
+  postgres_data:
+  influxdb_data:
+  influxdb_config:
+
+networks:
+  default:
+    name: nwis-network

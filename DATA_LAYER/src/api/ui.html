@@ -1,0 +1,739 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f6f2">
+  <title>NWIS | Well Intelligence</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #f4f6f2;
+      --surface: #ffffff;
+      --ink: #1e2924;
+      --muted: #68766e;
+      --line: #dce3dc;
+      --green: #286448;
+      --green-soft: #e6f0e8;
+      --rust: #a65336;
+      --rust-soft: #f6eae4;
+      --gold: #aa7a2d;
+      --shadow: 0 12px 36px rgba(35, 52, 42, .07);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "Segoe UI Variable", "Aptos", sans-serif;
+      font-size: 14px;
+    }
+    button, input, textarea { font: inherit; }
+    .topbar {
+      height: 62px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 34px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--line);
+    }
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 700; letter-spacing: .02em; }
+    .brand-mark {
+      width: 29px; height: 29px; display: grid; place-items: center;
+      background: var(--green); color: white; border-radius: 7px; font-size: 13px;
+    }
+    .brand small { display: block; margin-top: 2px; color: var(--muted); font-size: 10px; font-weight: 600; letter-spacing: .12em; }
+    .graph-badge { display: inline-flex; align-items: center; gap: 6px; padding: 3px 9px; border: 1px solid var(--line); border-radius: 999px; background: #fafbfa; font-size: 10px; font-weight: 650; color: #49574e; white-space: nowrap; }
+    .graph-badge-dot { width: 7px; height: 7px; border-radius: 50%; background: #aab3ad; }
+    .graph-badge[data-backend="neo4j"] .graph-badge-dot { background: #2f6fb5; }
+    .graph-badge[data-backend="local"] .graph-badge-dot { background: #39855f; }
+    .graph-badge[data-backend="unavailable"] .graph-badge-dot { background: var(--rust); }
+    .service-state { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 12px; }
+    .health-dot { width: 8px; height: 8px; border-radius: 50%; background: #aab3ad; }
+    .health-dot.online { background: #39855f; box-shadow: 0 0 0 3px #e4f0e8; }
+    .health-dot.offline { background: var(--rust); box-shadow: 0 0 0 3px var(--rust-soft); }
+    main { max-width: 1440px; margin: 0 auto; padding: 32px 34px 56px; }
+    .page-heading { display: flex; align-items: end; justify-content: space-between; gap: 20px; margin-bottom: 23px; }
+    .eyebrow { color: var(--green); font-size: 10px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
+    h1 { margin: 7px 0 0; font-size: 27px; line-height: 1.15; font-weight: 650; }
+    .heading-note { color: var(--muted); font-size: 12px; }
+    .workspace { display: grid; grid-template-columns: minmax(275px, 340px) minmax(0, 1fr); gap: 20px; align-items: start; }
+    .panel { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; box-shadow: var(--shadow); }
+    .query-panel { padding: 20px; }
+    .panel-title { margin: 0; font-size: 13px; font-weight: 700; }
+    .panel-kicker { margin: 5px 0 18px; color: var(--muted); font-size: 11px; }
+    label { display: block; margin: 0 0 7px; color: #49574e; font-size: 11px; font-weight: 650; }
+    textarea, input {
+      width: 100%; border: 1px solid #cfd8d0; border-radius: 5px; outline: none;
+      background: #fff; color: var(--ink); transition: border-color .15s, box-shadow .15s;
+    }
+    textarea { min-height: 112px; padding: 11px; resize: vertical; line-height: 1.5; }
+    input { height: 37px; padding: 0 10px; }
+    textarea:focus, input:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(40, 100, 72, .12); }
+    .field { margin-bottom: 15px; }
+    .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; }
+    .advanced { margin: 5px 0 16px; border-top: 1px solid var(--line); }
+    .advanced summary { padding: 13px 0 0; cursor: pointer; color: #49574e; font-size: 11px; font-weight: 650; }
+    .advanced-fields { padding-top: 14px; }
+    .submit-button {
+      width: 100%; height: 41px; display: flex; align-items: center; justify-content: center; gap: 9px;
+      border: 0; border-radius: 5px; background: var(--green); color: white; font-weight: 650; cursor: pointer;
+    }
+    .submit-button:hover { background: #1e5139; }
+    .submit-button:disabled { opacity: .6; cursor: wait; }
+    .submit-button svg { width: 16px; height: 16px; }
+    .sample-query { width: 100%; margin-top: 11px; padding: 0; border: 0; background: transparent; color: var(--green); text-align: left; font-size: 11px; cursor: pointer; }
+    .right-column { display: grid; gap: 20px; min-width: 0; }
+    /* ---- ingest panel ---- */
+    .ingest-panel { margin-top: 20px; padding: 20px; }
+    .ingest-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; }
+    .dropzone {
+      display: grid; place-items: center; gap: 6px; min-height: 132px; padding: 20px; text-align: center;
+      border: 1.5px dashed #c3cfc5; border-radius: 7px; background: #fbfcfa; cursor: pointer;
+      transition: border-color .15s, background .15s;
+    }
+    .dropzone:hover, .dropzone.dragover { border-color: var(--green); background: #f2f8f4; }
+    .dropzone.filled { border-style: solid; border-color: var(--green); background: #f2f8f4; }
+    .dropzone strong { font-size: 12px; }
+    .dropzone span { color: var(--muted); font-size: 11px; }
+    .dropzone .file-name { color: var(--green); font-weight: 650; word-break: break-all; }
+    select { width: 100%; height: 37px; padding: 0 10px; border: 1px solid #cfd8d0; border-radius: 5px; background: #fff; color: var(--ink); }
+    select:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(40, 100, 72, .12); }
+    .ingest-status { margin-top: 12px; padding: 11px 13px; border-radius: 6px; font-size: 11px; line-height: 1.6; background: #f4f6f3; color: #49574e; }
+    .ingest-status.ok { background: #e9f4ed; color: #1c4c34; }
+    .ingest-status.error { background: #fbeaea; color: #7d2a2a; }
+    .ingest-status.busy { background: #fbf1dc; color: #805c19; }
+    .ingest-stats { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 9px; }
+    .ingest-stats .chip { margin: 0; }
+    .doc-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 7px; max-height: 260px; overflow-y: auto; }
+    .doc-list li { display: flex; justify-content: space-between; gap: 10px; padding: 9px 11px; border: 1px solid var(--line); border-radius: 5px; font-size: 11px; }
+    .doc-list .doc-title { font-weight: 650; }
+    .doc-list .doc-meta { color: var(--muted); text-align: right; white-space: nowrap; }
+    .ingest-tabs { display: flex; gap: 6px; margin-bottom: 14px; }
+    .ingest-tabs button { padding: 6px 11px; border: 1px solid var(--line); border-radius: 4px; background: #fff; color: #49574e; font-size: 11px; font-weight: 650; cursor: pointer; }
+    .ingest-tabs button.active { background: var(--green); border-color: var(--green); color: #fff; }
+    @media (max-width: 880px) { .ingest-grid { grid-template-columns: 1fr; } }
+    .trace-panel { padding: 19px 21px 17px; }
+    .trace-header { display: flex; justify-content: space-between; align-items: start; gap: 12px; }
+    .trace-state { padding: 5px 8px; border-radius: 4px; background: #eef1ed; color: #667168; font-size: 10px; font-weight: 700; text-transform: uppercase; }
+    .trace-state.running { background: #fbf1dc; color: #805c19; }
+    .trace-state.done { background: var(--green-soft); color: var(--green); }
+    .trace-state.failed { background: var(--rust-soft); color: var(--rust); }
+    .current-stage { display: flex; align-items: center; gap: 9px; margin: 17px 0 14px; min-height: 22px; color: var(--muted); font-size: 12px; }
+    .current-stage strong { color: var(--ink); font-weight: 650; }
+    .spinner { display: none; width: 14px; height: 14px; border: 2px solid #d9e5dc; border-top-color: var(--green); border-radius: 50%; animation: spin .8s linear infinite; }
+    .spinner.visible { display: inline-block; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .stage-list { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); border-top: 1px solid var(--line); padding-top: 15px; }
+    .stage { position: relative; min-width: 0; color: #9aa49c; font-size: 10px; }
+    .stage:not(:last-child)::after { content: ""; position: absolute; top: 6px; left: 17px; right: 5px; height: 1px; background: var(--line); }
+    .stage-marker { position: relative; z-index: 1; width: 13px; height: 13px; margin-bottom: 8px; border: 2px solid #cbd4cc; border-radius: 50%; background: white; }
+    .stage.active { color: var(--ink); font-weight: 650; }
+    .stage.active .stage-marker { border-color: var(--gold); background: #f6e8c9; box-shadow: 0 0 0 3px #fbf5e8; }
+    .stage.complete { color: var(--green); }
+    .stage.complete .stage-marker { border-color: var(--green); background: var(--green); }
+    .trace-log { display: flex; flex-wrap: wrap; gap: 6px; min-height: 23px; margin-top: 14px; }
+    .trace-chip { padding: 4px 7px; border: 1px solid var(--line); border-radius: 4px; color: #536158; font-size: 10px; }
+    .store-bar { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); }
+    .store { display: flex; align-items: center; gap: 7px; min-width: 0; padding: 7px 9px; border: 1px solid var(--line); border-radius: 5px; background: #fafbfa; font-size: 10px; }
+    .store-dot { flex: none; width: 7px; height: 7px; border-radius: 50%; background: #aab3ad; }
+    .store.ok .store-dot { background: #39855f; }
+    .store.warn .store-dot { background: var(--gold); }
+    .store.down .store-dot { background: var(--rust); }
+    .store-name { font-weight: 650; color: #49574e; white-space: nowrap; }
+    .store-state { margin-left: auto; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .results-panel { min-height: 310px; overflow: hidden; }
+    .results-head { display: flex; justify-content: space-between; align-items: center; padding: 17px 20px; border-bottom: 1px solid var(--line); }
+    .results-meta { color: var(--muted); font-size: 11px; }
+    .graph-chip { display: inline-flex; align-items: center; gap: 5px; margin-left: 6px; padding: 2px 8px; border: 1px solid var(--line); border-radius: 999px; background: #fafbfa; font-size: 10px; font-weight: 650; color: #49574e; white-space: nowrap; }
+    .graph-chip[data-backend="neo4j"] { border-color: #bcd3ea; background: #eef4fb; color: #2f6fb5; }
+    .graph-chip[data-backend="local"] { border-color: #bfdccb; background: #eef6f1; color: #34795a; }
+    .empty-state { min-height: 250px; display: grid; place-items: center; padding: 30px; color: var(--muted); text-align: center; }
+    .empty-mark { width: 39px; height: 39px; display: grid; place-items: center; margin: 0 auto 12px; border: 1px solid var(--line); border-radius: 50%; color: var(--green); font-size: 16px; }
+    .empty-state p { margin: 0; font-size: 12px; }
+    .empty-state p.empty-hint { margin-top: 8px; padding: 9px 11px; border: 1px solid var(--line); border-radius: 6px; background: #fafbfa; color: #55625a; font-size: 11px; line-height: 1.55; }
+    .empty-state p.empty-hint code { padding: 1px 4px; border-radius: 3px; background: #eef1ed; font-size: 10px; }
+    .result-content { padding: 4px 20px 20px; }
+    .result-section { padding: 15px 0; border-bottom: 1px solid #e8ece8; }
+    .result-section:last-child { border-bottom: 0; }
+    .result-section h3 { display: flex; justify-content: space-between; margin: 0 0 10px; font-size: 12px; }
+    .count { color: var(--muted); font-size: 10px; font-weight: 500; }
+    .result-item { padding: 10px 0; border-top: 1px solid #eff2ef; }
+    .result-item:first-of-type { border-top: 0; }
+    .result-item strong { display: block; margin-bottom: 4px; font-size: 12px; }
+    .result-badges { margin-bottom: 5px; color: var(--green); font-size: 10px; font-weight: 600; }
+    .result-item p { margin: 0; color: #58665d; font-size: 11px; line-height: 1.55; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .result-item details { margin-top: 7px; }
+    .result-item summary, .full-json summary { color: var(--green); font-size: 10px; cursor: pointer; }
+    pre { max-height: 280px; overflow: auto; padding: 10px; border-radius: 4px; background: #f4f6f3; font-size: 10px; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .full-json { margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--line); }
+    @media (max-width: 800px) {
+      .topbar { padding: 0 18px; }
+      main { padding: 25px 18px 40px; }
+      .workspace { grid-template-columns: 1fr; }
+      .query-panel { order: 0; }
+      .right-column { order: 1; }
+    }
+    @media (max-width: 540px) {
+      .topbar { height: 56px; }
+      main { padding: 21px 13px 30px; }
+      .page-heading { align-items: start; flex-direction: column; gap: 7px; }
+      h1 { font-size: 23px; }
+      .stage-list { grid-template-columns: repeat(3, minmax(0, 1fr)); row-gap: 13px; }
+      .stage:nth-child(3)::after { display: none; }
+      .stage:not(:last-child)::after { right: 8px; }
+      .trace-panel { padding: 16px; }
+      .results-head, .result-content { padding-left: 15px; padding-right: 15px; }
+    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">N</span><span>NWIS<small>WELL INTELLIGENCE</small></span></div>
+    <div class="service-state"><span class="graph-badge" id="graph-badge" data-backend="unknown"><span class="graph-badge-dot"></span><span id="graph-badge-label">Graph: checking</span></span><span id="health-dot" class="health-dot"></span><span id="health-label">Checking API</span></div>
+  </header>
+  <main>
+    <div class="page-heading">
+      <div><div class="eyebrow">Nearby Wells Intelligence System</div><h1>Search drilling knowledge</h1></div>
+      <div class="heading-note">Hybrid retrieval across operational data, knowledge graph, and documents</div>
+    </div>
+    <div class="workspace">
+      <form id="search-form" class="panel query-panel">
+        <h2 class="panel-title">Search context</h2>
+        <p class="panel-kicker">Describe the well history or event you need to investigate.</p>
+        <div class="field">
+          <label for="query">Search query</label>
+          <textarea id="query" required placeholder="Find nearby mud loss events in Formation-X around 3,000 m"></textarea>
+        </div>
+        <details class="advanced">
+          <summary>Well and depth filters</summary>
+          <div class="advanced-fields">
+            <div class="field-grid">
+              <div class="field"><label for="formation">Formation</label><input id="formation" placeholder="Formation-X"></div>
+              <div class="field"><label for="well-id">Active well ID</label><input id="well-id" placeholder="Optional"></div>
+              <div class="field"><label for="depth-from">Depth from (m)</label><input id="depth-from" type="number" min="0" step="any" placeholder="0"></div>
+              <div class="field"><label for="depth-to">Depth to (m)</label><input id="depth-to" type="number" min="0" step="any" placeholder="Any"></div>
+              <div class="field"><label for="latitude">Latitude</label><input id="latitude" type="number" step="any" placeholder="Optional"></div>
+              <div class="field"><label for="longitude">Longitude</label><input id="longitude" type="number" step="any" placeholder="Optional"></div>
+            </div>
+          </div>
+        </details>
+        <div class="field"><label for="top-k">Maximum semantic results</label><input id="top-k" type="number" min="1" max="100" value="20"></div>
+        <button id="search-button" class="submit-button" type="submit">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 5 5"></path></svg>
+          <span>Search</span>
+        </button>
+        <button class="sample-query" id="sample-query" type="button">Try: Formation-X stuck pipe incidents near 3,200 m (fills formation + coordinates)</button>
+      </form>
+      <div class="right-column">
+        <section class="panel trace-panel" aria-live="polite">
+          <div class="trace-header"><div><h2 class="panel-title">Retrieval activity</h2><p class="panel-kicker" style="margin-bottom:0">Live status from the search engine</p></div><span id="trace-state" class="trace-state">Idle</span></div>
+          <div class="current-stage"><span id="spinner" class="spinner"></span><span id="current-message">Ready for a search</span></div>
+          <div id="stage-list" class="stage-list"></div>
+          <div id="trace-log" class="trace-log"></div>
+          <div id="store-bar" class="store-bar">
+            <div class="store" data-store="sql"><span class="store-dot"></span><span class="store-name">Local SQL</span><span class="store-state">checking</span></div>
+            <div class="store" data-store="chromadb"><span class="store-dot"></span><span class="store-name">ChromaDB</span><span class="store-state">checking</span></div>
+            <div class="store" data-store="graph"><span class="store-dot"></span><span class="store-name">Knowledge graph</span><span class="store-state">checking</span></div>
+          </div>
+        </section>
+        <section class="panel results-panel">
+          <div class="results-head"><h2 class="panel-title">Retrieved evidence</h2><span id="results-meta" class="results-meta">No search run</span></div>
+          <div id="results"><div class="empty-state"><div><div class="empty-mark">NW</div><p>Search results and source evidence will appear here.</p></div></div></div>
+        </section>
+      </div>
+    </div>
+    <section class="panel ingest-panel">
+      <h2 class="panel-title">Ingest data</h2>
+      <p class="panel-kicker">Upload reports, logs or notes. Content is parsed, chunked and indexed for semantic search immediately.</p>
+      <div class="ingest-tabs">
+        <button type="button" id="tab-file" class="active">Upload file</button>
+        <button type="button" id="tab-text">Paste text</button>
+      </div>
+      <div class="ingest-grid">
+        <div>
+          <div id="file-mode">
+            <div id="dropzone" class="dropzone" tabindex="0" role="button" aria-label="Choose a file to upload">
+              <strong>Drop a file here or click to browse</strong>
+              <span>PDF, TXT, MD, CSV, LOG or JSON</span>
+              <span id="file-name"></span>
+            </div>
+            <input type="file" id="file-input" accept=".pdf,.txt,.md,.csv,.log,.json" hidden>
+          </div>
+          <div id="text-mode" hidden>
+            <div class="field">
+              <label for="paste-content">Document content</label>
+              <textarea id="paste-content" style="min-height:132px" placeholder="Paste the report or note text here..."></textarea>
+            </div>
+          </div>
+          <div class="field-grid" style="margin-top:15px">
+            <div class="field"><label for="doc-type">Document type</label>
+              <select id="doc-type">
+                <option value="WELL_REPORT">Well report</option>
+                <option value="DRILLING_LOG">Drilling log</option>
+                <option value="LESSON_LEARNED">Lesson learned</option>
+                <option value="OPERATIONAL_REPORT">Operational report</option>
+                <option value="DAILY_REPORT">Daily report</option>
+                <option value="OTHER">Other</option>
+              </select>
+            </div>
+            <div class="field"><label for="doc-well">Well code</label><input id="doc-well" placeholder="e.g. CC-01"></div>
+            <div class="field"><label for="doc-title">Title</label><input id="doc-title" placeholder="Defaults to file name"></div>
+            <div class="field"><label for="doc-author">Author</label><input id="doc-author" placeholder="Optional"></div>
+            <div class="field"><label for="doc-date">Document date</label><input id="doc-date" type="date"></div>
+            <div class="field"><label for="doc-conf">Confidentiality</label>
+              <select id="doc-conf">
+                <option value="INTERNAL">Internal</option>
+                <option value="CONFIDENTIAL">Confidential</option>
+                <option value="RESTRICTED">Restricted</option>
+              </select>
+            </div>
+          </div>
+          <button id="upload-button" class="submit-button" type="button" disabled>Ingest document</button>
+          <div id="ingest-status" class="ingest-status">Choose a file or paste text to begin.</div>
+        </div>
+        <div>
+          <h3 class="panel-title" style="margin-bottom:5px">Recently ingested</h3>
+          <p class="panel-kicker" id="doc-count">Loading documents...</p>
+          <ul id="doc-list" class="doc-list"></ul>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script>
+    const stages = [
+      ["understanding", "Query understanding"],
+      ["routing", "Intent routing"],
+      ["structured", "Structured data"],
+      ["graph", "Knowledge graph"],
+      ["semantic", "Semantic retrieval"],
+      ["ranking", "Result ranking"]
+    ];
+    const stageList = document.getElementById("stage-list");
+    const visited = new Set();
+    let activeStage = "";
+
+    function escapeHtml(value) {
+      return String(value ?? "").replace(/[&<>"']/g, (char) => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;"
+      })[char]);
+    }
+
+    function renderStages() {
+      stageList.innerHTML = stages.map(([key, label]) => {
+        const state = key === activeStage ? "active" : visited.has(key) ? "complete" : "";
+        return `<div class="stage ${state}"><div class="stage-marker"></div><span>${label}</span></div>`;
+      }).join("");
+    }
+
+    function setState(state, label) {
+      const pill = document.getElementById("trace-state");
+      pill.className = `trace-state ${state}`;
+      pill.textContent = label;
+      document.getElementById("spinner").classList.toggle("visible", state === "running");
+    }
+
+    function addTrace(message) {
+      const log = document.getElementById("trace-log");
+      const chip = document.createElement("span");
+      chip.className = "trace-chip";
+      chip.textContent = message;
+      log.append(chip);
+      while (log.children.length > 5) log.firstElementChild.remove();
+    }
+
+    const storeAliases = { supabase: "sql", sql: "sql", chromadb: "chromadb", graph: "graph", neo4j: "graph" };
+    const backendLabels = { neo4j: "Neo4j", local: "Local graph" };
+    const backendBadgeLabels = { neo4j: "Graph: Neo4j", local: "Graph: offline (local)" };
+
+    // The knowledge-graph store is either Neo4j or the offline local graph,
+    // so both the badge and the store label follow whichever backend is active.
+    // Marks which knowledge graph actually served a result set, so Neo4j is
+    // never silently substituted for the offline graph (or the reverse).
+    function graphSourceChip(backend) {
+      if (backend !== "neo4j" && backend !== "local") {
+        return `<span class="graph-chip" data-backend="${escapeHtml(String(backend || "unknown"))}">graph: ${escapeHtml(String(backend || "unknown"))}</span>`;
+      }
+      const label = backend === "neo4j" ? "Neo4j" : "offline graph";
+      const title = backend === "neo4j" ? "Served by the Neo4j Aura knowledge graph" : "Served by the offline NetworkX graph";
+      return `<span class="graph-chip" data-backend="${backend}" title="${escapeHtml(title)}">served by ${escapeHtml(label)}</span>`;
+    }
+
+    function renderGraphBackend(backend) {
+      const name = backendLabels[backend] || "Knowledge graph";
+      const node = document.querySelector('#store-bar .store[data-store="graph"] .store-name');
+      if (node) node.textContent = name;
+
+      const badge = document.getElementById("graph-badge");
+      const badgeLabel = document.getElementById("graph-badge-label");
+      if (!badge || !badgeLabel) return;
+      if (backend === "neo4j" || backend === "local") {
+        badge.dataset.backend = backend;
+        badgeLabel.textContent = backendBadgeLabels[backend];
+        badge.title = backend === "neo4j"
+          ? "Queries are running against the Neo4j Aura knowledge graph"
+          : "Queries are running against the offline NetworkX graph (no internet needed)";
+      } else {
+        badge.dataset.backend = "unavailable";
+        badgeLabel.textContent = "Graph: unavailable";
+        badge.title = "No knowledge-graph backend could be reached";
+      }
+    }
+
+    function renderStores(status) {
+      document.querySelectorAll("#store-bar .store").forEach((node) => {
+        const key = node.dataset.store;
+        const raw = status ? (status[key] !== undefined ? status[key] : status[Object.keys(storeAliases).find((alias) => storeAliases[alias] === key)]) : undefined;
+        const label = node.querySelector(".store-state");
+        node.classList.remove("ok", "warn", "down");
+        if (raw === undefined) { label.textContent = "unknown"; return; }
+        if (raw === "ok" || raw === "connected") { node.classList.add("ok"); label.textContent = "connected"; return; }
+        const text = String(raw);
+        if (/unavailable|offline|error|refused/i.test(text)) { node.classList.add("down"); label.textContent = text.replace(/^unavailable:\s*/i, "offline: "); if (key === "graph") renderGraphBackend(null); return; }
+        // Readiness reports carry detail, e.g. "connected (26 rows)" or
+        // "connected (neo4j)". Those are healthy, so keep the dot green and
+        // show the detail instead of falling through to the warning state.
+        if (/^connected\b/i.test(text)) { node.classList.add("ok"); label.textContent = text; return; }
+        node.classList.add("warn"); label.textContent = text;
+      });
+    }
+
+    function renderResults(data) {
+      const groups = [
+        ["historical_events", "Historical events"],
+        ["nearby_wells", "Nearby wells"],
+        ["lessons", "Lessons learned"],
+        ["formations", "Formation knowledge"],
+        ["risk_patterns", "Risk patterns"],
+        ["source_documents", "Semantic matches"],
+        ["active_well", "Active well"]
+      ].filter(([key, label]) => label);
+      const sections = groups.filter(([key]) => Array.isArray(data[key]) && data[key].length).map(([key, label]) => {
+        const items = data[key].map((item) => {
+          const title = item.title || item.well_code || item.event_type || item.formation_name || item.formation_code || item.type || item.id || label;
+          const description = item.description || item.recommendation || item.lesson || item.content || item.document || item.text || item.summary || item.mitigation_applied || "Evidence retrieved; inspect details for source fields.";
+          const meta = item.metadata || {};
+          const score = item.relevance_score !== undefined ? `relevance ${Number(item.relevance_score).toFixed(3)}` : (item.similarity !== undefined ? `similarity ${Number(item.similarity).toFixed(3)}` : "");
+          const badges = [item.severity, item.event_type, item.well_code, item.distance_km !== undefined && item.distance_km !== null ? `${item.distance_km} km` : null, score, meta.event_type]
+            .filter(Boolean).map((value) => escapeHtml(String(value))).join(" &middot; ");
+          return `<article class="result-item"><strong>${escapeHtml(title)}</strong>${badges ? `<div class="result-badges">${badges}</div>` : ""}<p>${escapeHtml(description)}</p><details><summary>Record details</summary><pre>${escapeHtml(JSON.stringify(item, null, 2))}</pre></details></article>`;
+        }).join("");
+        return `<section class="result-section"><h3>${label}<span class="count">${data[key].length} record${data[key].length === 1 ? "" : "s"}</span></h3>${items}</section>`;
+      });
+      if (data.active_well && Object.keys(data.active_well).length) {
+        sections.push(`<section class="result-section"><h3>Active well<span class="count">1 record</span></h3><article class="result-item"><strong>${escapeHtml(data.active_well.well_code || data.active_well.well_name || "Active well")}</strong><div class="result-badges">${escapeHtml([data.active_well.well_type, data.active_well.current_formation, data.active_well.status].filter(Boolean).join(" &middot; "))}</div><details><summary>Record details</summary><pre>${escapeHtml(JSON.stringify(data.active_well, null, 2))}</pre></details></article></section>`);
+      }
+      const total = groups.reduce((count, [key]) => count + (Array.isArray(data[key]) ? data[key].length : 0), 0);
+      if (data.active_well && Object.keys(data.active_well).length) total += 1;
+      renderStores(data.store_status);
+      if (data.graph_backend) renderGraphBackend(data.graph_backend);
+      document.getElementById("results-meta").innerHTML = `${total} evidence item${total === 1 ? "" : "s"} ${graphSourceChip(data.graph_backend)}`;
+      const scoped = Object.values(data.store_status || {}).length > 0;
+      const hint = scoped
+        ? "No wells, events, lessons or documents matched those filters. Try widening the depth range, or use the sample query."
+        : "No search scope could be built from this query. Add a formation (for example <code>X</code>) or latitude/longitude so the structured store and knowledge graph know which wells to search.";
+      document.getElementById("results").innerHTML = sections.length
+        ? `<div class="result-content">${sections.join("")}<details class="full-json"><summary>View full response</summary><pre>${escapeHtml(JSON.stringify(data, null, 2))}</pre></details></div>`
+        : `<div class="empty-state"><div><div class="empty-mark">0</div><p>No matching evidence was returned for this search.</p><p class="empty-hint">${hint}</p><details class="full-json"><summary>View full response</summary><pre>${escapeHtml(JSON.stringify(data, null, 2))}</pre></details></div></div>`;
+    }
+
+    function appendContext(context, id, key, asNumber = false) {
+      const value = document.getElementById(id).value.trim();
+      if (value) context[key] = asNumber ? Number(value) : value;
+    }
+
+    async function submitSearch(event) {
+      event.preventDefault();
+      const button = document.getElementById("search-button");
+      const query = document.getElementById("query").value.trim();
+      if (!query) return;
+      const context = {};
+      appendContext(context, "formation", "formation");
+      appendContext(context, "well-id", "active_well_id");
+      appendContext(context, "depth-from", "depth_from", true);
+      appendContext(context, "depth-to", "depth_to", true);
+      appendContext(context, "latitude", "latitude", true);
+      appendContext(context, "longitude", "longitude", true);
+      const topK = Math.max(1, Math.min(100, Number(document.getElementById("top-k").value) || 20));
+
+      visited.clear(); activeStage = ""; renderStages();
+      document.getElementById("trace-log").replaceChildren();
+      document.getElementById("current-message").textContent = "Connecting to retrieval service";
+      document.getElementById("results-meta").textContent = "Search in progress";
+      document.getElementById("results").innerHTML = "<div class=\"empty-state\"><p>Waiting for evidence...</p></div>";
+      setState("running", "Searching");
+      button.disabled = true;
+
+      try {
+        const response = await fetch("/api/v1/search/stream", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "Accept": "text/event-stream" },
+          body: JSON.stringify({ query, context, top_k: topK })
+        });
+        if (!response.ok || !response.body) throw new Error(`Search request failed (${response.status})`);
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = "";
+        let finished = false;
+        while (!finished) {
+          const { value, done } = await reader.read();
+          buffer += decoder.decode(value || new Uint8Array(), { stream: !done });
+          const blocks = buffer.split("\n\n");
+          buffer = blocks.pop();
+          for (const block of blocks) {
+            const line = block.split("\n").find((part) => part.startsWith("data: "));
+            if (!line) continue;
+            const eventData = JSON.parse(line.slice(6));
+            if (eventData.type === "progress") {
+              if (activeStage && activeStage !== eventData.stage) visited.add(activeStage);
+              activeStage = eventData.stage;
+              renderStages();
+              document.getElementById("current-message").textContent = eventData.message;
+              addTrace(eventData.message);
+            } else if (eventData.type === "result") {
+              if (activeStage) visited.add(activeStage);
+              activeStage = ""; renderStages();
+              setState("done", "Complete");
+              document.getElementById("current-message").innerHTML = "<strong>Retrieval complete</strong>";
+              renderResults(eventData.data);
+              finished = true;
+            } else if (eventData.type === "error") {
+              throw new Error(eventData.message || "Search failed");
+            }
+          }
+          if (done) break;
+        }
+      } catch (error) {
+        setState("failed", "Failed");
+        document.getElementById("current-message").textContent = error.message;
+        document.getElementById("results-meta").textContent = "Search failed";
+        document.getElementById("results").innerHTML = `<div class="empty-state"><p>${escapeHtml(error.message)}</p></div>`;
+      } finally {
+        button.disabled = false;
+      }
+    }
+
+    document.getElementById("search-form").addEventListener("submit", submitSearch);
+    document.getElementById("sample-query").addEventListener("click", () => {
+      // Centred on CC-01, the well that carries the Formation-X stuck-pipe
+      // event, so the sample search returns that event rather than nothing.
+      document.getElementById("query").value = "Find nearby stuck pipe incidents in Formation-X around 3200 m";
+      document.getElementById("formation").value = "X";
+      document.getElementById("latitude").value = "28.575";
+      document.getElementById("longitude").value = "-101.355";
+      document.getElementById("query").focus();
+    });
+
+    // ---- ingestion ----
+    const ALLOWED = [".pdf", ".txt", ".md", ".csv", ".log", ".json"];
+    let selectedFile = null;
+    let ingestMode = "file";
+
+    const dropzone = document.getElementById("dropzone");
+    const fileInput = document.getElementById("file-input");
+    const fileName = document.getElementById("file-name");
+    const uploadButton = document.getElementById("upload-button");
+    const ingestStatus = document.getElementById("ingest-status");
+
+    function setIngestStatus(message, kind = "") {
+      ingestStatus.className = "ingest-status" + (kind ? " " + kind : "");
+      ingestStatus.textContent = message;
+    }
+
+    function setIngestStats(items) {
+      ingestStatus.querySelector(".ingest-stats")?.remove();
+      if (!items.length) return;
+      const wrap = document.createElement("div");
+      wrap.className = "ingest-stats";
+      items.forEach(([label, value]) => {
+        const chip = document.createElement("span");
+        chip.className = "chip";
+        chip.textContent = `${label}: ${value}`;
+        wrap.appendChild(chip);
+      });
+      ingestStatus.appendChild(wrap);
+    }
+
+    function refreshUploadButton() {
+      uploadButton.disabled = ingestMode === "file"
+        ? !selectedFile
+        : !document.getElementById("paste-content").value.trim();
+    }
+
+    function acceptFile(file) {
+      if (!file) return;
+      const dot = file.name.lastIndexOf(".");
+      const suffix = dot > -1 ? file.name.slice(dot).toLowerCase() : "";
+      if (!ALLOWED.includes(suffix)) {
+        selectedFile = null;
+        dropzone.classList.remove("filled");
+        fileName.textContent = "";
+        setIngestStatus(`Unsupported file type "${suffix || "unknown"}". Allowed: ${ALLOWED.join(", ")}`, "error");
+        refreshUploadButton();
+        return;
+      }
+      selectedFile = file;
+      fileName.textContent = `${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
+      fileName.className = "file-name";
+      dropzone.classList.add("filled");
+      setIngestStatus("Ready to ingest.");
+      if (!document.getElementById("doc-title").value) {
+        document.getElementById("doc-title").value = file.name.replace(/\.[^.]+$/, "");
+      }
+      refreshUploadButton();
+    }
+
+    dropzone.addEventListener("click", () => fileInput.click());
+    dropzone.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") { event.preventDefault(); fileInput.click(); }
+    });
+    fileInput.addEventListener("change", () => acceptFile(fileInput.files[0]));
+    ["dragenter", "dragover"].forEach((type) => dropzone.addEventListener(type, (event) => {
+      event.preventDefault(); dropzone.classList.add("dragover");
+    }));
+    ["dragleave", "drop"].forEach((type) => dropzone.addEventListener(type, (event) => {
+      event.preventDefault(); dropzone.classList.remove("dragover");
+    }));
+    dropzone.addEventListener("drop", (event) => {
+      const file = event.dataTransfer?.files?.[0];
+      if (file) acceptFile(file);
+    });
+    document.getElementById("paste-content").addEventListener("input", refreshUploadButton);
+
+    function setIngestMode(mode) {
+      ingestMode = mode;
+      document.getElementById("tab-file").classList.toggle("active", mode === "file");
+      document.getElementById("tab-text").classList.toggle("active", mode === "text");
+      document.getElementById("file-mode").hidden = mode !== "file";
+      document.getElementById("text-mode").hidden = mode !== "text";
+      refreshUploadButton();
+    }
+    document.getElementById("tab-file").addEventListener("click", () => setIngestMode("file"));
+    document.getElementById("tab-text").addEventListener("click", () => setIngestMode("text"));
+
+    function ingestMetadata() {
+      return {
+        document_type: document.getElementById("doc-type").value,
+        well_code: document.getElementById("doc-well").value.trim() || null,
+        title: document.getElementById("doc-title").value.trim() || null,
+        author: document.getElementById("doc-author").value.trim() || null,
+        document_date: document.getElementById("doc-date").value || null,
+        confidentiality: document.getElementById("doc-conf").value
+      };
+    }
+
+    async function runIngest() {
+      const meta = ingestMetadata();
+      uploadButton.disabled = true;
+      setIngestStatus("Uploading and parsing document. PDF files with scanned pages may take a moment...", "busy");
+      try {
+        let response;
+        if (ingestMode === "file") {
+          const body = new FormData();
+          body.append("file", selectedFile);
+          Object.entries(meta).forEach(([key, value]) => {
+            if (value !== null && value !== "") body.append(key, value);
+          });
+          response = await fetch("/api/v1/documents/upload", { method: "POST", body });
+        } else {
+          const content = document.getElementById("paste-content").value.trim();
+          response = await fetch("/api/v1/documents/upload-text", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ ...meta, content })
+          });
+        }
+        const payload = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(payload.detail || `Ingestion failed (${response.status})`);
+
+        const stats = [
+          ["status", payload.status || "processed"],
+          ["document", payload.document_id || "-"],
+          ["chunks", payload.chunks_created ?? payload.chunk_count ?? 0],
+          ["pages", payload.pages ?? payload.page_count ?? "-"]
+        ];
+        if (payload.entities_extracted !== undefined) stats.push(["entities", payload.entities_extracted]);
+        setIngestStatus("Ingestion complete.", "ok");
+        setIngestStats(stats);
+
+        selectedFile = null;
+        fileInput.value = "";
+        fileName.textContent = "";
+        dropzone.classList.remove("filled");
+        document.getElementById("paste-content").value = "";
+        document.getElementById("doc-title").value = "";
+        await loadDocuments();
+      } catch (error) {
+        setIngestStatus(error.message, "error");
+      } finally {
+        refreshUploadButton();
+      }
+    }
+    uploadButton.addEventListener("click", runIngest);
+
+    async function loadDocuments() {
+      const list = document.getElementById("doc-list");
+      const count = document.getElementById("doc-count");
+      try {
+        const response = await fetch("/api/v1/documents");
+        if (!response.ok) throw new Error("unavailable");
+        const payload = await response.json();
+        const documents = Array.isArray(payload) ? payload : (payload.documents || []);
+        count.textContent = `${documents.length} document${documents.length === 1 ? "" : "s"} indexed`;
+        if (!documents.length) {
+          list.innerHTML = '<li><span class="doc-meta">No documents ingested yet.</span></li>';
+          return;
+        }
+        list.replaceChildren(...documents.slice(0, 50).map((doc) => {
+          const item = document.createElement("li");
+          const title = document.createElement("span");
+          title.className = "doc-title";
+          title.textContent = doc.title || doc.source_path || doc.document_type || "Untitled";
+          const meta = document.createElement("span");
+          meta.className = "doc-meta";
+          meta.textContent = [doc.document_type, doc.well_code, doc.processing_status,
+            doc.page_count ? `${doc.page_count}p` : null].filter(Boolean).join(" · ");
+          item.append(title, meta);
+          return item;
+        }));
+      } catch (error) {
+        count.textContent = "Could not load documents";
+        list.innerHTML = '<li><span class="doc-meta">Document list unavailable.</span></li>';
+      }
+    }
+
+    async function pollReadiness() {
+      try {
+        const response = await fetch("/ready");
+        if (!response.ok) throw new Error("readiness unavailable");
+        const payload = await response.json();
+        renderStores(payload.checks);
+      } catch (error) {
+        renderStores(null);
+      }
+      try {
+        const response = await fetch("/api/v1/graph/stats");
+        if (response.ok) renderGraphBackend((await response.json()).backend);
+      } catch (error) {
+        /* the label keeps its default when graph stats are unavailable */
+      }
+    }
+
+    fetch("/health").then((response) => {
+      if (!response.ok) throw new Error("API unavailable");
+      document.getElementById("health-dot").classList.add("online");
+      document.getElementById("health-label").textContent = "API online";
+    }).catch(() => {
+      document.getElementById("health-dot").classList.add("offline");
+      document.getElementById("health-label").textContent = "API unavailable";
+    });
+    pollReadiness();
+    setInterval(pollReadiness, 15000);
+    loadDocuments();
+    renderStages();
+  </script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+# Wait a few minutes before connecting using these details. Instance status can be viewed at https://console.neo4j.io
+NEO4J_URI=neo4j+s://7743a946.databases.neo4j.io
+NEO4J_USERNAME=7743a946
+NEO4J_PASSWORD=x323rL3juBk5gCslTzr4cTwQyaBjYZOZI6cH9sCprdc
+NEO4J_DATABASE=7743a946
+AURA_INSTANCEID=7743a946
+AURA_INSTANCENAME=Free instance

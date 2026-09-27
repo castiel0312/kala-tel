@@ -1,0 +1,51 @@
+# Core dependencies
+supabase==2.3.4
+chromadb==0.4.22
+neo4j==5.15.0
+# graphify-client - using neo4j driver directly
+
+# OCR and PDF processing
+pytesseract==0.3.10
+pdfplumber==0.11.0
+PyMuPDF==1.23.26
+paddleocr==2.8.1
+opencv-python-headless==4.9.0.80
+
+# NLP and ML
+spacy==3.7.4
+transformers==4.37.0
+torch==2.2.0
+sentence-transformers==2.2.2
+langchain==0.1.12
+# langchain-community - compatible with langchain 0.1.12
+
+# Embeddings (CPU-compatible)
+onnxruntime==1.17.0
+tokenizers==0.15.1
+
+# Data processing
+pandas==2.2.0
+numpy==1.26.4
+pydantic==2.5.3
+pydantic-settings==2.1.0
+
+# API
+fastapi==0.109.0
+uvicorn==0.27.0
+python-multipart==0.0.6
+
+# Utilities
+python-dotenv==1.0.0
+pyyaml==6.0.1
+requests==2.31.0
+tqdm==4.66.1
+tenacity==8.2.3
+
+# Time series
+influxdb-client==1.38.0
+
+# Development
+pytest==7.4.4
+pytest-asyncio==0.23.3
+black==24.1.1
+ruff==0.1.15
