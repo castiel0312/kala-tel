@@ -1,0 +1,269 @@
+/* ============================================================================
+   Knowledge Centre. Four tallies, an explanation of the three provenance
+   kinds, one worked answer as a numbered chain, and the routes onward. The
+   chain is the point: an answer is shown as a sequence of citations, not a
+   paragraph.
+   ========================================================================== */
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nw-gap);
+  flex: 1 1 auto;
+  min-height: 0;
+  min-width: 0;
+  overflow: auto;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--nw-white);
+  border: 1px solid var(--nw-border);
+  border-top: 3px solid var(--nw-ink);
+  padding: var(--nw-s2) var(--nw-s3) 7px;
+  min-width: 0;
+}
+
+.stat b {
+  font-size: 21px;
+  line-height: 1.1;
+  color: var(--nw-ink);
+}
+
+.stat span {
+  font-family: var(--nw-font-display);
+  font-size: var(--nw-fs-micro);
+  font-weight: 700;
+  letter-spacing: var(--nw-track-label);
+  text-transform: uppercase;
+  color: var(--nw-text-3);
+}
+
+.stat small {
+  font-size: 9.5px;
+  line-height: 1.4;
+  color: var(--nw-text-4);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.duo {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--nw-gap);
+}
+
+.kinds {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.kind {
+  display: flex;
+  gap: 9px;
+  align-items: flex-start;
+  padding-bottom: 7px;
+  border-bottom: 1px solid var(--nw-border);
+}
+
+.kind:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.kind b {
+  display: block;
+  font-size: var(--nw-fs-xs);
+  color: var(--nw-ink);
+}
+
+.kind p {
+  margin: 1px 0 0;
+  font-size: 10.5px;
+  line-height: 1.5;
+  color: var(--nw-text-3);
+}
+
+.duoLinks {
+  display: flex;
+  gap: var(--nw-gap);
+  margin-top: var(--nw-s3);
+  padding-top: var(--nw-s2);
+  border-top: 1px solid var(--nw-border);
+}
+
+.duoLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--nw-font-display);
+  font-size: var(--nw-fs-micro);
+  font-weight: 700;
+  letter-spacing: var(--nw-track-label);
+  text-transform: uppercase;
+  color: var(--nw-ink-2);
+  text-decoration: none;
+}
+
+.duoLink:hover {
+  color: var(--nw-ink);
+  text-decoration: underline;
+}
+
+/* ------------------------------------------------------------ worked Q -- */
+
+.workedQ {
+  margin: 0 0 var(--nw-s2);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--nw-ink-2);
+}
+
+.chain {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: none;
+}
+
+.chain li {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
+  gap: 7px;
+  padding: 5px 0;
+  border-bottom: 1px solid var(--nw-border-dark-2);
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--nw-ink-2);
+}
+
+.chainN {
+  display: grid;
+  place-items: center;
+  width: 15px;
+  height: 15px;
+  background: var(--nw-yellow);
+  color: var(--nw-ink);
+  font-family: var(--nw-font-mono);
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.workedFoot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: var(--nw-s2);
+}
+
+.workedFoot a {
+  font-family: var(--nw-font-display);
+  font-size: var(--nw-fs-micro);
+  font-weight: 700;
+  letter-spacing: var(--nw-track-label);
+  text-transform: uppercase;
+  color: var(--nw-ink-2);
+  text-decoration: none;
+}
+
+.workedFoot a:hover {
+  text-decoration: underline;
+}
+
+/* ---------------------------------------------------------------- touch -- */
+
+.touch {
+  display: flex;
+  flex-direction: column;
+}
+
+.touchRow {
+  display: grid;
+  grid-template-columns: 84px minmax(0, 1fr) minmax(0, 1fr) 14px;
+  gap: 10px;
+  align-items: center;
+  padding: 7px var(--nw-s3);
+  border-bottom: 1px solid var(--nw-border);
+  text-decoration: none;
+  color: var(--nw-ink);
+}
+
+.touchRow:last-child {
+  border-bottom: 0;
+}
+
+.touchRow:hover {
+  background: var(--nw-paper);
+}
+
+.touchK {
+  overflow-wrap: anywhere;
+  font-family: var(--nw-font-display);
+  font-size: var(--nw-fs-micro);
+  font-weight: 700;
+  letter-spacing: var(--nw-track-label);
+  text-transform: uppercase;
+  color: var(--nw-text-3);
+}
+
+.touchV {
+  font-size: var(--nw-fs-xs);
+  font-weight: 600;
+  color: var(--nw-ink);
+}
+
+.touchN {
+  font-size: 10.5px;
+  color: var(--nw-text-3);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.touchRow svg {
+  color: var(--nw-text-4);
+}
+
+.ctaRow {
+  display: flex;
+  align-items: center;
+  gap: var(--nw-s2);
+  flex-wrap: wrap;
+}
+
+.ctaNote {
+  font-size: 10.5px;
+  color: var(--nw-text-4);
+  margin-left: auto;
+}
+
+@media (max-width: 1180px) {
+  .stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .duo {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .touchRow {
+    grid-template-columns: 70px minmax(0, 1fr) 14px;
+  }
+
+  .touchN {
+    display: none;
+  }
+}
+

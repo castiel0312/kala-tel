@@ -1,0 +1,361 @@
+/* ============================================================================
+   Rig Mobile. A single column of large, unambiguous readouts. Sized for a
+   phone held at the sh floor: 28px depth, 20px tiles, no hover-dependent
+   affordances.
+   ========================================================================== */
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nw-gap);
+  flex: 1 1 auto;
+  min-height: 0;
+  min-width: 0;
+  overflow: auto;
+  max-width: 560px;
+}
+
+/* ----------------------------------------------------------------- depth -- */
+
+.depth {
+  background: var(--nw-ink);
+  color: var(--nw-ink-2);
+  padding: var(--nw-s3) var(--nw-s3) var(--nw-s2);
+  border-left: 4px solid var(--nw-yellow);
+}
+
+.depthK {
+  font-family: var(--nw-font-display);
+  font-size: var(--nw-fs-micro);
+  font-weight: 800;
+  letter-spacing: var(--nw-track-label);
+  text-transform: uppercase;
+  color: var(--nw-ink-3);
+}
+
+.depthV {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  font-family: var(--nw-font-mono);
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1.05;
+  color: var(--nw-ink-2);
+  margin-top: 2px;
+}
+
+.depthU {
+  font-family: var(--nw-font-display);
+  font-size: var(--nw-fs-micro);
+  font-weight: 700;
+  letter-spacing: var(--nw-track-label);
+  text-transform: uppercase;
+  color: var(--nw-ink-3);
+}
+
+.depthFoot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px 12px;
+  margin-top: 3px;
+  font-size: 9.5px;
+  color: var(--nw-ink-3);
+}
+
+.depthBar {
+  position: relative;
+  height: 20px;
+  margin-top: var(--nw-s2);
+  background: var(--nw-ink-2);
+  border: 1px solid var(--nw-border-dark-2);
+}
+
+.depthBar i {
+  position: absolute;
+  inset: 0 auto 0 0;
+  display: block;
+  background: color-mix(in srgb, var(--nw-yellow) 70%, transparent);
+}
+
+.depthBar span {
+  position: absolute;
+  left: 5px;
+  top: 3px;
+  font-family: var(--nw-font-mono);
+  font-size: 9.5px;
+  color: var(--nw-ink);
+}
+
+/* ----------------------------------------------------------------- alert -- */
+
+.alertCard {
+  display: flex;
+  align-items: center;
+  gap: var(--nw-s2);
+  background: var(--nw-white);
+  border: 1px solid var(--nw-red);
+  padding: var(--nw-s2) var(--nw-s3);
+  text-decoration: none;
+  color: var(--nw-ink);
+}
+
+.alertCard:hover {
+  background: color-mix(in srgb, var(--nw-red) 6%, var(--nw-white));
+}
+
+.alertBar {
+  flex: 0 0 4px;
+  align-self: stretch;
+  background: var(--nw-red);
+}
+
+.alertBar[data-sev='WATCH'] {
+  background: var(--nw-yellow-deep);
+}
+
+.alertBar[data-sev='MEDIUM'],
+.alertBar[data-sev='INFO'] {
+  background: var(--nw-steel);
+}
+
+.alertBody {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.alertK {
+  font-family: var(--nw-font-display);
+  font-size: 8.5px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--nw-red);
+}
+
+.alertT {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--nw-ink);
+}
+
+.alertSub {
+  font-size: 10.5px;
+  color: var(--nw-text-3);
+}
+
+.clearCard {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: var(--nw-s2) var(--nw-s3);
+  border: 1px solid var(--nw-green);
+  color: var(--nw-green);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* ----------------------------------------------------------------- tiles -- */
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.tile {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--nw-white);
+  border: 1px solid var(--nw-border);
+  border-top: 2px solid var(--nw-ink);
+  padding: 6px 8px 5px;
+  min-width: 0;
+}
+
+.tile--warn {
+  border-top-color: var(--nw-yellow-deep);
+}
+
+.tileK {
+  font-family: var(--nw-font-display);
+  font-size: var(--nw-fs-micro);
+  font-weight: 800;
+  letter-spacing: var(--nw-track-label);
+  text-transform: uppercase;
+  color: var(--nw-text-3);
+}
+
+.tileV {
+  font-family: var(--nw-font-mono);
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--nw-ink);
+  line-height: 1.15;
+}
+
+.tileU {
+  font-family: var(--nw-font-mono);
+  font-size: 9px;
+  color: var(--nw-text-4);
+}
+
+.tileF {
+  font-size: 9.5px;
+  color: var(--nw-text-3);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ------------------------------------------------------------------ risk -- */
+
+.riskCard {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: var(--nw-white);
+  border: 1px solid var(--nw-border-dark-2);
+  border-left: 4px solid var(--nw-red);
+  padding: 7px 9px;
+  text-decoration: none;
+}
+
+.riskTop {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.riskName {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--nw-ink);
+  flex: 1 1 auto;
+}
+
+.riskTop .mono {
+  font-size: 10px;
+  color: var(--nw-text-3);
+}
+
+.riskWhy {
+  margin: 0;
+  font-size: 10.5px;
+  line-height: 1.45;
+  color: var(--nw-text-3);
+}
+
+/* ------------------------------------------------------------------ mits -- */
+
+.mits {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.mit {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.mitRow {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  padding-bottom: 3px;
+  border-bottom: 1px solid var(--nw-border-dark-2);
+}
+
+.mitT {
+  font-size: 11.5px;
+  line-height: 1.4;
+  color: var(--nw-ink-2);
+}
+
+.mitRec {
+  font-size: 11px;
+  line-height: 1.45;
+  color: var(--nw-ink-3);
+  padding-left: 7px;
+  border-left: 2px solid var(--nw-yellow);
+}
+
+/* ------------------------------------------------------------- checklist -- */
+
+.checks {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.checks li {
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr) auto;
+  gap: 7px;
+  align-items: baseline;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--nw-border);
+  font-size: 11.5px;
+  color: var(--nw-text-2);
+}
+
+.checks li:last-child {
+  border-bottom: 0;
+}
+
+.checkBox {
+  display: grid;
+  place-items: center;
+  width: 13px;
+  height: 13px;
+  border: 1px solid var(--nw-border-dark-2);
+  color: var(--nw-green);
+}
+
+.checkT {
+  font-weight: 600;
+  color: var(--nw-ink);
+}
+
+.checkS {
+  font-size: 9.5px;
+  color: var(--nw-text-4);
+  white-space: nowrap;
+}
+
+.checkDone .checkT {
+  color: var(--nw-text-3);
+  text-decoration: line-through;
+  text-decoration-color: var(--nw-border-dark-2);
+}
+
+/* ----------------------------------------------------------------- links -- */
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.links a {
+  font-family: var(--nw-font-display);
+  font-size: var(--nw-fs-micro);
+  font-weight: 700;
+  letter-spacing: var(--nw-track-label);
+  text-transform: uppercase;
+  color: var(--nw-ink-2);
+  text-decoration: none;
+  border: 1px solid var(--nw-border-dark-2);
+  padding: 5px 8px;
+}
+
+.links a:hover {
+  border-color: var(--nw-yellow-deep);
+  background: color-mix(in srgb, var(--nw-yellow) 12%, var(--nw-white));
+}

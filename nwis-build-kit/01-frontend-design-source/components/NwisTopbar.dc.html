@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>NWIS page header</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<header style="width: 1192px; height: 88px; box-sizing: border-box; display: flex; align-items: center; gap: 12px; padding: 0 24px; background: #FFFFFF; border-bottom: 1px solid #E8E9E5; color: #080909; font-family: 'IBM Plex Sans', system-ui, sans-serif">
+<div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px">
+<span style="display: flex; align-items: center; gap: 8px; font-family: 'Archivo', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; color: #6B6E69"><span style="width: 18px; height: 3px; background: #F4C400"></span>{{num}} / {{sectionUpper}}</span>
+<h1 style="margin: 0; font-family: 'Archivo', sans-serif; font-size: 26px; font-weight: 800; line-height: 1.1; letter-spacing: -0.01em">{{heading}}</h1>
+<span style="font-size: 13px; color: #454845; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{desc}}</span>
+</div>
+<span style="height: 32px; box-sizing: border-box; display: flex; align-items: center; gap: 8px; padding: 0 12px; border: 1px solid #E8E9E5; font-family: 'Archivo', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.12em; white-space: nowrap">
+<span style="width: 8px; height: 8px; border-radius: 50%; background: #278052"></span>eRTMAC LIVE
+<span style="font-family: 'IBM Plex Mono', monospace; font-weight: 400; letter-spacing: 0; color: #6B6E69">2 s</span>
+</span>
+<span style="height: 32px; box-sizing: border-box; display: flex; align-items: center; gap: 8px; padding: 0 12px; background: #080909; color: #FFFFFF; font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; font-weight: 600; white-space: nowrap">OIL-WELL-104 <span style="color: #F4C400">3,124 m</span></span>
+<span style="height: 24px; box-sizing: border-box; display: flex; align-items: center; padding: 0 8px; border: 1px dashed #D6A900; background: #FFF3B0; font-family: 'Archivo', sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: 0.12em; white-space: nowrap">DEMO DATA</span>
+<a href="KnowledgeCentre.dc.html" aria-label="Search wells, events and documents" style="width: 40px; height: 40px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 1px solid #E8E9E5; color: #080909">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true" style="stroke-width: 2; stroke-linecap: round; stroke-linejoin: round"><path d="M11 4.5a6.5 6.5 0 1 0 0 13a6.5 6.5 0 1 0 0-13zM20 20l-4.2-4.2"></path></svg>
+</a>
+<a href="AlertsCentre.dc.html" aria-label="Alerts, 3 need a decision" style="position: relative; width: 40px; height: 40px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 1px solid #E8E9E5; color: #080909">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true" style="stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round"><path d="M6 16v-5a6 6 0 0 1 12 0v5l2 2H4zM10 20.5a2 2 0 0 0 4 0"></path></svg>
+<span style="position: absolute; top: -6px; right: -6px; min-width: 18px; height: 18px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; padding: 0 4px; background: #F4C400; color: #080909; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; font-weight: 600">3</span>
+</a>
+<span role="img" aria-label="Signed in as a drilling engineer" style="width: 40px; height: 40px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; background: #F5F5F1; border: 1px solid #E8E9E5; font-family: 'Archivo', sans-serif; font-size: 13px; font-weight: 800">DE</span>
+</header>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"num":{"editor":"text","default":"01"},"section":{"editor":"text","default":"Operations"},"heading":{"editor":"text","default":"Command Centre"},"desc":{"editor":"text","default":"What is happening on OIL-WELL-104 right now, and what is ahead."},"$preview":{"width":1192,"height":88}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var p = this.props || {};
+    var section = p.section != null ? String(p.section) : 'Operations';
+    return {
+      num: p.num != null ? p.num : '01',
+      sectionUpper: section.toUpperCase(),
+      heading: p.heading != null ? p.heading : 'Command Centre',
+      desc: p.desc != null ? p.desc : 'What is happening on OIL-WELL-104 right now, and what is ahead.'
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>NWIS Assistant</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0;background:#F5F5F1}
+a{color:#080909}a:hover{color:#454845}
+button,input{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; display: flex; overflow: hidden; background: #F5F5F1; color: #080909; font-family: 'IBM Plex Sans', system-ui, sans-serif">
+<dc-import name="NwisSidebar" active="assistant" hint-size="248px,900px"></dc-import>
+<div style="width: 1192px; height: 900px; display: flex; flex-direction: column">
+<dc-import name="NwisTopbar" num="12" section="AI" heading="NWIS Assistant" desc="Ask in plain words. Every answer comes with its evidence, similar wells, sources and a confidence." hint-size="1192px,88px"></dc-import>
+<main style="flex-grow: 1; min-height: 0; box-sizing: border-box; padding: 24px; display: flex; gap: 16px">
+
+<section aria-label="Conversation" style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 14px">
+<div style="flex-shrink: 0; display: flex; align-items: center; gap: 8px; flex-wrap: wrap">
+<span style="font-family: 'Archivo', sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: 0.16em; color: #6B6E69; margin-right: 4px">ASK</span>
+<sc-for list="{{quick}}" as="q" hint-placeholder-count="4">
+<button type="button" onClick="{{q.pick}}" aria-pressed="{{q.pressed}}" style="height: 34px; padding: 0 14px; border: 1px solid {{q.border}}; background: {{q.bg}}; color: {{q.fg}}; font-size: 13px; font-weight: 500; cursor: pointer; white-space: nowrap">{{q.label}}</button>
+</sc-for>
+</div>
+
+<div style="flex-grow: 1; min-height: 0; display: flex; flex-direction: column; gap: 14px; overflow-y: auto">
+<div style="align-self: flex-end; max-width: 520px; display: flex; flex-direction: column; align-items: flex-end; gap: 4px">
+<span style="font-family: 'Archivo', sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: 0.14em; color: #6B6E69">YOU · 16:04</span>
+<span style="padding: 12px 16px; background: #080909; color: #FFFFFF; font-size: 15px; font-weight: 500; line-height: 1.45">{{a.q}}</span>
+</div>
+
+<article aria-label="NWIS answer" style="flex-shrink: 0; background: #FFFFFF; border: 1px solid #E8E9E5">
+<div style="height: 44px; box-sizing: border-box; display: flex; align-items: center; gap: 10px; padding: 0 18px; border-bottom: 1px solid #E8E9E5">
+<span style="width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; background: #F4C400">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#080909" aria-hidden="true" style="stroke-width: 2.25; stroke-linecap: round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6.3 6.3l2.8 2.8M14.9 14.9l2.8 2.8M6.3 17.7l2.8-2.8M14.9 9.1l2.8-2.8"></path></svg></span>
+<span style="font-family: 'Archivo', sans-serif; font-size: 12px; font-weight: 800; letter-spacing: 0.14em">NWIS</span>
+<span style="font-size: 12px; color: #6B6E69">{{a.meta}}</span>
+</div>
+<div style="padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span style="display: flex; align-items: center; gap: 8px; font-family: 'Archivo', sans-serif; font-size: 10.5px; font-weight: 800; letter-spacing: 0.16em"><span style="width: 18px; height: 3px; background: #F4C400"></span>ANSWER</span>
+<p style="margin: 0; font-size: 18px; font-weight: 600; line-height: 1.45; max-width: 700px">{{a.answer}}</p>
+</div>
+<div style="display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span style="font-family: 'Archivo', sans-serif; font-size: 10.5px; font-weight: 800; letter-spacing: 0.16em">EVIDENCE</span>
+<sc-for list="{{a.evidence}}" as="e" hint-placeholder-count="3">
+<div style="display: flex; gap: 10px; padding: 9px 12px; background: #F5F5F1; border-left: 3px solid {{e.color}}">
+<span style="width: 20px; height: 20px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: #080909; color: #FFFFFF; font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600">{{e.n}}</span>
+<span style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px"><span style="font-size: 13px; font-weight: 600; line-height: 1.4">{{e.t}}</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #454845">{{e.src}}</span></span>
+</div>
+</sc-for>
+</div>
+<div style="display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span style="font-family: 'Archivo', sans-serif; font-size: 10.5px; font-weight: 800; letter-spacing: 0.16em">SIMILAR WELLS</span>
+<sc-for list="{{a.wells}}" as="w" hint-placeholder-count="3">
+<a href="NearbyWells.dc.html" style="display: grid; grid-template-columns: 58px minmax(0, 1fr) 38px; align-items: center; gap: 10px; height: 26px; text-decoration: none">
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; font-weight: 600">{{w.id}}</span>
+<span style="height: 6px; background: #E8E9E5; position: relative"><span style="position: absolute; left: 0; top: 0; bottom: 0; width: {{w.sim}}%; background: {{w.bar}}"></span></span>
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; text-align: right">{{w.sim}}%</span>
+</a>
+</sc-for>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span style="font-family: 'Archivo', sans-serif; font-size: 10.5px; font-weight: 800; letter-spacing: 0.16em">CONFIDENCE</span>
+<div style="display: flex; align-items: center; gap: 10px">
+<span style="font-family: 'Archivo', sans-serif; font-size: 28px; font-weight: 900; line-height: 1">{{a.conf}}</span>
+<span style="display: flex; flex-direction: column; gap: 4px; flex-grow: 1">
+<span style="display: flex; gap: 3px"><span style="flex: 1 1 0; height: 8px; background: {{a.c1}}"></span><span style="flex: 1 1 0; height: 8px; background: {{a.c2}}"></span><span style="flex: 1 1 0; height: 8px; background: {{a.c3}}"></span><span style="flex: 1 1 0; height: 8px; background: {{a.c4}}"></span></span>
+<span style="font-size: 11.5px; color: #454845">{{a.confText}}</span>
+</span>
+</div>
+</div>
+</div>
+</div>
+<div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding-top: 12px; border-top: 1px solid #E8E9E5">
+<span style="font-family: 'Archivo', sans-serif; font-size: 10.5px; font-weight: 800; letter-spacing: 0.16em; margin-right: 4px">SOURCE</span>
+<sc-for list="{{a.sources}}" as="s" hint-placeholder-count="3">
+<a href="DocumentIntel.dc.html" style="height: 28px; box-sizing: border-box; display: flex; align-items: center; gap: 6px; padding: 0 10px; border: 1px solid #D4D6D1; font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; text-decoration: none; white-space: nowrap">
+<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true" style="stroke-width: 2; stroke-linecap: round; stroke-linejoin: round"><path d="M7 3h7l5 5v13H7zM14 3v5h5"></path></svg>{{s.t}}</a>
+</sc-for>
+<span style="flex-grow: 1"></span>
+<a href="{{a.href}}" style="height: 34px; box-sizing: border-box; display: flex; align-items: center; gap: 8px; padding: 0 14px; background: #080909; color: #FFFFFF; font-family: 'Archivo', sans-serif; font-size: 11.5px; font-weight: 800; letter-spacing: 0.1em; text-decoration: none; white-space: nowrap">{{a.cta}}
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F4C400" aria-hidden="true" style="stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></a>
+</div>
+</div>
+</article>
+</div>
+
+<div role="search" style="position: relative; flex-shrink: 0; margin: 0; display: flex; align-items: center; gap: 8px; height: 64px; box-sizing: border-box; padding: 0 8px 0 16px; background: #FFFFFF; border: 2px solid #080909">
+<label for="as-q" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Ask NWIS</label>
+<span style="display: flex; gap: 6px; flex-shrink: 0">
+<span style="height: 26px; display: flex; align-items: center; padding: 0 8px; background: #080909; color: #FFFFFF; font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600">OIL-WELL-104</span>
+<span style="height: 26px; display: flex; align-items: center; padding: 0 8px; background: #F5F5F1; border: 1px solid #D4D6D1; font-family: 'IBM Plex Mono', monospace; font-size: 11px">3,124 m</span>
+<span style="height: 26px; display: flex; align-items: center; padding: 0 8px; background: #F5F5F1; border: 1px solid #D4D6D1; font-family: 'IBM Plex Mono', monospace; font-size: 11px">5 km</span>
+</span>
+<input id="as-q" type="text" placeholder="Ask about wells, depths, events or documents" style="flex-grow: 1; min-width: 0; height: 44px; border: none; outline: none; background: transparent; font-size: 15px; color: #080909">
+<button type="button" aria-label="Send question" style="width: 48px; height: 48px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; border: none; background: #F4C400; color: #080909; cursor: pointer">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true" style="stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button>
+</div>
+</section>
+
+<aside aria-label="Context NWIS is using" style="width: 320px; flex-shrink: 0; position: relative; display: flex; flex-direction: column; background: #080909; color: #FFFFFF; overflow: hidden">
+<div style="padding: 20px 22px 0">
+<span style="display: flex; align-items: center; gap: 8px; font-family: 'Archivo', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; color: #F4C400"><span style="width: 18px; height: 3px; background: #F4C400"></span>CONTEXT IN USE</span>
+<span style="display: block; margin-top: 10px; font-family: 'Archivo', sans-serif; font-size: 26px; font-weight: 900; line-height: 1">OIL-WELL-104</span>
+<span style="display: block; margin-top: 6px; font-size: 12.5px; color: #C9CBC6">3,124 m MD · Tipam · drilling</span>
+</div>
+<dl style="margin: 18px 22px 0; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0; font-size: 12.5px; border-top: 1px solid #2A2C2B">
+<sc-for list="{{ctx}}" as="c" hint-placeholder-count="6">
+<dt style="padding: 10px 0; border-bottom: 1px solid #2A2C2B; color: #A3A6A1">{{c.k}}</dt><dd style="margin: 0; padding: 10px 0; border-bottom: 1px solid #2A2C2B; font-family: 'IBM Plex Mono', monospace; font-weight: 600; text-align: right; color: {{c.color}}">{{c.v}}</dd>
+</sc-for>
+</dl>
+<div style="margin: 18px 22px 0; display: flex; flex-direction: column; gap: 8px">
+<span style="font-family: 'Archivo', sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: 0.16em; color: #A3A6A1">HOW ANSWERS ARE BUILT</span>
+<ol style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 6px; font-size: 12.5px; color: #D4D6D1">
+<li style="display: flex; gap: 10px"><span style="font-family: 'IBM Plex Mono', monospace; color: #F4C400">01</span>Search the index and the graph</li>
+<li style="display: flex; gap: 10px"><span style="font-family: 'IBM Plex Mono', monospace; color: #F4C400">02</span>Keep only passages with a page</li>
+<li style="display: flex; gap: 10px"><span style="font-family: 'IBM Plex Mono', monospace; color: #F4C400">03</span>Write the answer from those alone</li>
+<li style="display: flex; gap: 10px"><span style="font-family: 'IBM Plex Mono', monospace; color: #F4C400">04</span>Refuse if nothing supports it</li>
+</ol>
+</div>
+<span style="flex-grow: 1"></span>
+<div style="margin: 0 22px 22px; padding: 12px 14px; border: 1px solid #2A2C2B; display: flex; align-items: center; gap: 10px">
+<span style="width: 8px; height: 8px; border-radius: 50%; background: #3FB57A; flex-shrink: 0"></span>
+<span style="font-size: 12px; line-height: 1.4; color: #C9CBC6">Model and documents stay on Oil India servers. Nothing leaves the network.</span>
+</div>
+<div style="position: absolute; left: 0; right: 0; bottom: 0; height: 5px; background: repeating-linear-gradient(-45deg, #F4C400 0 8px, #080909 8px 16px)"></div>
+</aside>
+
+</main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { q: 'q1' };
+  }
+  renderVals() {
+    var self = this;
+    var st = this.state || {};
+    var cur = st.q || 'q1';
+    var RED = '#D9362B', BLK = '#080909', GRY = '#A3A6A1';
+    var QA = [
+      { id: 'q1', label: 'Nearby events at this depth', q: 'What happened in nearby wells at the depth we are about to drill?',
+        meta: 'Answered in 1.8 s · on-prem model · 3 sources',
+        answer: 'Three of the closest offsets had trouble within 20 m below the Barail top: two lost mud and one got stuck. OIL-WELL-104 reaches that zone in about 62 m.',
+        evidence: [['W-067 lost 45 bbl/h at 3,061 m MD, 17 m below its Barail top', 'WCR W-067 p.47', RED], ['W-088 lost total returns 13 m below its Barail top', 'WCR W-088 p.88', RED], ['W-121 stuck differentially 17 m below its Barail top', 'DDR W-121 5 Aug 2021', BLK]],
+        wells: [['W-067', 87], ['W-088', 78], ['W-121', 64]], sources: ['WCR W-067 p.47', 'WCR W-088 p.88', 'DDR W-121 5 Aug 2021'],
+        conf: '0.86', level: 4, confText: 'High · three independent reports agree', href: 'NearbyWells.dc.html', cta: 'SHOW ON MAP' },
+      { id: 'q2', label: 'Why 83 % mud loss?', q: 'Why is the mud-loss risk 83 %?',
+        meta: 'Answered in 2.1 s · on-prem model · 4 sources',
+        answer: 'The offsets most like this well all lost mud just below the Barail top, and the live data is starting to look like theirs did: ECD is rising and flow out is down 3 %.',
+        evidence: [['All 3 top offsets lost mud within 20 m below the Barail top', 'WCR p.47 · WCR p.88 · DDR 2 Nov 2016', RED], ['ECD 1.453 g/cm³, rising 0.010 per hour toward 1.52', 'eRTMAC live feed', BLK], ['Flow out −3 % and pit −0.4 m³/h over 40 min', 'eRTMAC live feed', BLK]],
+        wells: [['W-067', 87], ['W-042', 81], ['W-088', 78]], sources: ['WCR W-067 p.47', 'WCR W-088 p.88', 'DDR W-042 2 Nov 2016', 'eRTMAC'],
+        conf: '0.81', level: 4, confText: 'High · calibrated on 212 Barail entries', href: 'RiskCentre.dc.html', cta: 'VIEW EVIDENCE' },
+      { id: 'q3', label: 'What worked for W-067?', q: 'What worked when W-067 lost mud?',
+        meta: 'Answered in 1.6 s · on-prem model · 3 sources',
+        answer: 'Cutting flow by 10 % and spotting a 40 ppb LCM pill cured it in 3.5 h with 12 m³ lost. W-088 tried pills alone at a higher ECD and needed a cement plug.',
+        evidence: [['W-067: flow −10 %, 40 ppb LCM pill, cured in 3.5 h', 'WCR W-067 p.47', GRY], ['W-042: 30 ppb fine LCM in the active system, cured in 1 h', 'DDR W-042 2 Nov 2016', GRY], ['W-088: two pills failed at ECD 1.478, cement plug, 36 h', 'WCR W-088 p.88', RED]],
+        wells: [['W-067', 87], ['W-042', 81], ['W-088', 78]], sources: ['WCR W-067 p.47', 'DDR W-042 2 Nov 2016', 'WCR W-088 p.88'],
+        conf: '0.78', level: 3, confText: 'Medium-high · outcomes are well documented', href: 'KnowledgeGraph.dc.html', cta: 'SHOW IN GRAPH' },
+      { id: 'q4', label: 'Compare 104 vs W-067', q: 'Compare OIL-WELL-104 with W-067.',
+        meta: 'Answered in 1.2 s · on-prem model · 2 sources',
+        answer: 'Same mud system and bit, 87 % similar. OIL-WELL-104 is drilling 10 % slower with 12 % more torque, and its 9⅝-in shoe is 60 m deeper.',
+        evidence: [['ROP 13.7 vs 15.2 m/h', 'eRTMAC · DDR W-067', BLK], ['Torque 27.8 vs 24.9 kN·m', 'eRTMAC · DDR W-067', BLK], ['9⅝-in shoe 3,050 vs 2,990 m MD', 'Well plan · WCR W-067 p.12', GRY]],
+        wells: [['W-067', 87]], sources: ['DDR W-067 Mar 2019', 'WCR W-067 p.12'],
+        conf: '0.90', level: 4, confText: 'High · direct measurements', href: 'WellCompare.dc.html', cta: 'OPEN COMPARISON' }
+    ];
+    var a = QA.filter(function (x) { return x.id === cur; })[0] || QA[0];
+    var quick = QA.map(function (x) {
+      var on = x.id === cur;
+      return { label: x.label, pressed: on ? 'true' : 'false', bg: on ? '#080909' : '#FFFFFF', fg: on ? '#FFFFFF' : '#080909', border: on ? '#080909' : '#D4D6D1', pick: function () { self.setState({ q: x.id }); } };
+    });
+    var cl = function (i) { return i <= a.level ? (a.level >= 4 ? '#278052' : '#F4C400') : '#E8E9E5'; };
+    return {
+      quick: quick,
+      a: {
+        q: a.q, meta: a.meta, answer: a.answer, conf: a.conf, confText: a.confText, href: a.href, cta: a.cta,
+        c1: cl(1), c2: cl(2), c3: cl(3), c4: cl(4),
+        evidence: a.evidence.map(function (e, i) { return { n: String(i + 1), t: e[0], src: e[1], color: e[2] }; }),
+        wells: a.wells.map(function (w) { return { id: w[0], sim: w[1], bar: w[1] >= 75 ? '#F4C400' : '#A3A6A1' }; }),
+        sources: a.sources.map(function (s) { return { t: s }; })
+      },
+      ctx: [
+        { k: 'Formation', v: 'Tipam', color: '#FFFFFF' },
+        { k: 'Next top', v: 'Barail · 62 m', color: '#F4C400' },
+        { k: 'Offsets in scope', v: '7 within 5 km', color: '#FFFFFF' },
+        { k: 'Events indexed', v: '12', color: '#FFFFFF' },
+        { k: 'Pages searchable', v: '12,907', color: '#FFFFFF' },
+        { k: 'Live feed', v: 'eRTMAC · 2 s', color: '#3FB57A' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

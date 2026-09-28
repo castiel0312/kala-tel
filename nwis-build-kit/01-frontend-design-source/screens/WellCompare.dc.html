@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>NWIS Well Comparison</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0;background:#F5F5F1}
+a{color:#080909}a:hover{color:#454845}
+button{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; display: flex; overflow: hidden; background: #F5F5F1; color: #080909; font-family: 'IBM Plex Sans', system-ui, sans-serif">
+<dc-import name="NwisSidebar" active="compare" hint-size="248px,900px"></dc-import>
+<div style="width: 1192px; height: 900px; display: flex; flex-direction: column">
+<dc-import name="NwisTopbar" num="04" section="Operations" heading="Well Comparison" desc="OIL-WELL-104 side by side with one offset, at the same position in the formation." hint-size="1192px,88px"></dc-import>
+<main style="flex-grow: 1; min-height: 0; box-sizing: border-box; padding: 24px; display: flex; flex-direction: column; gap: 16px">
+
+<section aria-label="Wells being compared" style="height: 132px; flex-shrink: 0; position: relative; display: flex">
+<div style="flex: 1 1 0; min-width: 0; position: relative; box-sizing: border-box; padding: 20px 64px 20px 28px; display: flex; flex-direction: column; justify-content: center; gap: 6px; background: #080909; color: #FFFFFF; overflow: hidden">
+<span style="display: flex; align-items: center; gap: 8px; font-family: 'Archivo', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; color: #F4C400"><span style="width: 18px; height: 3px; background: #F4C400"></span>ACTIVE WELL</span>
+<span style="font-family: 'Archivo', sans-serif; font-size: 38px; font-weight: 900; line-height: 1">OIL-WELL-104</span>
+<span style="font-size: 12.5px; color: #C9CBC6">3,124 m MD · Tipam · 8½-in section · drilling</span>
+<div style="position: absolute; left: 0; right: 0; bottom: 0; height: 5px; background: repeating-linear-gradient(-45deg, #F4C400 0 8px, #080909 8px 16px)"></div>
+</div>
+<div style="flex: 1 1 0; min-width: 0; position: relative; box-sizing: border-box; padding: 18px 24px 18px 64px; display: flex; flex-direction: column; justify-content: center; gap: 6px; background: #FFFFFF; border: 1px solid #E8E9E5; border-left: none">
+<div style="position: absolute; left: 0; right: 0; top: 0; height: 3px; background: #F4C400"></div>
+<div style="display: flex; align-items: center; gap: 10px">
+<span style="font-family: 'Archivo', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; color: #6B6E69">COMPARE WITH</span>
+<span style="flex-grow: 1"></span>
+<div role="group" aria-label="Choose offset well" style="display: flex">
+<sc-for list="{{picker}}" as="k" hint-placeholder-count="4">
+<button type="button" onClick="{{k.pick}}" aria-pressed="{{k.pressed}}" style="height: 30px; margin-left: -1px; padding: 0 10px; border: 1px solid {{k.border}}; background: {{k.bg}}; color: {{k.fg}}; font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; font-weight: 600; cursor: pointer; white-space: nowrap">{{k.label}}</button>
+</sc-for>
+</div>
+</div>
+<span style="display: flex; align-items: baseline; gap: 14px"><span style="font-family: 'Archivo', sans-serif; font-size: 38px; font-weight: 900; line-height: 1">{{o.id}}</span><span style="font-family: 'Archivo', sans-serif; font-size: 13px; font-weight: 800; letter-spacing: 0.08em">{{o.sim}}% SIMILAR</span></span>
+<span style="font-size: 12.5px; color: #454845">{{o.meta}}</span>
+</div>
+<div aria-hidden="true" style="position: absolute; left: 50%; top: 50%; width: 76px; height: 76px; margin: -38px 0 0 -38px; box-sizing: border-box; border-radius: 50%; background: #F4C400; border: 4px solid #F5F5F1; display: flex; align-items: center; justify-content: center; font-family: 'Archivo', sans-serif; font-size: 22px; font-weight: 900; letter-spacing: 0.02em">VS</div>
+</section>
+
+<div style="flex-grow: 1; min-height: 0; display: flex; gap: 16px">
+
+<section aria-label="Drilling parameters compared" style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; background: #FFFFFF; border: 1px solid #E8E9E5">
+<div style="height: 48px; flex-shrink: 0; box-sizing: border-box; display: flex; align-items: center; gap: 12px; padding: 0 20px; border-bottom: 1px solid #E8E9E5">
+<span style="display: flex; align-items: center; gap: 8px; font-family: 'Archivo', sans-serif; font-size: 12px; font-weight: 800; letter-spacing: 0.14em"><span style="width: 18px; height: 3px; background: #F4C400"></span>DRILLING PARAMETERS</span>
+<span style="font-size: 12.5px; color: #454845">Offset values taken at the same depth below the Barail top</span>
+<span style="flex-grow: 1"></span>
+<span style="display: flex; align-items: center; gap: 12px; font-size: 11.5px; color: #454845; white-space: nowrap">
+<span style="display: flex; align-items: center; gap: 5px"><span style="width: 12px; height: 8px; background: #080909"></span>104</span>
+<span style="display: flex; align-items: center; gap: 5px"><span style="width: 12px; height: 8px; background: #A3A6A1"></span>{{o.id}}</span>
+</span>
+</div>
+<div style="height: 34px; flex-shrink: 0; display: grid; grid-template-columns: 120px 72px minmax(0, 1fr) 2px minmax(0, 1fr) 72px 84px; align-items: center; gap: 0 12px; padding: 0 20px; background: #080909; color: #FFFFFF; font-family: 'Archivo', sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: 0.14em">
+<span>PARAMETER</span><span style="text-align: right">104</span><span></span><span></span><span></span><span>OFFSET</span><span style="text-align: right">DIFFERENCE</span>
+</div>
+<div style="flex-grow: 1; min-height: 0; display: flex; flex-direction: column">
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="7">
+<div style="flex: 1 1 0; min-height: 0; display: grid; grid-template-columns: 120px 72px minmax(0, 1fr) 2px minmax(0, 1fr) 72px 84px; align-items: center; gap: 0 12px; padding: 0 20px 0 17px; border-left: 3px solid {{r.flag}}; border-bottom: 1px solid #EEEEEA">
+<span style="display: flex; flex-direction: column; gap: 1px"><span style="font-family: 'Archivo', sans-serif; font-size: 12.5px; font-weight: 800; letter-spacing: 0.06em">{{r.label}}</span><span style="font-size: 11px; color: #6B6E69">{{r.unit}}</span></span>
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 15px; font-weight: 600; text-align: right">{{r.a}}</span>
+<span style="display: flex; justify-content: flex-end"><span style="display: block; height: 14px; width: {{r.aw}}%; background: #080909"></span></span>
+<span style="align-self: stretch; margin: 12px 0; background: #080909"></span>
+<span style="display: flex"><span style="display: block; height: 14px; width: {{r.bw}}%; background: {{r.bColor}}"></span></span>
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 15px; font-weight: 600">{{r.b}}</span>
+<span style="display: flex; justify-content: flex-end"><span style="height: 24px; box-sizing: border-box; display: flex; align-items: center; padding: 0 8px; background: {{r.dBg}}; border: 1px solid {{r.dBorder}}; font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600">{{r.d}}</span></span>
+</div>
+</sc-for>
+</div>
+<div style="height: 40px; flex-shrink: 0; box-sizing: border-box; display: flex; align-items: center; gap: 10px; padding: 0 20px; border-top: 1px solid #E8E9E5; font-size: 12px; color: #454845">
+<span style="height: 18px; display: flex; align-items: center; padding: 0 6px; background: #F4C400; font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; color: #080909">±8 %</span>
+Highlighted rows differ by more than 8 %. {{o.diffCount}} of 7 parameters differ this much.
+</div>
+</section>
+
+<aside style="width: 408px; flex-shrink: 0; display: flex; flex-direction: column; gap: 16px">
+<section aria-label="Well design compared" style="flex-shrink: 0; background: #FFFFFF; border: 1px solid #E8E9E5">
+<div style="height: 40px; box-sizing: border-box; display: grid; grid-template-columns: 96px minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: 10px; padding: 0 16px; border-bottom: 1px solid #E8E9E5; font-family: 'Archivo', sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: 0.14em">
+<span style="font-size: 11px; font-weight: 800">DESIGN</span><span style="color: #6B6E69">104</span><span style="color: #6B6E69">{{o.id}}</span>
+</div>
+<sc-for list="{{design}}" as="g" hint-placeholder-count="4">
+<div style="display: grid; grid-template-columns: 96px minmax(0, 1fr) minmax(0, 1fr); align-items: stretch; gap: 10px; padding: 0 16px; border-bottom: 1px solid #EEEEEA; font-size: 12.5px; line-height: 1.35">
+<span style="padding: 10px 0; font-family: 'Archivo', sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: 0.12em; color: #6B6E69">{{g.label}}</span>
+<span style="padding: 10px 0">{{g.a}}</span>
+<span style="padding: 10px 8px; margin-left: -8px; background: {{g.bg}}">{{g.b}}</span>
+</div>
+</sc-for>
+</section>
+
+<section aria-label="Takeaway for OIL-WELL-104" style="flex-shrink: 0; position: relative; box-sizing: border-box; padding: 16px 18px 20px; background: #080909; color: #FFFFFF">
+<span style="display: flex; align-items: center; gap: 8px; font-family: 'Archivo', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; color: #F4C400"><span style="width: 18px; height: 3px; background: #F4C400"></span>TAKEAWAY FOR 104</span>
+<p style="margin: 10px 0 0; font-family: 'Archivo', sans-serif; font-size: 17px; font-weight: 800; line-height: 1.3">{{o.lesson}}</p>
+<span style="display: block; margin-top: 8px; font-size: 12px; color: #A3A6A1">{{o.lessonSrc}}</span>
+<div style="position: absolute; left: 0; right: 0; bottom: 0; height: 5px; background: repeating-linear-gradient(-45deg, #F4C400 0 8px, #080909 8px 16px)"></div>
+</section>
+
+<section aria-label="Events in the offset" style="flex-grow: 1; min-height: 0; display: flex; flex-direction: column; background: #FFFFFF; border: 1px solid #E8E9E5; overflow: hidden">
+<div style="height: 40px; flex-shrink: 0; box-sizing: border-box; display: flex; align-items: center; padding: 0 16px; border-bottom: 1px solid #E8E9E5">
+<span style="font-family: 'Archivo', sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 0.14em">EVENTS · {{o.id}}</span>
+<span style="flex-grow: 1"></span>
+<span style="font-size: 12px; color: #454845">104: none yet</span>
+</div>
+<div style="padding: 10px 16px; display: flex; flex-direction: column; gap: 8px; overflow-y: auto">
+<sc-for list="{{o.events}}" as="e" hint-placeholder-count="2">
+<div style="display: flex; flex-direction: column; gap: 2px; padding: 8px 10px; background: #F5F5F1; border-left: 3px solid {{e.color}}">
+<div style="display: flex; justify-content: space-between; gap: 8px"><span style="font-family: 'Archivo', sans-serif; font-size: 12px; font-weight: 800; letter-spacing: 0.06em">{{e.type}}</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; font-weight: 600">{{e.align}}</span></div>
+<span style="font-size: 12px; color: #454845">{{e.note}}</span>
+</div>
+</sc-for>
+</div>
+</section>
+</aside>
+</div>
+
+</main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { off: 'W-067' };
+  }
+  renderVals() {
+    var self = this;
+    var st = this.state || {};
+    var cur = st.off || 'W-067';
+    var P = [
+      { k: 'rop', label: 'ROP', unit: 'm/h', lo: 0, hi: 20, dp: 1 },
+      { k: 'wob', label: 'WOB', unit: 'kN', lo: 0, hi: 100, dp: 0 },
+      { k: 'rpm', label: 'RPM', unit: 'rev/min', lo: 0, hi: 150, dp: 0 },
+      { k: 'tq', label: 'TORQUE', unit: 'kN·m', lo: 0, hi: 35, dp: 1 },
+      { k: 'ecd', label: 'ECD', unit: 'g/cm³', lo: 1.3, hi: 1.55, dp: 3 },
+      { k: 'spp', label: 'SPP', unit: 'bar', lo: 0, hi: 220, dp: 0 },
+      { k: 'mw', label: 'MUD WEIGHT', unit: 'g/cm³', lo: 1.2, hi: 1.5, dp: 2 }
+    ];
+    var A = { rop: 13.7, wob: 82, rpm: 120, tq: 27.8, ecd: 1.453, spp: 182, mw: 1.38 };
+    var ADES = ['3,050 m MD', 'Lead 1.50 + tail 1.90', 'KCl-polymer, 1.38', '8½-in PDC, 5-blade'];
+    var O = {
+      'W-067': { sim: 87, meta: '1.2 km at bit depth · spud 2019 · 2 events', v: { rop: 15.2, wob: 78, rpm: 110, tq: 24.9, ecd: 1.462, spp: 176, mw: 1.38 },
+        des: ['2,990 m MD', 'Lead 1.50 + tail 1.90', 'KCl-polymer, 1.38', '8½-in PDC, 5-blade'],
+        lesson: 'Cut flow 10 % and have a 40 ppb LCM pill ready before 3,180 m MD.', lessonSrc: 'W-067 cured its loss in 3.5 h this way · WCR p.47',
+        events: [{ type: 'MUD LOSS 45 bbl/h', align: '≙ 3,203 m', note: 'LCM pill; cured in 3.5 h, 12 m³ lost', sev: 'high' }, { type: 'TORQUE SPIKES', align: 'Tipam', note: 'Reamed through, no lost time', sev: 'low' }] },
+      'W-042': { sim: 81, meta: '2.1 km at bit depth · spud 2016 · 2 events', v: { rop: 11.8, wob: 90, rpm: 130, tq: 29.4, ecd: 1.441, spp: 190, mw: 1.36 },
+        des: ['3,210 m MD', 'Single slurry 1.88', 'KCl-polymer, 1.36', '8½-in PDC, 6-blade'],
+        lesson: 'Fine LCM in the active system held seepage to 1 h at a lower ECD.', lessonSrc: 'W-042 ran ECD 1.441, 0.012 below 104 · DDR 2 Nov 2016',
+        events: [{ type: 'SEEPAGE 8 bbl/h', align: '≙ 3,204 m', note: '30 ppb fine LCM; cured in 1 h', sev: 'med' }, { type: 'OVERPULL 25 t', align: '≙ 3,264 m', note: 'Back-reamed; 6 h lost', sev: 'med' }] },
+      'W-088': { sim: 78, meta: '2.6 km at bit depth · spud 2014 · 2 events', v: { rop: 12.5, wob: 85, rpm: 115, tq: 26.1, ecd: 1.478, spp: 185, mw: 1.40 },
+        des: ['3,145 m MD', 'Lead 1.50 + tail 1.90 · squeezed', 'PHPA, 1.40', '8½-in TCI'],
+        lesson: 'Total loss came with ECD at 1.478. Keep 104 below 1.47 entering the Barail.', lessonSrc: 'Two pills failed, cement plug, 36 h lost · WCR p.88',
+        events: [{ type: 'TOTAL LOSS', align: '≙ 3,199 m', note: 'Two LCM pills failed; cement plug, 36 h', sev: 'high' }, { type: 'POOR CEMENT BOND', align: '≙ 3,148 m', note: '9⅝-in shoe; squeezed', sev: 'med' }] },
+      'W-121': { sim: 64, meta: '4.2 km at bit depth · spud 2021 · 1 event', v: { rop: 16.9, wob: 70, rpm: 125, tq: 31.0, ecd: 1.450, spp: 172, mw: 1.37 },
+        des: ['2,940 m MD', 'Lead 1.55 + tail 1.90', 'KCl-polymer, 1.37', '8½-in PDC, 5-blade'],
+        lesson: 'Keep connections short and the string moving below the Barail top.', lessonSrc: 'W-121 stuck on a connection; 9 h lost · DDR 5 Aug 2021',
+        events: [{ type: 'DIFFERENTIAL STICKING', align: '≙ 3,203 m', note: 'Jarred free with a pipe-free pill; 9 h', sev: 'med' }] }
+    };
+    var SEV = { high: '#D9362B', med: '#080909', low: '#A3A6A1' };
+    var o = O[cur] || O['W-067'];
+    var diffCount = 0;
+    var fx = function (v, dp) { return v.toLocaleString('en-US', { minimumFractionDigits: dp, maximumFractionDigits: dp }); };
+    var rows = P.map(function (p) {
+      var a = A[p.k], b = o.v[p.k];
+      var pct = (b - a) / a * 100;
+      var big = Math.abs(pct) > 8;
+      if (big) diffCount++;
+      var ds = Math.abs(pct) < 0.05 ? '0 %' : (pct > 0 ? '+' : '−') + Math.abs(pct).toFixed(1) + ' %';
+      return {
+        label: p.label, unit: p.unit, a: fx(a, p.dp), b: fx(b, p.dp),
+        aw: Math.round((a - p.lo) / (p.hi - p.lo) * 1000) / 10,
+        bw: Math.round((b - p.lo) / (p.hi - p.lo) * 1000) / 10,
+        bColor: big ? '#D6A900' : '#A3A6A1',
+        d: ds, dBg: big ? '#F4C400' : '#FFFFFF', dBorder: big ? '#F4C400' : '#E8E9E5',
+        flag: big ? '#F4C400' : 'transparent'
+      };
+    });
+    var LAB = ['9⅝-in SHOE', 'CEMENT', 'MUD SYSTEM', 'BIT'];
+    var design = LAB.map(function (l, i) {
+      return { label: l, a: ADES[i], b: o.des[i], bg: o.des[i] !== ADES[i] ? '#FFF3B0' : 'transparent' };
+    });
+    var picker = ['W-067', 'W-042', 'W-088', 'W-121'].map(function (id) {
+      var on = id === cur;
+      return { label: id + ' ' + O[id].sim + '%', pressed: on ? 'true' : 'false', bg: on ? '#080909' : '#FFFFFF', fg: on ? '#FFFFFF' : '#080909', border: on ? '#080909' : '#D4D6D1', pick: function () { self.setState({ off: id }); } };
+    });
+    return {
+      rows: rows, design: design, picker: picker,
+      o: {
+        id: cur, sim: o.sim, meta: o.meta, lesson: o.lesson, lessonSrc: o.lessonSrc, diffCount: String(diffCount),
+        events: o.events.map(function (e) { return { type: e.type, align: e.align, note: e.note, color: SEV[e.sev] }; })
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>

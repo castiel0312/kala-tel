@@ -1,0 +1,204 @@
+/* ============================================================================
+   NWIS design tokens — industrial command system
+   ----------------------------------------------------------------------------
+   Working canvas is paper/white. Black builds structure (rails, headers, panels,
+   section titles). Yellow is an operational signal only: selected, active,
+   drilling, trajectory, CTA. Red is danger. Green is healthy / confirmed.
+   Yellow is never used for text on a light background.
+   Every colour in the product resolves to one of the variables below.
+   ========================================================================== */
+
+:root {
+  /* ---- structural neutrals ---------------------------------------------- */
+  --nw-black: #0a0b0b;          /* rails, headers, hero, primary surfaces */
+  --nw-charcoal: #151717;       /* panel on black, table header on black */
+  --nw-charcoal-2: #1c1f1e;     /* elevated black: drawer head, tooltip, menu */
+  --nw-graphite: #2a2d2c;       /* dividers on black, inactive chart marks */
+  --nw-graphite-2: #3b3f3d;     /* hover on black */
+
+  /* ---- working canvas ---------------------------------------------------- */
+  --nw-paper: #f1f1ed;          /* page background */
+  --nw-white: #ffffff;          /* data surface */
+  --nw-surface: #fafaf7;        /* quiet surface inside a white surface */
+  --nw-surface-2: #f5f5f1;      /* tracks, wells, inactive fills */
+
+  /* ---- borders ----------------------------------------------------------- */
+  --nw-border: #d7d8d2;         /* 1px industrial rule on light */
+  --nw-border-2: #bfc1b9;       /* control border, emphasised rule */
+  --nw-border-dark: #2a2d2c;    /* 1px rule on black */
+  --nw-border-dark-2: #3b3f3d;  /* emphasised rule on black */
+
+  /* ---- text -------------------------------------------------------------- */
+  --nw-text: #0a0b0b;
+  --nw-text-2: #4b4e4a;
+  --nw-text-3: #777a74;
+  --nw-text-4: #9b9e97;
+  --nw-ink: #ffffff;            /* text on black */
+  --nw-ink-2: #c3c6c0;          /* secondary text on black */
+  --nw-ink-3: #8e928b;          /* captions on black */
+
+  /* ---- signal ------------------------------------------------------------ */
+  --nw-yellow: #f5c518;         /* the signal: active, selected, drilling */
+  --nw-yellow-deep: #b8900a;    /* yellow rule/underline on a light surface */
+  --nw-yellow-soft: #fdf2c4;    /* selected row / watch fill on light */
+  --nw-yellow-ink: #2b2203;     /* text printed on yellow */
+  --nw-yellow-dim: #6b5806;     /* yellow label on black, low emphasis */
+
+  --nw-red: #d33a2b;            /* danger only */
+  --nw-red-deep: #9c2419;
+  --nw-red-soft: #f9e6e3;
+  --nw-red-on-black: #ff6a58;
+
+  --nw-orange: #e8721c;         /* kick: a pressure event, told apart from red mud loss */
+
+  --nw-green: #1f8a54;          /* healthy / live / confirmed */
+  --nw-green-deep: #14603a;
+  --nw-green-soft: #e2f0e8;
+  --nw-green-on-black: #45bd83;
+
+  --nw-steel: #93a3ad;          /* water, mud, non-signal physical quantities */
+  --nw-steel-soft: #e6ecf0;
+
+  /* ---- geological fills --------------------------------------------------
+     A dark petroleum palette, because the rock is only ever read against black: as
+     a full-height body in the hero cutaway, as a hairline swatch in an event row,
+     as a chip in the corridor table. A near-white fill on those surfaces reads as a
+     hole in the page rather than as a rock, which is why nothing in this block is
+     pale. Brown and sandstone above, shale and muted grey through the middle, one
+     blue body for the water, one warm body for the reservoir. Distinct in value and
+     hue enough to read as rock, never saturated, and never competing with yellow. */
+  --nw-geo-girujan: #2e2820;    /* upper deltaic sand + clay */
+  --nw-geo-tipam: #25282c;      /* ferruginous clay, grey-blue */
+  --nw-geo-aquifer: #123543;    /* water-bearing sand: the aquifer, the only cool body */
+  --nw-geo-barail: #221f19;     /* the interval the system watches */
+  --nw-geo-dihing: #1c1e21;
+  --nw-geo-tura: #17181a;       /* basement */
+  --nw-geo-unknown: #202225;
+
+  /* ---- the hero cutaway -------------------------------------------------
+     The landing section is drawn on black, so its bodies are the dark end of the
+     palette again: the four below are the intervals the API does not publish — the
+     panel labels them as interpreted — and they are the only warm and the only
+     saturated bodies in the whole rock, so the eye goes to the reservoir and the
+     loss-prone sand above it. */
+  --nw-geo-surface: #191b1b;    /* compressed overburden above the cut */
+  --nw-geo-sandstone: #3a3020;  /* Barail sandstone: the loss-prone sand */
+  --nw-geo-reservoir: #4a3116;  /* Barail reservoir: the only warm body */
+  --nw-geo-deep: #131518;       /* below the reservoir, down to basement */
+  --nw-geo-ink: #0b0c0d;        /* bedding strokes inside the rock */
+
+  /* ---- the hero's geological cross-section -------------------------------
+     The cutaway is the one place in NWIS that is allowed to be colourful, and it
+     is colourful for the reason a printed section is: a formation is a *band*, and
+     the only way to read a band is to be able to tell it from the band under it.
+     So every fill below is a different hue from both of its neighbours and a
+     different value from at least one of them, and the ramp runs warm at the
+     surface through to cool at depth — the way a core photograph runs.
+
+     This block is deliberately separate from the `--nw-geo-*` swatches above. Those
+     are hairlines on paper in the event rows and the corridor table, and at this
+     saturation they would fight the page; the section gets the colour, the page
+     does not. */
+
+/* NOTE: the `--nw-strata-*` values that used to live here have moved to
+   `src/components/landing/heroPalette.ts`, which publishes them onto the document
+   root at startup (`installPalette` in `main.tsx`). They are the hero's own
+   colours, they are read by three renderers that cannot share a TypeScript
+   object, and the recolour asked for a single place to change them — not two
+   that have to be kept in agreement. The names are unchanged, so `lib/section.ts`
+   and the CSS still ask for exactly what they asked for before. */
+
+  /* ---- the hero's site ---------------------------------------------------
+     The surface the machine stands on is painted, not rendered: two values, the
+     haze at the horizon and the lamps on the pad, so the site belongs to the
+     same dusk as the sky and the rock. */
+  --nw-site-haze: #4a4c3c;      /* the air between the ridges, and the light at the horizon */
+  --nw-site-pad: #f5c518;       /* the pad lamps spilling onto the ground */
+
+  /* ---- typography -------------------------------------------------------- */
+  --nw-font-display: 'Archivo', 'Helvetica Neue', system-ui, sans-serif;
+  --nw-font-body: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+  --nw-font-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* §6 sets a floor, not a scale: nothing printed in the hero's right-hand visual may render
+     below 11px. `--nw-fs-micro` and `--nw-fs-xs` are the two steps that used to sit under it, so
+     both now restate the same 11px and the four steps above it stay where they are. The micro step
+     is kept as a name rather than deleted because the other panels — the table's micro heads, the
+     unit chips — are allowed to stay small; only the section's own labels are held to the floor, and
+     they are routed through the two section steps below instead. */
+  --nw-fs-micro: 9.5px;         /* unit chips, axis ticks, table micro heads */
+  --nw-fs-xs: 11px;            /* §6 floor: the smallest a section label may be */
+  --nw-fs-sm: 11.5px;           /* table cells, secondary */
+  --nw-fs-label: 11px;         /* section label, floor */
+  --nw-fs-label-b: 12px;       /* section label with a second line under it */
+  --nw-fs-body: 13px;           /* default body */
+  --nw-fs-md: 14.5px;           /* lead in a panel */
+  --nw-fs-lg: 17px;             /* panel title */
+  --nw-fs-xl: 21px;             /* section title */
+  --nw-fs-2xl: 27px;            /* page title */
+  --nw-fs-3xl: 35px;            /* hero metric, stat */
+  --nw-fs-4xl: 50px;            /* landing statement */
+  --nw-fs-5xl: 72px;            /* landing hero */
+
+  --nw-track-label: 0.15em;     /* uppercase engineering label */
+  --nw-track-wide: 0.22em;      /* hero label */
+  --nw-track-tight: -0.012em;   /* large display numerals */
+  --nw-lh-tight: 1.06;
+  --nw-lh: 1.42;
+
+  /* ---- shape ------------------------------------------------------------- */
+  --nw-r1: 2px;                 /* default: instrumentation, chips, inputs */
+  --nw-r2: 4px;                 /* data bands, small surfaces */
+  --nw-r3: 8px;                 /* the largest corner in the system */
+  --nw-r-pill: 999px;           /* live dot only */
+
+  /* ---- space ------------------------------------------------------------- */
+  --nw-s1: 4px;
+  --nw-s2: 8px;
+  --nw-s3: 12px;
+  --nw-s4: 16px;
+  --nw-s5: 20px;
+  --nw-s6: 24px;
+  --nw-s7: 32px;
+
+  --nw-gap: 12px;               /* default panel gutter */
+  --nw-page-pad: 16px;
+  --nw-rail-w: 216px;
+  --nw-rail-w-collapsed: 60px;
+  --nw-topbar-h: 50px;
+  --nw-drawer-w: 400px;
+  --nw-rail-h: 62px;
+
+  /* ---- hazard stripe ----------------------------------------------------- */
+  --nw-hazard: repeating-linear-gradient(
+    -45deg,
+    var(--nw-yellow) 0 7px,
+    var(--nw-black) 7px 14px
+  );
+  --nw-hazard-sm: repeating-linear-gradient(
+    -45deg,
+    var(--nw-yellow) 0 4px,
+    var(--nw-black) 4px 8px
+  );
+  --nw-hazard-thin: repeating-linear-gradient(
+    -45deg,
+    var(--nw-yellow) 0 2px,
+    var(--nw-black) 2px 4px
+  );
+
+  /* ---- depth ------------------------------------------------------------
+     Shadows are for things that float over the workspace (drawer, palette,
+     map controls). Panels are separated by 1px rules, not by blur. */
+  --nw-float: 0 1px 2px rgba(10, 11, 11, 0.08), 0 10px 30px rgba(10, 11, 11, 0.14);
+  --nw-lift: 0 1px 2px rgba(10, 11, 11, 0.06);
+
+  /* ---- motion ------------------------------------------------------------ */
+  --nw-dur-fast: 110ms;
+  --nw-dur: 190ms;
+  --nw-ease: cubic-bezier(0.2, 0, 0.1, 1);
+
+  /* ---- focus ------------------------------------------------------------- */
+  --nw-focus: 0 0 0 2px var(--nw-white), 0 0 0 4px var(--nw-yellow-deep);
+
+  color-scheme: light;
+}

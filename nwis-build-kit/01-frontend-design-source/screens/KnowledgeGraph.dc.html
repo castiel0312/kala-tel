@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>NWIS Knowledge Graph</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0;background:#F5F5F1}
+a{color:#080909}a:hover{color:#454845}
+button{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; display: flex; overflow: hidden; background: #F5F5F1; color: #080909; font-family: 'IBM Plex Sans', system-ui, sans-serif">
+<dc-import name="NwisSidebar" active="graph" hint-size="248px,900px"></dc-import>
+<div style="width: 1192px; height: 900px; display: flex; flex-direction: column">
+<dc-import name="NwisTopbar" num="08" section="Knowledge" heading="Knowledge Graph" desc="How wells, formations, events, actions and documents connect around OIL-WELL-104." hint-size="1192px,88px"></dc-import>
+<main style="flex-grow: 1; min-height: 0; box-sizing: border-box; padding: 24px; display: flex; gap: 16px">
+
+<section aria-label="Graph" style="width: 768px; flex-shrink: 0; display: flex; flex-direction: column; background: #FFFFFF; border: 1px solid #E8E9E5">
+<div style="height: 48px; flex-shrink: 0; box-sizing: border-box; display: flex; align-items: center; gap: 12px; padding: 0 16px; border-bottom: 1px solid #E8E9E5">
+<span style="display: flex; align-items: center; gap: 8px; font-family: 'Archivo', sans-serif; font-size: 12px; font-weight: 800; letter-spacing: 0.14em"><span style="width: 18px; height: 3px; background: #F4C400"></span>2-HOP NEIGHBOURHOOD</span>
+<span style="font-size: 12.5px; color: #454845; white-space: nowrap">14 of 38,420 nodes</span>
+<span style="flex-grow: 1"></span>
+<button type="button" onClick="{{togglePath}}" aria-pressed="{{pathPressed}}" style="height: 32px; display: flex; align-items: center; gap: 8px; padding: 0 12px; border: 1px solid {{pathBorder}}; background: {{pathBg}}; color: #080909; font-family: 'Archivo', sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 0.1em; cursor: pointer">
+<span style="width: 18px; height: 4px; background: #F4C400; box-shadow: 0 0 0 1.5px #080909"></span>EVIDENCE PATH</button>
+<a href="KnowledgeCentre.dc.html" style="height: 32px; box-sizing: border-box; display: flex; align-items: center; padding: 0 12px; border: 1px solid #D4D6D1; font-family: 'Archivo', sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 0.1em; text-decoration: none">LIST VIEW</a>
+</div>
+<div style="position: relative; flex-grow: 1; min-height: 0; overflow: hidden; background: #F5F5F1">
+<svg width="766" height="674" viewBox="0 0 766 674" role="img" aria-label="Graph linking OIL-WELL-104 through the Barail formation and offset wells to past events, their causes, actions, outcomes and source documents." style="position: absolute; left: 0; top: 0; display: block">
+<defs><pattern id="kg-dot" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#DCDDD7"></circle></pattern></defs>
+<rect x="0" y="0" width="766" height="674" fill="url(#kg-dot)"></rect>
+<line x1="100" y1="330" x2="100" y2="110" stroke="{{E.e1.u}}" style="stroke-width: {{E.e1.uw}}; stroke-linecap: round"></line>
+<line x1="100" y1="330" x2="290" y2="380" stroke="{{E.e2.u}}" style="stroke-width: {{E.e2.uw}}; stroke-linecap: round"></line>
+<line x1="100" y1="330" x2="290" y2="150" stroke="{{E.e3.u}}" style="stroke-width: {{E.e3.uw}}; stroke-linecap: round"></line>
+<line x1="100" y1="330" x2="290" y2="590" stroke="{{E.e4.u}}" style="stroke-width: {{E.e4.uw}}; stroke-linecap: round"></line>
+<line x1="100" y1="330" x2="100" y2="620" stroke="{{E.e5.u}}" style="stroke-width: {{E.e5.uw}}; stroke-linecap: round"></line>
+<line x1="290" y1="150" x2="490" y2="210" stroke="{{E.e6.u}}" style="stroke-width: {{E.e6.uw}}; stroke-linecap: round"></line>
+<line x1="290" y1="590" x2="490" y2="440" stroke="{{E.e7.u}}" style="stroke-width: {{E.e7.uw}}; stroke-linecap: round"></line>
+<line x1="100" y1="620" x2="490" y2="650" stroke="{{E.e8.u}}" style="stroke-width: {{E.e8.uw}}; stroke-linecap: round"></line>
+<line x1="490" y1="210" x2="290" y2="380" stroke="{{E.e9.u}}" style="stroke-width: {{E.e9.uw}}; stroke-linecap: round"></line>
+<line x1="490" y1="440" x2="290" y2="380" stroke="{{E.e10.u}}" style="stroke-width: {{E.e10.uw}}; stroke-linecap: round"></line>
+<line x1="490" y1="650" x2="290" y2="380" stroke="{{E.e11.u}}" style="stroke-width: {{E.e11.uw}}; stroke-linecap: round"></line>
+<line x1="490" y1="210" x2="680" y2="80" stroke="{{E.e12.u}}" style="stroke-width: {{E.e12.uw}}; stroke-linecap: round"></line>
+<line x1="490" y1="440" x2="680" y2="80" stroke="{{E.e13.u}}" style="stroke-width: {{E.e13.uw}}; stroke-linecap: round"></line>
+<line x1="490" y1="210" x2="680" y2="230" stroke="{{E.e14.u}}" style="stroke-width: {{E.e14.uw}}; stroke-linecap: round"></line>
+<line x1="680" y1="230" x2="680" y2="360" stroke="{{E.e15.u}}" style="stroke-width: {{E.e15.uw}}; stroke-linecap: round"></line>
+<line x1="490" y1="210" x2="490" y2="60" stroke="{{E.e16.u}}" style="stroke-width: {{E.e16.uw}}; stroke-linecap: round"></line>
+<line x1="490" y1="440" x2="680" y2="500" stroke="{{E.e17.u}}" style="stroke-width: {{E.e17.uw}}; stroke-linecap: round"></line>
+<line x1="100" y1="330" x2="100" y2="110" stroke="{{E.e1.c}}" style="stroke-width: {{E.e1.w}}; stroke-linecap: round"></line>
+<line x1="100" y1="330" x2="290" y2="380" stroke="{{E.e2.c}}" style="stroke-width: {{E.e2.w}}; stroke-linecap: round"></line>
+<line x1="100" y1="330" x2="290" y2="150" stroke="{{E.e3.c}}" style="stroke-width: {{E.e3.w}}; stroke-linecap: round"></line>
+<line x1="100" y1="330" x2="290" y2="590" stroke="{{E.e4.c}}" style="stroke-width: {{E.e4.w}}; stroke-linecap: round"></line>
+<line x1="100" y1="330" x2="100" y2="620" stroke="{{E.e5.c}}" style="stroke-width: {{E.e5.w}}; stroke-linecap: round"></line>
+<line x1="290" y1="150" x2="490" y2="210" stroke="{{E.e6.c}}" style="stroke-width: {{E.e6.w}}; stroke-linecap: round"></line>
+<line x1="290" y1="590" x2="490" y2="440" stroke="{{E.e7.c}}" style="stroke-width: {{E.e7.w}}; stroke-linecap: round"></line>
+<line x1="100" y1="620" x2="490" y2="650" stroke="{{E.e8.c}}" style="stroke-width: {{E.e8.w}}; stroke-linecap: round"></line>
+<line x1="490" y1="210" x2="290" y2="380" stroke="{{E.e9.c}}" style="stroke-width: {{E.e9.w}}; stroke-linecap: round"></line>
+<line x1="490" y1="440" x2="290" y2="380" stroke="{{E.e10.c}}" style="stroke-width: {{E.e10.w}}; stroke-linecap: round"></line>
+<line x1="490" y1="650" x2="290" y2="380" stroke="{{E.e11.c}}" style="stroke-width: {{E.e11.w}}; stroke-linecap: round"></line>
+<line x1="490" y1="210" x2="680" y2="80" stroke="{{E.e12.c}}" style="stroke-width: {{E.e12.w}}; stroke-linecap: round"></line>
+<line x1="490" y1="440" x2="680" y2="80" stroke="{{E.e13.c}}" style="stroke-width: {{E.e13.w}}; stroke-linecap: round"></line>
+<line x1="490" y1="210" x2="680" y2="230" stroke="{{E.e14.c}}" style="stroke-width: {{E.e14.w}}; stroke-linecap: round"></line>
+<line x1="680" y1="230" x2="680" y2="360" stroke="{{E.e15.c}}" style="stroke-width: {{E.e15.w}}; stroke-linecap: round"></line>
+<line x1="490" y1="210" x2="490" y2="60" stroke="{{E.e16.c}}" style="stroke-width: {{E.e16.w}}; stroke-linecap: round"></line>
+<line x1="490" y1="440" x2="680" y2="500" stroke="{{E.e17.c}}" style="stroke-width: {{E.e17.w}}; stroke-linecap: round"></line>
+<text x="100" y="223.5" fill="#080909" opacity="{{E.e1.lo}}" style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; text-anchor: middle; paint-order: stroke; stroke: #F5F5F1; stroke-width: 5px; stroke-linejoin: round">DRILLING IN</text>
+<text x="195" y="358.5" fill="#080909" opacity="{{E.e2.lo}}" style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; text-anchor: middle; paint-order: stroke; stroke: #F5F5F1; stroke-width: 5px; stroke-linejoin: round">62 m AHEAD</text>
+<text x="195" y="243.5" fill="#080909" opacity="{{E.e3.lo}}" style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; text-anchor: middle; paint-order: stroke; stroke: #F5F5F1; stroke-width: 5px; stroke-linejoin: round">1.2 km · 87 %</text>
+<text x="195" y="463.5" fill="#080909" opacity="{{E.e4.lo}}" style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; text-anchor: middle; paint-order: stroke; stroke: #F5F5F1; stroke-width: 5px; stroke-linejoin: round">2.6 km · 78 %</text>
+<text x="100" y="478.5" fill="#080909" opacity="{{E.e5.lo}}" style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; text-anchor: middle; paint-order: stroke; stroke: #F5F5F1; stroke-width: 5px; stroke-linejoin: round">4.2 km · 64 %</text>
+<text x="390" y="183.5" fill="#080909" opacity="{{E.e6.lo}}" style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; text-anchor: middle; paint-order: stroke; stroke: #F5F5F1; stroke-width: 5px; stroke-linejoin: round">RECORDED</text>
+<text x="390" y="518.5" fill="#080909" opacity="{{E.e7.lo}}" style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; text-anchor: middle; paint-order: stroke; stroke: #F5F5F1; stroke-width: 5px; stroke-linejoin: round">RECORDED</text>
+<text x="295" y="638.5" fill="#080909" opacity="{{E.e8.lo}}" style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; text-anchor: middle; paint-order: stroke; stroke: #F5F5F1; stroke-width: 5px; stroke-linejoin: round">RECORDED</text>
+<text x="390" y="298.5" fill="#080909" opacity="{{E.e9.lo}}" style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; text-anchor: middle; paint-order: stroke; stroke: #F5F5F1; stroke-width: 5px; stroke-linejoin: round">+17 m BELOW TOP</text>
+<text x="390" y="413.5" fill="#080909" opacity="{{E.e10.lo}}" style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; text-anchor: middle; paint-order: stroke; stroke: #F5F5F1; stroke-width: 5px; stroke-linejoin: round">+13 m BELOW TOP</text>
+<text x="390" y="518.5" fill="#080909" opacity="{{E.e11.lo}}" style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; text-anchor: middle; paint-order: stroke; stroke: #F5F5F1; stroke-width: 5px; stroke-linejoin: round">+17 m BELOW TOP</text>
+<text x="585" y="148.5" fill="#080909" opacity="{{E.e12.lo}}" style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; text-anchor: middle; paint-order: stroke; stroke: #F5F5F1; stroke-width: 5px; stroke-linejoin: round">CAUSE</text>
+<text x="585" y="263.5" fill="#080909" opacity="{{E.e13.lo}}" style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; text-anchor: middle; paint-order: stroke; stroke: #F5F5F1; stroke-width: 5px; stroke-linejoin: round">CAUSE</text>
+<text x="585" y="223.5" fill="#080909" opacity="{{E.e14.lo}}" style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; text-anchor: middle; paint-order: stroke; stroke: #F5F5F1; stroke-width: 5px; stroke-linejoin: round">ACTION</text>
+<text x="680" y="298.5" fill="#080909" opacity="{{E.e15.lo}}" style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; text-anchor: middle; paint-order: stroke; stroke: #F5F5F1; stroke-width: 5px; stroke-linejoin: round">OUTCOME</text>
+<text x="490" y="138.5" fill="#080909" opacity="{{E.e16.lo}}" style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; text-anchor: middle; paint-order: stroke; stroke: #F5F5F1; stroke-width: 5px; stroke-linejoin: round">SOURCE</text>
+<text x="585" y="473.5" fill="#080909" opacity="{{E.e17.lo}}" style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; text-anchor: middle; paint-order: stroke; stroke: #F5F5F1; stroke-width: 5px; stroke-linejoin: round">ACTION</text>
+</svg>
+<sc-for list="{{nodes}}" as="n" hint-placeholder-count="14">
+<button type="button" onClick="{{n.pick}}" aria-pressed="{{n.pressed}}" aria-label="{{n.aria}}" style="position: absolute; left: {{n.x}}px; top: {{n.y}}px; transform: translate(-50%, -50%); height: 34px; box-sizing: border-box; display: flex; align-items: center; gap: 7px; padding: 0 12px; border: {{n.border}}; background: {{n.bg}}; color: {{n.fg}}; box-shadow: {{n.ring}}; opacity: {{n.op}}; font-family: {{n.font}}; font-size: 12px; font-weight: 800; letter-spacing: {{n.ls}}; white-space: nowrap; cursor: pointer">
+<span style="width: 7px; height: 7px; flex-shrink: 0; background: {{n.dot}}; border-radius: {{n.dotR}}"></span>{{n.label}}</button>
+</sc-for>
+</div>
+<div style="height: 40px; flex-shrink: 0; box-sizing: border-box; display: flex; align-items: center; gap: 16px; padding: 0 16px; border-top: 1px solid #E8E9E5; font-size: 11.5px; color: #454845; white-space: nowrap">
+<span style="display: flex; align-items: center; gap: 6px"><span style="width: 14px; height: 10px; background: #F4C400; box-shadow: inset 0 0 0 1.5px #080909"></span>Active well</span>
+<span style="display: flex; align-items: center; gap: 6px"><span style="width: 14px; height: 10px; background: #080909"></span>Offset well</span>
+<span style="display: flex; align-items: center; gap: 6px"><span style="width: 14px; height: 10px; background: #E8E9E5; box-shadow: inset 0 0 0 1px #080909"></span>Formation</span>
+<span style="display: flex; align-items: center; gap: 6px"><span style="width: 14px; height: 10px; background: #D9362B"></span>Critical event</span>
+<span style="display: flex; align-items: center; gap: 6px"><span style="width: 14px; height: 10px; background: #FFFFFF; box-shadow: inset 0 0 0 1px #080909"></span>Cause · action · outcome</span>
+<span style="display: flex; align-items: center; gap: 6px"><span style="width: 14px; height: 10px; background: #FFFFFF; outline: 1px dashed #454845; outline-offset: -1px"></span>Document</span>
+</div>
+</section>
+
+<aside aria-label="Selected node" style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; background: #FFFFFF; border: 1px solid #E8E9E5; overflow: hidden">
+<div style="flex-shrink: 0; position: relative; padding: 18px 20px 20px; background: #080909; color: #FFFFFF">
+<div style="position: absolute; left: 0; right: 0; top: 0; height: 3px; background: {{d.accent}}"></div>
+<span style="display: flex; align-items: center; gap: 8px; font-family: 'Archivo', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; color: #F4C400"><span style="width: 18px; height: 3px; background: #F4C400"></span>{{d.type}}</span>
+<span style="display: block; margin-top: 10px; font-family: 'Archivo', sans-serif; font-size: 26px; font-weight: 900; line-height: 1.1">{{d.label}}</span>
+<span style="display: block; margin-top: 6px; font-size: 12.5px; color: #C9CBC6">{{d.sub}}</span>
+</div>
+<div style="flex-grow: 1; min-height: 0; overflow-y: auto; padding: 14px 20px; display: flex; flex-direction: column; gap: 16px">
+<dl style="margin: 0; display: grid; grid-template-columns: 104px minmax(0, 1fr); gap: 8px 12px; font-size: 13px; line-height: 1.4">
+<sc-for list="{{d.props}}" as="p" hint-placeholder-count="4">
+<dt style="font-family: 'Archivo', sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: 0.12em; color: #6B6E69; padding-top: 2px">{{p.k}}</dt><dd style="margin: 0; font-family: {{p.font}}">{{p.v}}</dd>
+</sc-for>
+</dl>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span style="font-family: 'Archivo', sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 0.14em">CONNECTED TO · {{d.degree}}</span>
+<sc-for list="{{d.links}}" as="l" hint-placeholder-count="4">
+<button type="button" onClick="{{l.pick}}" style="height: 40px; display: flex; align-items: center; gap: 10px; padding: 0 12px; border: none; border-left: 3px solid {{l.bar}}; background: #F5F5F1; color: #080909; text-align: left; cursor: pointer">
+<span style="width: 108px; flex-shrink: 0; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; font-weight: 600; color: #454845; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{l.rel}}</span>
+<span style="flex-grow: 1; min-width: 0; font-family: 'Archivo', sans-serif; font-size: 12.5px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{l.label}}</span>
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true" style="flex-shrink: 0; stroke-width: 2.25; stroke-linecap: round; stroke-linejoin: round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+</button>
+</sc-for>
+</div>
+<sc-if value="{{pathOn}}" hint-placeholder-val="{{true}}">
+<div style="padding: 12px 14px; background: #FFF3B0; border: 1px solid #D6A900">
+<span style="font-family: 'Archivo', sans-serif; font-size: 10.5px; font-weight: 800; letter-spacing: 0.14em">EVIDENCE PATH</span>
+<p style="margin: 4px 0 0; font-size: 12.5px; line-height: 1.5">OIL-WELL-104 → W-067 → mud loss 17 m below the Barail top → 40 ppb LCM pill → cured in 3.5 h. Source: WCR W-067 p.47.</p>
+</div>
+</sc-if>
+</div>
+<div style="flex-shrink: 0; display: flex; gap: 8px; padding: 12px 20px 16px; border-top: 1px solid #E8E9E5">
+<a href="{{d.href}}" style="flex-grow: 1; height: 42px; display: flex; align-items: center; justify-content: center; background: #080909; color: #FFFFFF; font-family: 'Archivo', sans-serif; font-size: 12px; font-weight: 800; letter-spacing: 0.1em; text-decoration: none">{{d.cta}}</a>
+<a href="AssistantPanel.dc.html" style="height: 42px; box-sizing: border-box; display: flex; align-items: center; padding: 0 16px; background: #F4C400; color: #080909; font-family: 'Archivo', sans-serif; font-size: 12px; font-weight: 900; letter-spacing: 0.1em; text-decoration: none">ASK NWIS</a>
+</div>
+</aside>
+
+</main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { sel: 'eLoss', path: true };
+  }
+  renderVals() {
+    var self = this;
+    var st = this.state || {};
+    var sel = st.sel || 'eLoss';
+    var pathOn = st.path !== false;
+    var N = [["n104", "OIL-WELL-104", "active", 100, 330], ["fTipam", "TIPAM", "formation", 100, 110], ["w121", "W-121", "well", 100, 620], ["w067", "W-067", "well", 290, 150], ["fBarail", "BARAIL", "formation", 290, 380], ["w088", "W-088", "well", 290, 590], ["dWcr", "WCR W-067 p.47", "document", 490, 60], ["eLoss", "MUD LOSS · 3,061 m", "critical", 490, 210], ["eTotal", "TOTAL LOSS · 3,196 m", "critical", 490, 440], ["eStuck", "STUCK PIPE · 3,014 m", "event", 490, 650], ["cSand", "FRACTURED SAND", "cause", 680, 80], ["aLcm", "LCM PILL 40 ppb", "action", 680, 230], ["oCured", "CURED IN 3.5 h", "outcome", 680, 360], ["aPlug", "CEMENT PLUG · 36 h", "action", 680, 500]];
+    var E = [["e1", "n104", "fTipam", "DRILLING IN"], ["e2", "n104", "fBarail", "62 m AHEAD"], ["e3", "n104", "w067", "1.2 km · 87 %"], ["e4", "n104", "w088", "2.6 km · 78 %"], ["e5", "n104", "w121", "4.2 km · 64 %"], ["e6", "w067", "eLoss", "RECORDED"], ["e7", "w088", "eTotal", "RECORDED"], ["e8", "w121", "eStuck", "RECORDED"], ["e9", "eLoss", "fBarail", "+17 m BELOW TOP"], ["e10", "eTotal", "fBarail", "+13 m BELOW TOP"], ["e11", "eStuck", "fBarail", "+17 m BELOW TOP"], ["e12", "eLoss", "cSand", "CAUSE"], ["e13", "eTotal", "cSand", "CAUSE"], ["e14", "eLoss", "aLcm", "ACTION"], ["e15", "aLcm", "oCured", "OUTCOME"], ["e16", "eLoss", "dWcr", "SOURCE"], ["e17", "eTotal", "aPlug", "ACTION"]];
+    var PATH = { e2: 1, e3: 1, e6: 1, e9: 1, e14: 1, e15: 1, e16: 1 };
+    var INFO = {
+      n104: { type: 'ACTIVE WELL', sub: 'Drilling · 8½-in section', props: [['BIT DEPTH', '3,124 m MD', 1], ['FORMATION', 'Tipam'], ['NEXT', 'Barail top in 62 m'], ['TOP RISK', 'Mud loss 83 %']], href: 'CommandCentre.dc.html', cta: 'OPEN COMMAND CENTRE' },
+      fTipam: { type: 'FORMATION', sub: 'Current formation on OIL-WELL-104', props: [['TOP ON 104', '2,752 m TVDSS', 1], ['LITHOLOGY', 'Sandstone with clay bands'], ['EVENTS, 5 km', '3']], href: 'KnowledgeCentre.dc.html', cta: 'EVENTS IN TIPAM' },
+      fBarail: { type: 'FORMATION', sub: 'Next formation · predicted top 3,030 ± 12 m TVDSS', props: [['TOP ON 104', '3,030 ± 12 m TVDSS', 1], ['LITHOLOGY', 'Sandstone, shale, coal'], ['EVENTS, 5 km', '8'], ['PATTERN', 'Losses within 20 m below the top']], href: 'KnowledgeCentre.dc.html', cta: 'EVENTS IN BARAIL' },
+      w067: { type: 'OFFSET WELL', sub: '1.2 km at bit depth · 87 % similar', props: [['SPUD', '2019', 1], ['TD', '3,420 m MD', 1], ['BARAIL TOP', '3,004 m TVDSS', 1], ['EVENTS', '2']], href: 'WellCompare.dc.html', cta: 'COMPARE WITH 104' },
+      w088: { type: 'OFFSET WELL', sub: '2.6 km at bit depth · 78 % similar', props: [['SPUD', '2014', 1], ['TD', '3,380 m MD', 1], ['BARAIL TOP', '3,088 m TVDSS', 1], ['STATUS', 'Suspended']], href: 'WellCompare.dc.html', cta: 'COMPARE WITH 104' },
+      w121: { type: 'OFFSET WELL', sub: '4.2 km at bit depth · 64 % similar', props: [['SPUD', '2021', 1], ['TD', '3,480 m MD', 1], ['BARAIL TOP', '2,985 m TVDSS', 1], ['EVENTS', '1']], href: 'WellCompare.dc.html', cta: 'COMPARE WITH 104' },
+      eLoss: { type: 'EVENT · CRITICAL', sub: 'W-067 · 14 Mar 2019', props: [['DEPTH', '3,061 m MD · 3,021 TVDSS', 1], ['POSITION', '+17 m below the Barail top'], ['RATE', '45 bbl/h', 1], ['ON 104', '≙ 3,203 m MD', 1]], href: 'DocumentIntel.dc.html', cta: 'OPEN SOURCE PAGE' },
+      eTotal: { type: 'EVENT · CRITICAL', sub: 'W-088 · 21 Jan 2014', props: [['DEPTH', '3,196 m MD · 3,101 TVDSS', 1], ['POSITION', '+13 m below the Barail top'], ['LOST TIME', '36 h', 1], ['ON 104', '≙ 3,199 m MD', 1]], href: 'DocumentIntel.dc.html', cta: 'OPEN SOURCE PAGE' },
+      eStuck: { type: 'EVENT', sub: 'W-121 · 5 Aug 2021', props: [['DEPTH', '3,014 m MD · 3,002 TVDSS', 1], ['POSITION', '+17 m below the Barail top'], ['LOST TIME', '9 h', 1], ['ON 104', '≙ 3,203 m MD', 1]], href: 'KnowledgeCentre.dc.html', cta: 'OPEN EVENT' },
+      cSand: { type: 'CAUSE', sub: 'Extracted from 2 reports', props: [['SEEN IN', '2 events'], ['FORMATION', 'Barail'], ['SOURCES', 'WCR W-067 p.47 · WCR W-088 p.88']], href: 'KnowledgeCentre.dc.html', cta: 'EVENTS WITH THIS CAUSE' },
+      aLcm: { type: 'ACTION', sub: 'Lost-circulation material pill', props: [['DOSE', '40 ppb', 1], ['USED', '3 times within 5 km'], ['WORKED', '2 of 3']], href: 'KnowledgeCentre.dc.html', cta: 'WHERE IT WAS USED' },
+      oCured: { type: 'OUTCOME', sub: 'W-067 mud loss', props: [['TIME TO CURE', '3.5 h', 1], ['MUD LOST', '12 m³', 1], ['RESULT', 'Drilled ahead normally']], href: 'KnowledgeCentre.dc.html', cta: 'SIMILAR OUTCOMES' },
+      aPlug: { type: 'ACTION', sub: 'After two LCM pills failed', props: [['WELL', 'W-088', 1], ['LOST TIME', '36 h', 1], ['RESULT', 'Losses cured']], href: 'KnowledgeCentre.dc.html', cta: 'WHERE IT WAS USED' },
+      dWcr: { type: 'DOCUMENT', sub: 'Well completion report · scanned', props: [['PAGE', '47 of 112', 1], ['OCR CONFIDENCE', '0.94', 1], ['ENTITIES', '9 extracted'], ['STATUS', 'Verified']], href: 'DocumentIntel.dc.html', cta: 'OPEN DOCUMENT' }
+    };
+    var TYPE = {
+      active: { bg: '#F4C400', fg: '#080909', border: '2px solid #080909', dot: '#080909', font: "'IBM Plex Mono', monospace", ls: '0' },
+      well: { bg: '#080909', fg: '#FFFFFF', border: '2px solid #080909', dot: '#F4C400', font: "'IBM Plex Mono', monospace", ls: '0' },
+      formation: { bg: '#E8E9E5', fg: '#080909', border: '1.5px solid #080909', dot: '#6B6E69', font: "'Archivo', sans-serif", ls: '0.12em' },
+      critical: { bg: '#D9362B', fg: '#FFFFFF', border: '2px solid #D9362B', dot: '#FFFFFF', font: "'Archivo', sans-serif", ls: '0.04em' },
+      event: { bg: '#FFFFFF', fg: '#080909', border: '2px solid #080909', dot: '#080909', font: "'Archivo', sans-serif", ls: '0.04em' },
+      cause: { bg: '#FFFFFF', fg: '#080909', border: '1px solid #080909', dot: '#A3A6A1', font: "'Archivo', sans-serif", ls: '0.04em' },
+      action: { bg: '#FFFFFF', fg: '#080909', border: '1px solid #080909', dot: '#F4C400', font: "'Archivo', sans-serif", ls: '0.04em' },
+      outcome: { bg: '#FFFFFF', fg: '#080909', border: '1px solid #080909', dot: '#278052', font: "'Archivo', sans-serif", ls: '0.04em' },
+      document: { bg: '#FFFFFF', fg: '#080909', border: '1px dashed #454845', dot: '#A3A6A1', font: "'IBM Plex Mono', monospace", ls: '0' }
+    };
+    var byId = {};
+    N.forEach(function (n) { byId[n[0]] = n; });
+    var nb = {};
+    E.forEach(function (e) { if (e[1] === sel) nb[e[2]] = e; if (e[2] === sel) nb[e[1]] = e; });
+    var Eo = {};
+    E.forEach(function (e) {
+      var inc = e[1] === sel || e[2] === sel;
+      var path = pathOn && !!PATH[e[0]];
+      Eo[e[0]] = {
+        u: path ? '#080909' : 'transparent', uw: path ? 7 : 0,
+        c: path ? '#F4C400' : (inc ? '#080909' : '#C9CBC6'), w: path ? 3.5 : (inc ? 2.25 : 1.5),
+        lo: path || inc ? 1 : 0
+      };
+    });
+    var nodes = N.map(function (n) {
+      var t = TYPE[n[2]], on = n[0] === sel, near = !!nb[n[0]];
+      return {
+        x: n[3], y: n[4], label: n[1], bg: t.bg, fg: t.fg, border: t.border, dot: t.dot, dotR: n[2] === 'outcome' || n[2] === 'critical' ? '50%' : '0',
+        font: t.font, ls: t.ls,
+        ring: on ? '0 0 0 3px #F5F5F1, 0 0 0 6px #080909' : 'none',
+        op: on || near ? 1 : 0.55,
+        pressed: on ? 'true' : 'false', aria: n[1] + ', ' + INFO[n[0]].type.toLowerCase(),
+        pick: function () { self.setState({ sel: n[0] }); }
+      };
+    });
+    var s = byId[sel] || byId.eLoss, inf = INFO[s[0]];
+    var links = Object.keys(nb).map(function (id) {
+      var e = nb[id];
+      return { rel: e[3], label: byId[id][1], bar: pathOn && PATH[e[0]] ? '#F4C400' : '#D4D6D1', pick: function () { self.setState({ sel: id }); } };
+    });
+    return {
+      E: Eo, nodes: nodes, pathOn: pathOn,
+      pathPressed: pathOn ? 'true' : 'false', pathBg: pathOn ? '#FFF3B0' : '#FFFFFF', pathBorder: pathOn ? '#080909' : '#D4D6D1',
+      togglePath: function () { self.setState({ path: !pathOn }); },
+      d: {
+        type: inf.type, label: s[1], sub: inf.sub, href: inf.href, cta: inf.cta, degree: String(links.length),
+        accent: s[2] === 'critical' ? '#D9362B' : '#F4C400',
+        props: inf.props.map(function (p) { return { k: p[0], v: p[1], font: p[2] ? "'IBM Plex Mono', monospace" : 'inherit' }; }),
+        links: links
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,243 @@
+/* ============================================================================
+   Analytics Hub. A black hero histogram over the Barail depth bins, then three
+   quiet evidence rows. The matrix is the only place red appears here, and only
+   as a density wash behind a number.
+   ========================================================================== */
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nw-gap);
+  flex: 1 1 auto;
+  min-height: 0;
+  min-width: 0;
+  overflow: auto;
+}
+
+.duo {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--nw-gap);
+}
+
+.duoWide {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+  gap: var(--nw-gap);
+}
+
+.binNote {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  margin-top: var(--nw-s2);
+  padding-top: var(--nw-s2);
+  border-top: 1px solid var(--nw-border-dark-2);
+  font-size: 10.5px;
+  line-height: 1.5;
+  color: var(--nw-ink-2);
+}
+
+.binTag {
+  flex: 0 0 auto;
+  font-family: var(--nw-font-display);
+  font-size: 8.5px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  padding: 1px 4px;
+  background: var(--nw-yellow);
+  color: var(--nw-ink);
+}
+
+.dim {
+  color: var(--nw-ink-3);
+}
+
+/* ------------------------------------------------------------- per year -- */
+
+.yearBars {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: 2px;
+  height: 96px;
+}
+
+.yearCol {
+  display: grid;
+  grid-template-rows: 10px 1fr 12px;
+  gap: 1px;
+  align-items: end;
+  justify-items: center;
+}
+
+.yearVal {
+  font-family: var(--nw-font-mono);
+  font-size: 8.5px;
+  color: var(--nw-text-4);
+}
+
+.yearBarTrack {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  background: linear-gradient(to bottom, transparent, var(--nw-surface-2));
+}
+
+.yearBar {
+  display: block;
+  width: 100%;
+  background: var(--nw-text-3);
+}
+
+.yearBarHi {
+  display: block;
+  width: 100%;
+  background: var(--nw-yellow-deep);
+}
+
+.yearLabel {
+  font-family: var(--nw-font-mono);
+  font-size: 8.5px;
+  color: var(--nw-text-4);
+}
+
+/* ---------------------------------------------------------------- matrix -- */
+
+.matrix {
+  display: grid;
+  gap: 1px;
+  align-items: stretch;
+}
+
+.mxCorner {
+  background: transparent;
+}
+
+.mxHead {
+  font-family: var(--nw-font-display);
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--nw-text-4);
+  text-align: center;
+  padding-bottom: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mxRow {
+  font-family: var(--nw-font-display);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--nw-ink);
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mxCell {
+  font-family: var(--nw-font-mono);
+  font-size: 10px;
+  text-align: center;
+  padding: 7px 0;
+  background: var(--nw-surface-2);
+  color: var(--nw-ink-2);
+  cursor: default;
+}
+
+.mxCell:hover {
+  outline: 1px solid var(--nw-ink);
+}
+
+/* ------------------------------------------------------------ similarity -- */
+
+.simTable {
+  display: flex;
+  flex-direction: column;
+}
+
+.simRow {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr) 46px 54px 96px;
+  gap: 8px;
+  align-items: center;
+  padding: 6px var(--nw-s3);
+  border-bottom: 1px solid var(--nw-border);
+  text-decoration: none;
+}
+
+.simRow:last-child {
+  border-bottom: 0;
+}
+
+.simRow:hover {
+  background: var(--nw-paper);
+}
+
+.simRow--in {
+  background: color-mix(in srgb, var(--nw-yellow) 8%, transparent);
+}
+
+.simId {
+  font-family: var(--nw-font-mono);
+  font-size: 11px;
+  color: var(--nw-ink);
+}
+
+.simTrack {
+  position: relative;
+  height: 6px;
+  background: var(--nw-surface-2);
+  display: block;
+}
+
+.simTrack i {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: var(--nw-ink);
+  display: block;
+}
+
+.simRow--in .simTrack i {
+  background: var(--nw-yellow-deep);
+}
+
+.simVal,
+.simDist {
+  font-family: var(--nw-font-mono);
+  font-size: 10.5px;
+  text-align: right;
+  color: var(--nw-text-2);
+}
+
+.simDist {
+  color: var(--nw-text-4);
+}
+
+.simVerdict {
+  font-family: var(--nw-font-display);
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-align: right;
+  color: var(--nw-text-4);
+}
+
+.simRow--in .simVerdict {
+  color: var(--nw-ink-2);
+}
+
+@media (max-width: 1100px) {
+  .duo,
+  .duoWide {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

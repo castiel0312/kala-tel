@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>NWIS Command Centre</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0;background:#F5F5F1}
+a{color:#080909}a:hover{color:#454845}
+button{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; display: flex; overflow: hidden; background: #F5F5F1; color: #080909; font-family: 'IBM Plex Sans', system-ui, sans-serif">
+<dc-import name="NwisSidebar" active="command" hint-size="248px,900px"></dc-import>
+<div style="width: 1192px; height: 900px; display: flex; flex-direction: column">
+<dc-import name="NwisTopbar" num="01" section="Operations" heading="Command Centre" desc="What is happening on OIL-WELL-104 right now, and what is ahead of the bit." hint-size="1192px,88px"></dc-import>
+<main style="flex-grow: 1; min-height: 0; box-sizing: border-box; padding: 24px; display: flex; flex-direction: column; gap: 16px">
+
+<section aria-label="Active well" style="height: 168px; flex-shrink: 0; position: relative; display: flex; align-items: stretch; background: #080909; color: #FFFFFF; overflow: hidden">
+<div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; gap: 10px; padding: 0 32px">
+<span style="display: flex; align-items: center; gap: 8px; font-family: 'Archivo', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; color: #F4C400"><span style="width: 18px; height: 3px; background: #F4C400"></span>ACTIVE WELL</span>
+<span style="font-family: 'Archivo', sans-serif; font-size: 44px; font-weight: 900; line-height: 1; letter-spacing: -0.01em">OIL-WELL-104</span>
+<div style="display: flex; gap: 8px; flex-wrap: wrap">
+<span style="height: 26px; box-sizing: border-box; display: flex; align-items: center; gap: 7px; padding: 0 10px; border: 1px solid #3A3D3B; font-family: 'Archivo', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.12em"><span style="width: 7px; height: 7px; border-radius: 50%; background: #3FB57A"></span>DRILLING</span>
+<span style="height: 26px; box-sizing: border-box; display: flex; align-items: center; padding: 0 10px; border: 1px solid #3A3D3B; font-size: 12px; color: #D4D6D1">Tipam Formation</span>
+<span style="height: 26px; box-sizing: border-box; display: flex; align-items: center; padding: 0 10px; border: 1px solid #3A3D3B; font-size: 12px; color: #D4D6D1">8½-in section</span>
+<span style="height: 26px; box-sizing: border-box; display: flex; align-items: center; padding: 0 10px; border: 1px solid #3A3D3B; font-size: 12px; color: #D4D6D1">Rotary</span>
+</div>
+</div>
+<div style="width: 1px; margin: 28px 0; background: #2A2C2B"></div>
+<div style="width: 236px; flex-shrink: 0; display: flex; flex-direction: column; justify-content: center; gap: 6px; padding: 0 28px; box-sizing: border-box">
+<span style="font-family: 'Archivo', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; color: #A3A6A1">BIT DEPTH</span>
+<span style="font-family: 'Archivo', sans-serif; font-size: 52px; font-weight: 900; line-height: 1">3,124<span style="font-size: 18px; font-weight: 700; color: #A3A6A1"> m</span></span>
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #A3A6A1">MD · 2,968 m TVDSS</span>
+</div>
+<div style="width: 1px; margin: 28px 0; background: #2A2C2B"></div>
+<div style="width: 250px; flex-shrink: 0; display: flex; flex-direction: column; justify-content: center; gap: 6px; padding: 0 28px; box-sizing: border-box">
+<span style="font-family: 'Archivo', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; color: #A3A6A1">NEXT FORMATION</span>
+<span style="font-family: 'Archivo', sans-serif; font-size: 20px; font-weight: 800">Barail top</span>
+<span style="display: flex; align-items: baseline; gap: 8px"><span style="font-family: 'Archivo', sans-serif; font-size: 36px; font-weight: 900; line-height: 1; color: #F4C400">62 m</span><span style="font-size: 12.5px; color: #A3A6A1">ahead · ≈ 4.5 h</span></span>
+</div>
+<div style="width: 176px; flex-shrink: 0; display: flex; align-items: flex-end; justify-content: center">
+<svg width="176" height="162" viewBox="0 0 200 170" aria-hidden="true">
+<defs><pattern id="cc-hz" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect x="0" y="0" width="5" height="10" fill="#080909"></rect><rect x="5" y="0" width="5" height="10" fill="#F4C400"></rect></pattern></defs>
+<line x1="90" y1="130" x2="108" y2="10" stroke="#3A3D3B" style="stroke-width: 1.4"></line>
+<line x1="140" y1="130" x2="122" y2="10" stroke="#3A3D3B" style="stroke-width: 1.4"></line>
+<polygon points="30,140 140,140 170,126 60,126" fill="#2E302F" stroke="#5A5D59"></polygon>
+<polygon points="30,140 140,140 140,160 30,160" fill="#1C1E1D" stroke="#5A5D59"></polygon>
+<polygon points="140,140 170,126 170,146 140,160" fill="#121414" stroke="#5A5D59"></polygon>
+<rect x="30" y="140" width="110" height="5" fill="url(#cc-hz)"></rect>
+<line x1="80" y1="136" x2="98" y2="16" stroke="#D4D6D1" style="stroke-width: 1.8"></line>
+<line x1="130" y1="136" x2="112" y2="16" stroke="#D4D6D1" style="stroke-width: 1.8"></line>
+<path d="M83.6 112H126.4M87.2 88H122.8M90.8 64H119.2M94.4 40H115.6M80 136 126.4 112M130 136 83.6 112M83.6 112 122.8 88M126.4 112 87.2 88M87.2 88 119.2 64M122.8 88 90.8 64M90.8 64 115.6 40M119.2 64 94.4 40" fill="none" stroke="#8E918C" style="stroke-width: 1"></path>
+<rect x="94" y="8" width="22" height="9" fill="#E8E9E5"></rect>
+<rect x="94" y="5" width="22" height="3" fill="#F4C400"></rect>
+<line x1="105" y1="17" x2="105" y2="70" stroke="#A3A6A1" style="stroke-width: 1"></line>
+<rect x="100" y="70" width="10" height="16" fill="#F4C400"></rect>
+<path d="M105 86v4a3 3 0 1 1-3 3" fill="none" stroke="#F4C400" style="stroke-width: 1.5"></path>
+<line x1="105" y1="96" x2="105" y2="136" stroke="#6B6E69" style="stroke-width: 2"></line>
+<polygon points="142,118 162,118 170,114 150,114" fill="#2E302F" stroke="#5A5D59"></polygon>
+<polygon points="142,118 162,118 162,132 142,132" fill="#242625" stroke="#5A5D59"></polygon>
+<polygon points="162,118 170,114 170,128 162,132" fill="#121414" stroke="#5A5D59"></polygon>
+<rect x="146" y="122" width="7" height="4" fill="#F4C400"></rect>
+<path d="M38 132h30M40 129h30M42 126h30" fill="none" stroke="#6B6E69" style="stroke-width: 1.5"></path>
+</svg>
+</div>
+<div style="position: absolute; left: 0; right: 0; bottom: 0; height: 6px; background: repeating-linear-gradient(-45deg, #F4C400 0 8px, #080909 8px 16px)"></div>
+</section>
+
+<section aria-label="Primary parameters" style="height: 96px; flex-shrink: 0; display: flex; background: #FFFFFF; border: 1px solid #E8E9E5">
+<sc-for list="{{metrics}}" as="m" hint-placeholder-count="4">
+<div style="position: relative; flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; justify-content: center; gap: 3px; padding: 0 24px; border-right: 1px solid #E8E9E5">
+<div style="position: absolute; left: 0; right: 0; top: 0; height: 3px; background: {{m.bar}}"></div>
+<span style="display: flex; align-items: center; gap: 8px; font-family: 'Archivo', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; color: #6B6E69">{{m.label}}
+<sc-if value="{{m.watch}}" hint-placeholder-val="{{false}}"><span style="padding: 1px 6px; background: #F4C400; color: #080909; font-size: 10px; letter-spacing: 0.1em">WATCH</span></sc-if>
+</span>
+<span style="display: flex; align-items: baseline; gap: 6px"><span style="font-family: 'Archivo', sans-serif; font-size: 32px; font-weight: 800; line-height: 1.05">{{m.value}}</span><span style="font-size: 13px; color: #6B6E69">{{m.unit}}</span></span>
+<span style="font-size: 12px; color: #454845; white-space: nowrap">{{m.sub}}</span>
+</div>
+</sc-for>
+<button type="button" onClick="{{toggleMore}}" aria-expanded="{{moreExpanded}}" style="width: 148px; flex-shrink: 0; border: none; background: {{moreBg}}; color: {{moreFg}}; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; font-family: 'Archivo', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; cursor: pointer">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true" style="stroke-width: 2.25; stroke-linecap: round"><path d="{{moreIcon}}"></path></svg>
+{{moreLabel}}
+</button>
+</section>
+
+<sc-if value="{{showMore}}" hint-placeholder-val="{{false}}">
+<section aria-label="More parameters" style="height: 64px; flex-shrink: 0; display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); background: #FFFFFF; border: 1px solid #E8E9E5">
+<sc-for list="{{moreParams}}" as="p" hint-placeholder-count="8">
+<div style="display: flex; flex-direction: column; justify-content: center; gap: 2px; padding: 0 16px; border-right: 1px solid #E8E9E5">
+<span style="font-family: 'Archivo', sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: 0.12em; color: #6B6E69">{{p.label}}</span>
+<span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 16px; font-weight: 600">{{p.value}}</span> <span style="font-size: 11.5px; color: #6B6E69">{{p.unit}}</span></span>
+</div>
+</sc-for>
+</section>
+</sc-if>
+
+<div style="flex-grow: 1; min-height: 0; display: flex; gap: 16px">
+<section aria-label="Nearby wells map" style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; background: #FFFFFF; border: 1px solid #E8E9E5">
+<div style="height: 52px; flex-shrink: 0; box-sizing: border-box; display: flex; align-items: center; gap: 12px; padding: 0 18px; border-bottom: 1px solid #E8E9E5">
+<span style="font-family: 'Archivo', sans-serif; font-size: 12px; font-weight: 800; letter-spacing: 0.14em">NEARBY WELLS</span>
+<span style="font-size: 12.5px; color: #454845">5 km radius · 7 wells · 3 relevant</span>
+<span style="flex-grow: 1"></span>
+<a href="NearbyWells.dc.html" style="display: flex; align-items: center; gap: 6px; font-family: 'Archivo', sans-serif; font-size: 11.5px; font-weight: 800; letter-spacing: 0.1em; text-decoration: none">OPEN MAP
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true" style="stroke-width: 2.25; stroke-linecap: round; stroke-linejoin: round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></a>
+</div>
+<div style="position: relative; flex-grow: 1; min-height: 0; overflow: hidden; background: #F5F5F1">
+<svg width="766" height="334" viewBox="0 0 766 334" role="img" aria-label="Map of OIL-WELL-104 and seven offset wells within 5 km. Three relevant offsets lie within 2.6 km." style="position: absolute; left: 0; top: 0; display: block">
+<defs><pattern id="cc-grid" x="23" y="15" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M30 0H0V30" fill="none" stroke="#ECECE7"></path></pattern></defs>
+<rect x="0" y="0" width="766" height="334" fill="url(#cc-grid)"></rect>
+<path d="M0 70C120 30 250 96 380 58S620 30 766 84" fill="none" stroke="#DEDFD9" style="stroke-width: 1.2"></path>
+<path d="M0 104C140 70 240 132 390 98S640 76 766 124" fill="none" stroke="#E4E5DF"></path>
+<path d="M0 262C160 236 250 300 420 270S640 236 766 282" fill="none" stroke="#DEDFD9" style="stroke-width: 1.2"></path>
+<path d="M0 300C170 280 280 330 440 306S650 276 766 316" fill="none" stroke="#E4E5DF"></path>
+<circle cx="383" cy="165" r="30" fill="none" stroke="#E1E2DC"></circle>
+<circle cx="383" cy="165" r="60" fill="none" stroke="#E1E2DC"></circle>
+<circle cx="383" cy="165" r="90" fill="none" stroke="#E1E2DC"></circle>
+<circle cx="383" cy="165" r="120" fill="none" stroke="#E1E2DC"></circle>
+<circle cx="383" cy="165" r="150" fill="rgba(244,196,0,0.05)" stroke="#454845" style="stroke-width: 1.25; stroke-dasharray: 5 5"></circle>
+<text x="389" y="29" fill="#454845" style="font-family: 'IBM Plex Mono', monospace; font-size: 11px">5 km</text>
+<path d="M359 138Q361 150 371 153" fill="none" stroke="{{tr.w067}}" style="stroke-width: {{tw.w067}}; stroke-linecap: round"></path>
+<path d="M461 159Q460 150 458 147" fill="none" stroke="{{tr.w042}}" style="stroke-width: {{tw.w042}}; stroke-linecap: round"></path>
+<path d="M440 243Q443 231 455 228" fill="none" stroke="{{tr.w088}}" style="stroke-width: {{tw.w088}}; stroke-linecap: round"></path>
+<path d="M317 207Q318 214 323 216" fill="none" stroke="{{tr.w081}}" style="stroke-width: {{tw.w081}}; stroke-linecap: round"></path>
+<path d="M470 237Q472 242 479 243" fill="none" stroke="{{tr.w112}}" style="stroke-width: {{tw.w112}}; stroke-linecap: round"></path>
+<path d="M338 57Q340 67 347 69" fill="none" stroke="{{tr.w103}}" style="stroke-width: {{tw.w103}}; stroke-linecap: round"></path>
+<path d="M269 108Q273 118 287 120" fill="none" stroke="{{tr.w121}}" style="stroke-width: {{tw.w121}}; stroke-linecap: round"></path>
+<circle cx="359" cy="138" r="3" fill="#FFFFFF" stroke="#6B6E69"></circle>
+<circle cx="461" cy="159" r="3" fill="#FFFFFF" stroke="#6B6E69"></circle>
+<circle cx="440" cy="243" r="3" fill="#FFFFFF" stroke="#6B6E69"></circle>
+<circle cx="317" cy="207" r="3" fill="#FFFFFF" stroke="#6B6E69"></circle>
+<circle cx="470" cy="237" r="3" fill="#FFFFFF" stroke="#6B6E69"></circle>
+<circle cx="338" cy="57" r="3" fill="#FFFFFF" stroke="#6B6E69"></circle>
+<circle cx="269" cy="108" r="3" fill="#FFFFFF" stroke="#6B6E69"></circle>
+<path d="M383 165Q389 172 401 174" fill="none" stroke="#080909" style="stroke-width: 6; stroke-linecap: round"></path>
+<path d="M383 165Q389 172 401 174" fill="none" stroke="#F4C400" style="stroke-width: 2.5; stroke-linecap: round"></path>
+<path d="M401 174L411 180" fill="none" stroke="#080909" style="stroke-width: 1.5; stroke-dasharray: 3 3"></path>
+<rect x="377" y="159" width="12" height="12" fill="#080909"></rect>
+<rect x="381" y="163" width="4" height="4" fill="#F4C400"></rect>
+<path d="M395 168h12l-6 10z" fill="#F4C400" stroke="#080909" style="stroke-width: 1.25"></path>
+<circle cx="379" cy="160" r="4" fill="#D9362B" stroke="#FFFFFF" style="stroke-width: 1.5"></circle>
+<circle cx="466" cy="154" r="4" fill="#D9362B" stroke="#FFFFFF" style="stroke-width: 1.5"></circle>
+<circle cx="463" cy="235" r="4" fill="#D9362B" stroke="#FFFFFF" style="stroke-width: 1.5"></circle>
+<line x1="714" y1="316" x2="744" y2="316" stroke="#080909" style="stroke-width: 2"></line>
+<text x="708" y="320" fill="#454845" style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; text-anchor: end">1 km</text>
+</svg>
+<span style="position: absolute; left: 410px; top: 182px; height: 22px; box-sizing: border-box; display: flex; align-items: center; padding: 0 8px; background: #080909; color: #FFFFFF; font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; white-space: nowrap">OIL-WELL-104</span>
+<sc-for list="{{wells}}" as="w" hint-placeholder-count="7">
+<button type="button" aria-label="{{w.aria}}" aria-pressed="{{w.pressed}}" onClick="{{w.pick}}" style="position: absolute; left: {{w.bx}}px; top: {{w.by}}px; width: 28px; height: 28px; padding: 0; border: none; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center">
+<span style="display: block; width: 12px; height: 12px; box-sizing: border-box; border-radius: 50%; background: {{w.fill}}; border: 1.5px solid {{w.stroke}}; box-shadow: {{w.ring}}"></span>
+</button>
+<sc-if value="{{w.showLabel}}" hint-placeholder-val="{{false}}">
+<span style="position: absolute; left: {{w.lx}}; right: {{w.rx}}; top: {{w.ly}}px; height: 20px; box-sizing: border-box; display: flex; align-items: center; padding: 0 7px; background: {{w.labelBg}}; color: {{w.labelFg}}; border: 1px solid {{w.labelBorder}}; font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; white-space: nowrap; pointer-events: none">{{w.label}}</span>
+</sc-if>
+</sc-for>
+
+<div style="position: absolute; left: 16px; top: 16px; width: 236px; box-sizing: border-box; background: #FFFFFF; border: 1px solid #080909">
+<div style="height: 3px; background: #F4C400"></div>
+<div style="padding: 12px 14px 14px; display: flex; flex-direction: column; gap: 8px">
+<div style="display: flex; align-items: center; justify-content: space-between">
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 16px; font-weight: 600">{{sel.id}}</span>
+<span style="font-family: 'Archivo', sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 0.08em">{{sel.sim}}% SIMILAR</span>
+</div>
+<div style="height: 4px; background: #E8E9E5; position: relative"><div style="position: absolute; left: 0; top: 0; bottom: 0; width: {{sel.sim}}%; background: {{sel.simBar}}"></div></div>
+<span style="font-size: 12.5px; color: #454845">{{sel.dist}} at bit depth · {{sel.ev}}</span>
+<div style="display: flex; gap: 12px; margin-top: 2px">
+<a href="NearbyWells.dc.html" style="font-family: 'Archivo', sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 0.1em; text-decoration-color: #F4C400; text-decoration-thickness: 2px; text-underline-offset: 4px">VIEW WELL →</a>
+<a href="WellCompare.dc.html" style="font-family: 'Archivo', sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 0.1em; text-decoration-color: #F4C400; text-decoration-thickness: 2px; text-underline-offset: 4px">COMPARE</a>
+</div>
+</div>
+</div>
+
+<div style="position: absolute; left: 16px; bottom: 12px; display: flex; gap: 14px; padding: 6px 10px; background: rgba(255,255,255,0.92); border: 1px solid #E8E9E5; font-size: 11.5px; color: #454845">
+<span style="display: flex; align-items: center; gap: 6px"><span style="width: 10px; height: 10px; background: #080909; box-shadow: inset 0 0 0 3px #080909, inset 0 0 0 5px #F4C400"></span>Active</span>
+<span style="display: flex; align-items: center; gap: 6px"><span style="width: 10px; height: 10px; box-sizing: border-box; border-radius: 50%; background: #F4C400; border: 1.5px solid #080909"></span>Relevant offset</span>
+<span style="display: flex; align-items: center; gap: 6px"><span style="width: 10px; height: 10px; box-sizing: border-box; border-radius: 50%; background: #FFFFFF; border: 1.5px solid #6B6E69"></span>Other</span>
+<span style="display: flex; align-items: center; gap: 6px"><span style="width: 8px; height: 8px; border-radius: 50%; background: #D9362B"></span>Mud-loss site</span>
+</div>
+</div>
+</section>
+
+<section aria-label="Top risk" style="width: 360px; flex-shrink: 0; box-sizing: border-box; padding: 22px 24px; display: flex; flex-direction: column; background: #080909; color: #FFFFFF; border: 2px solid #F4C400">
+<div style="display: flex; align-items: center; justify-content: space-between">
+<span style="display: flex; align-items: center; gap: 8px; font-family: 'Archivo', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; color: #F4C400"><span style="width: 18px; height: 3px; background: #F4C400"></span>TOP RISK</span>
+<span style="display: flex; align-items: center; gap: 6px; padding: 3px 8px; background: #D9362B; font-family: 'Archivo', sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 0.12em"><span style="width: 6px; height: 6px; border-radius: 50%; background: #FFFFFF"></span>HIGH</span>
+</div>
+<span style="margin-top: 14px; font-family: 'Archivo', sans-serif; font-size: 22px; font-weight: 800; letter-spacing: 0.02em">MUD LOSS</span>
+<span style="font-family: 'Archivo', sans-serif; font-size: 84px; font-weight: 900; line-height: 0.95; color: #F4C400">83%</span>
+<span style="margin-top: 6px; font-size: 13px; color: #C9CBC6">3,180–3,240 m MD · just below the Barail top</span>
+<div style="margin-top: 16px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid #2A2C2B; border-bottom: 1px solid #2A2C2B">
+<a href="KnowledgeCentre.dc.html" style="display: flex; flex-direction: column; gap: 2px; padding: 12px 0; color: #FFFFFF; text-decoration: none; border-right: 1px solid #2A2C2B">
+<span style="font-family: 'Archivo', sans-serif; font-size: 30px; font-weight: 900; line-height: 1">6</span>
+<span style="font-family: 'Archivo', sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: 0.12em; color: #A3A6A1">HISTORICAL EVENTS</span>
+</a>
+<a href="NearbyWells.dc.html" style="display: flex; flex-direction: column; gap: 2px; padding: 12px 0 12px 16px; color: #FFFFFF; text-decoration: none">
+<span style="font-family: 'Archivo', sans-serif; font-size: 30px; font-weight: 900; line-height: 1">3</span>
+<span style="font-family: 'Archivo', sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: 0.12em; color: #A3A6A1">SIMILAR WELLS</span>
+</a>
+</div>
+<div style="margin-top: auto; display: flex; gap: 8px">
+<a href="RiskCentre.dc.html" style="flex-grow: 1; height: 46px; display: flex; align-items: center; justify-content: center; gap: 8px; background: #F4C400; color: #080909; font-family: 'Archivo', sans-serif; font-size: 12.5px; font-weight: 900; letter-spacing: 0.1em; text-decoration: none">VIEW EVIDENCE
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true" style="stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></a>
+<a href="AssistantPanel.dc.html" style="width: 70px; height: 46px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 1px solid #454845; color: #FFFFFF; font-family: 'Archivo', sans-serif; font-size: 12.5px; font-weight: 800; letter-spacing: 0.1em; text-decoration: none">WHY?</a>
+</div>
+</section>
+</div>
+
+<nav aria-label="Summary" style="height: 64px; flex-shrink: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px">
+<a href="AlertsCentre.dc.html" style="position: relative; display: flex; align-items: center; gap: 14px; padding: 0 20px; background: #FFFFFF; border: 1px solid #E8E9E5; color: #080909; text-decoration: none">
+<span style="position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: #F4C400"></span>
+<span style="font-family: 'Archivo', sans-serif; font-size: 30px; font-weight: 900">03</span>
+<span style="display: flex; flex-direction: column; gap: 1px"><span style="font-family: 'Archivo', sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 0.14em">ACTIVE ALERTS</span><span style="font-size: 12px; color: #454845">Need a decision</span></span>
+</a>
+<a href="NearbyWells.dc.html" style="display: flex; align-items: center; gap: 14px; padding: 0 20px; background: #FFFFFF; border: 1px solid #E8E9E5; color: #080909; text-decoration: none">
+<span style="font-family: 'Archivo', sans-serif; font-size: 30px; font-weight: 900">07</span>
+<span style="display: flex; flex-direction: column; gap: 1px"><span style="font-family: 'Archivo', sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 0.14em">OFFSET WELLS</span><span style="font-size: 12px; color: #454845">Within 5 km</span></span>
+</a>
+<a href="KnowledgeCentre.dc.html" style="display: flex; align-items: center; gap: 14px; padding: 0 20px; background: #FFFFFF; border: 1px solid #E8E9E5; color: #080909; text-decoration: none">
+<span style="font-family: 'Archivo', sans-serif; font-size: 30px; font-weight: 900">12</span>
+<span style="display: flex; flex-direction: column; gap: 1px"><span style="font-family: 'Archivo', sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 0.14em">HISTORICAL EVENTS</span><span style="font-size: 12px; color: #454845">In these offsets</span></span>
+</a>
+<a href="RiskCentre.dc.html" style="display: flex; align-items: center; gap: 14px; padding: 0 20px; background: #FFFFFF; border: 1px solid #E8E9E5; color: #080909; text-decoration: none">
+<span style="font-family: 'Archivo', sans-serif; font-size: 30px; font-weight: 900">03</span>
+<span style="display: flex; flex-direction: column; gap: 1px"><span style="font-family: 'Archivo', sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 0.14em">RISK ZONES AHEAD</span><span style="font-size: 12px; color: #454845">1 high · 2 medium</span></span>
+</a>
+</nav>
+
+</main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { sel: 'W-067', more: false };
+  }
+  renderVals() {
+    var self = this;
+    var st = this.state || {};
+    var sel = st.sel || 'W-067';
+    var more = !!st.more;
+    var W = [
+      { id: 'W-067', key: 'w067', x: 371, y: 153, sim: 87, dist: '1.2 km', ev: '2 events, mud loss in Barail', side: 'left' },
+      { id: 'W-042', key: 'w042', x: 458, y: 147, sim: 81, dist: '2.1 km', ev: '2 events, seepage and overpull', side: 'right' },
+      { id: 'W-088', key: 'w088', x: 455, y: 228, sim: 78, dist: '2.6 km', ev: '2 events, total loss and poor bond', side: 'left' },
+      { id: 'W-081', key: 'w081', x: 323, y: 216, sim: 58, dist: '3.0 km', ev: '2 events, seepage and bit balling', side: 'left' },
+      { id: 'W-112', key: 'w112', x: 479, y: 243, sim: 41, dist: '3.4 km', ev: '1 event, gas influx', side: 'right' },
+      { id: 'W-103', key: 'w103', x: 347, y: 69, sim: 36, dist: '3.9 km', ev: '2 events, tight hole and cement losses', side: 'right' },
+      { id: 'W-121', key: 'w121', x: 287, y: 120, sim: 64, dist: '4.2 km', ev: '1 event, differential sticking', side: 'right' }
+    ];
+    var tr = {}, tw = {};
+    var wells = W.map(function (w) {
+      var rel = w.sim >= 75, on = w.id === sel;
+      tr[w.key] = on ? '#080909' : (rel ? '#D6A900' : '#A3A6A1');
+      tw[w.key] = on ? 3 : (rel ? 2.25 : 1.5);
+      return {
+        aria: w.id + ', ' + w.dist + ' at bit depth, ' + w.sim + ' percent similar',
+        pressed: on ? 'true' : 'false',
+        pick: function () { self.setState({ sel: w.id }); },
+        bx: w.x - 14, by: w.y - 14,
+        fill: rel ? '#F4C400' : '#FFFFFF',
+        stroke: rel || on ? '#080909' : '#6B6E69',
+        ring: on ? '0 0 0 3px #FFFFFF, 0 0 0 5px #080909' : 'none',
+        showLabel: rel || on,
+        label: w.id + ' · ' + w.sim + '%',
+        lx: w.side === 'right' ? (w.x + 14) + 'px' : 'auto',
+        rx: w.side === 'left' ? (766 - w.x + 14) + 'px' : 'auto',
+        ly: w.y - 10,
+        labelBg: on ? '#080909' : '#FFFFFF',
+        labelFg: on ? '#FFFFFF' : '#080909',
+        labelBorder: on ? '#080909' : '#D4D6D1'
+      };
+    });
+    var s = W.filter(function (w) { return w.id === sel; })[0] || W[0];
+    var metrics = [
+      { label: 'DEPTH', value: '3,124', unit: 'm MD', sub: '+18 m in the last hour', watch: false, bar: 'transparent' },
+      { label: 'ROP', value: '13.7', unit: 'm/h', sub: 'Within the normal band', watch: false, bar: 'transparent' },
+      { label: 'TORQUE', value: '27.8', unit: 'kN·m', sub: '3.1 above the T&D model', watch: true, bar: '#F4C400' },
+      { label: 'ECD', value: '1.453', unit: 'g/cm³', sub: 'Fracture limit 1.52', watch: true, bar: '#F4C400' }
+    ];
+    var moreParams = [
+      { label: 'WOB', value: '82', unit: 'kN' }, { label: 'RPM', value: '120', unit: 'rpm' },
+      { label: 'SPP', value: '182', unit: 'bar' }, { label: 'HOOKLOAD', value: '142', unit: 't' },
+      { label: 'FLOW IN', value: '2,850', unit: 'L/min' }, { label: 'FLOW OUT', value: '97', unit: '%' },
+      { label: 'PIT VOLUME', value: '84.2', unit: 'm³' }, { label: 'MUD WEIGHT', value: '1.38', unit: 'g/cm³' }
+    ];
+    return {
+      wells: wells, tr: tr, tw: tw,
+      sel: { id: s.id, sim: s.sim, dist: s.dist, ev: s.ev, simBar: s.sim >= 75 ? '#F4C400' : '#A3A6A1' },
+      metrics: metrics, moreParams: moreParams, showMore: more,
+      moreExpanded: more ? 'true' : 'false',
+      moreLabel: more ? 'LESS' : 'MORE PARAMETERS',
+      moreIcon: more ? 'M5 12h14' : 'M12 5v14M5 12h14',
+      moreBg: more ? '#080909' : '#F5F5F1',
+      moreFg: more ? '#F4C400' : '#080909',
+      toggleMore: function () { self.setState({ more: !more }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

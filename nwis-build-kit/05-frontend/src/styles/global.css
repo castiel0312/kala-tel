@@ -1,0 +1,198 @@
+/* ============================================================================
+   NWIS global base. Reset, typography, focus, scrollbars, and the handful of
+   utility classes that more than one module needs.
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--nw-paper);
+  color: var(--nw-text);
+  font-family: var(--nw-font-body);
+  font-size: var(--nw-fs-body);
+  line-height: var(--nw-lh);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow: hidden;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ul,
+ol,
+figure,
+pre {
+  margin: 0;
+  padding: 0;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+svg {
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--nw-yellow-deep);
+  outline-offset: 1px;
+}
+
+::selection {
+  background: var(--nw-yellow);
+  color: var(--nw-black);
+}
+
+/* ---- engineering numerals ---------------------------------------------- */
+.mono {
+  font-family: var(--nw-font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+/* ---- display numerals: tight, heavy, never marketing-loose ------------- */
+.display {
+  font-family: var(--nw-font-display);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--nw-track-tight);
+  line-height: var(--nw-lh-tight);
+  font-weight: 800;
+}
+
+/* ---- engineering label: the most repeated element in the product -------- */
+.label {
+  font-family: var(--nw-font-display);
+  font-size: var(--nw-fs-xs);
+  font-weight: 700;
+  letter-spacing: var(--nw-track-label);
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+/* ---- scrollbars: thin, industrial, visible on dark surfaces too --------- */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--nw-border-2) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--nw-border-2);
+  border: 2px solid transparent;
+  background-clip: content-box;
+  border-radius: var(--nw-r-pill);
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--nw-text-3);
+  background-clip: content-box;
+}
+
+.on-black *::-webkit-scrollbar-thumb,
+.on-black ::-webkit-scrollbar-thumb {
+  background: var(--nw-graphite-2);
+  background-clip: content-box;
+}
+
+/* ---- selection colour inside tables and code-ish rows ------------------- */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---- mapbox chrome restyled to the industrial system ------------------- */
+.mapboxgl-ctrl-attrib {
+  font-family: var(--nw-font-body);
+  font-size: 9.5px;
+  background: rgba(255, 255, 255, 0.82) !important;
+  border-radius: 0 !important;
+}
+
+.mapboxgl-ctrl-attrib a {
+  color: var(--nw-text-3);
+}
+
+.mapboxgl-ctrl-attrib-button {
+  filter: grayscale(1) contrast(1.4);
+}
+
+.mapboxgl-canvas:focus {
+  outline: none;
+}
+
+.mapboxgl-ctrl-logo {
+  opacity: 0.5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

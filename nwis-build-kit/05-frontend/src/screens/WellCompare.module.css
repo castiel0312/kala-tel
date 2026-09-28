@@ -1,0 +1,380 @@
+/* ============================================================================
+   Well Compare. A duel header, the aligned parameter rows, and a right column
+   that answers "so what" — the takeaway, the events, and where to go next.
+   ========================================================================== */
+
+.duel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: var(--nw-gap);
+  align-items: stretch;
+  flex: 0 0 auto;
+}
+
+.side {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: var(--nw-s3);
+  background: var(--nw-white);
+  border: 1px solid var(--nw-border);
+  border-top: 3px solid var(--nw-ink);
+  min-width: 0;
+}
+
+.picker {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  justify-content: center;
+  align-items: center;
+  padding: var(--nw-s2) var(--nw-s3);
+  background: var(--nw-yellow);
+  border: 1px solid var(--nw-yellow-deep);
+  max-width: 260px;
+}
+
+.pickerK,
+.sideK {
+  font-family: var(--nw-font-display);
+  font-size: var(--nw-fs-micro);
+  font-weight: 800;
+  letter-spacing: var(--nw-track-label);
+  text-transform: uppercase;
+  color: var(--nw-text-3);
+}
+
+.pickerRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  justify-content: center;
+}
+
+.pickerEmpty {
+  font-family: var(--nw-font-mono);
+  font-size: 10px;
+  color: var(--nw-ink-2);
+}
+
+.pickBtn {
+  appearance: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  border: 1px solid color-mix(in srgb, var(--nw-ink) 30%, transparent);
+  background: color-mix(in srgb, var(--nw-white) 70%, transparent);
+  color: var(--nw-ink);
+  font-family: var(--nw-font-mono);
+  font-size: 10px;
+  padding: 2px 6px;
+  cursor: pointer;
+  min-height: 26px;
+}
+
+.pickBtn:hover {
+  background: var(--nw-white);
+}
+
+.pickBtn--on {
+  background: var(--nw-ink);
+  color: var(--nw-yellow);
+  border-color: var(--nw-ink);
+}
+
+.sideId {
+  font-family: var(--nw-font-mono);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--nw-ink);
+  line-height: 1.1;
+}
+
+.sideMeta {
+  font-family: var(--nw-font-mono);
+  font-size: 10px;
+  color: var(--nw-text-2);
+}
+
+.sideChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 3px;
+}
+
+/* ------------------------------------------------------------------ body -- */
+
+.body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 336px;
+  gap: var(--nw-gap);
+  flex: 1 1 auto;
+  min-height: 0;
+  min-width: 0;
+}
+
+.mainCol,
+.sideCol {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nw-gap);
+  min-width: 0;
+  min-height: 0;
+}
+
+.skelPad {
+  padding: var(--nw-s3);
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+}
+
+.legendRow {
+  display: flex;
+  gap: var(--nw-s3);
+  padding: 6px var(--nw-s3);
+  border-top: 1px solid var(--nw-border);
+  background: var(--nw-paper);
+  flex-wrap: wrap;
+}
+
+.legendCell {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--nw-font-display);
+  font-size: var(--nw-fs-micro);
+  font-weight: 700;
+  letter-spacing: var(--nw-track-label);
+  text-transform: uppercase;
+  color: var(--nw-text-3);
+}
+
+.swatchA,
+.swatchB,
+.swatchF {
+  width: 12px;
+  height: 8px;
+  display: inline-block;
+}
+
+.swatchA {
+  background: var(--nw-ink);
+}
+
+.swatchB {
+  background: var(--nw-steel);
+}
+
+.swatchF {
+  background: var(--nw-red);
+}
+
+/* ---------------------------------------------------------------- design -- */
+
+.design {
+  display: flex;
+  flex-direction: column;
+}
+
+.designRow {
+  display: grid;
+  grid-template-columns: 108px minmax(0, 1fr) minmax(0, 1fr) 22px;
+  gap: 8px;
+  align-items: baseline;
+  padding: 5px var(--nw-s3);
+  border-bottom: 1px solid var(--nw-border);
+  font-size: var(--nw-fs-xs);
+}
+
+.designRow--differs {
+  background: color-mix(in srgb, var(--nw-yellow) 12%, transparent);
+}
+
+.designK {
+  font-family: var(--nw-font-display);
+  font-size: var(--nw-fs-micro);
+  font-weight: 700;
+  letter-spacing: var(--nw-track-label);
+  text-transform: uppercase;
+  color: var(--nw-text-3);
+}
+
+.designA {
+  font-family: var(--nw-font-mono);
+  font-size: 10.5px;
+  color: var(--nw-ink);
+}
+
+.designB {
+  font-family: var(--nw-font-mono);
+  font-size: 10.5px;
+  color: var(--nw-text-2);
+}
+
+.designFlag {
+  display: inline-flex;
+  justify-content: flex-end;
+  color: var(--nw-text-4);
+}
+
+.designRow--differs .designFlag {
+  color: var(--nw-red);
+}
+
+/* -------------------------------------------------------------- takeaway -- */
+
+.takeaway {
+  margin: 6px 0 4px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--nw-ink-2);
+  font-weight: 500;
+}
+
+.takeawaySrc {
+  font-family: var(--nw-font-mono);
+  font-size: 9.5px;
+  color: var(--nw-ink-3);
+}
+
+.takeawayActions {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: var(--nw-s3);
+}
+
+/* ---------------------------------------------------------------- events -- */
+
+.event {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 8px var(--nw-s3);
+  border-bottom: 1px solid var(--nw-border);
+}
+
+.event:last-child {
+  border-bottom: 0;
+}
+
+.eventHead {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.eventT {
+  font-size: var(--nw-fs-xs);
+  font-weight: 600;
+  color: var(--nw-ink);
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.eventMd {
+  font-family: var(--nw-font-mono);
+  font-size: 10px;
+  color: var(--nw-text-3);
+}
+
+.eventBody {
+  font-size: var(--nw-fs-xs);
+  color: var(--nw-text-2);
+  line-height: 1.45;
+}
+
+.eventOutcome {
+  font-size: var(--nw-fs-xs);
+  color: var(--nw-text-2);
+}
+
+.eventOutcome b {
+  color: var(--nw-ink);
+}
+
+.eventSrc {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-family: var(--nw-font-display);
+  font-size: var(--nw-fs-micro);
+  font-weight: 700;
+  letter-spacing: var(--nw-track-label);
+  text-transform: uppercase;
+  color: var(--nw-text-3);
+  text-decoration: none;
+}
+
+.eventSrc:hover {
+  color: var(--nw-ink);
+  text-decoration: underline;
+}
+
+/* ------------------------------------------------------------------ misc -- */
+
+.factorsNote,
+.nextNote {
+  margin: var(--nw-s2) 0 0;
+  font-size: 10.5px;
+  line-height: 1.45;
+  color: var(--nw-text-3);
+}
+
+.nextLinks {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.nextLinks a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--nw-fs-xs);
+  color: var(--nw-ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--nw-border);
+  padding-bottom: 4px;
+}
+
+.nextLinks a:hover {
+  border-bottom-color: var(--nw-yellow-deep);
+}
+
+@media (max-width: 1180px) {
+  .body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Phone: one well at a time, stacked, instead of a three-track duel. */
+@media (max-width: 899px) {
+  .duel {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+  }
+  /* Stacked, each well's panel takes the height its content needs. */
+  .duel > * {
+    height: auto;
+  }
+  .body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .sideK {
+    overflow-wrap: anywhere;
+  }
+  /* Stacked columns scroll instead of squeezing their panels flat. */
+  .mainCol > *,
+  .sideCol > * {
+    flex: 0 0 auto;
+  }
+}

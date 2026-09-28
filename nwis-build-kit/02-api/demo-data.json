@@ -1,0 +1,2670 @@
+{
+  "_meta": {
+    "demo": true,
+    "note": "All values are invented for the SIH26121 prototype. Replace with real WCR/DDR/eRTMAC data.",
+    "units": {
+      "depth": "m",
+      "ecd": "g/cm³",
+      "mudWeight": "g/cm³",
+      "torque": "kN·m",
+      "wob": "kN",
+      "spp": "bar",
+      "hookload": "t",
+      "flow": "L/min",
+      "rate": "bbl/h",
+      "volume": "m³"
+    },
+    "depthConventions": {
+      "MD": "measured depth along the hole",
+      "TVDSS": "true vertical depth below sea level",
+      "metresBelowBarailTop": "event TVDSS − that well's Barail top TVDSS",
+      "alignedMdOnActiveM": "active well's predicted Barail top MD (3,186) + metresBelowBarailTop"
+    }
+  },
+  "activeWell": {
+    "id": "OIL-WELL-104",
+    "status": "DRILLING",
+    "rigState": "ROTARY",
+    "holeSection": "8½-in",
+    "field": "Upper Assam (demo)",
+    "surfaceKm": [
+      0.0,
+      0.0
+    ],
+    "bitKm": [
+      0.6,
+      -0.3
+    ],
+    "kbElevationM": 0,
+    "bit": {
+      "mdM": 3124,
+      "tvdssM": 2968,
+      "mdMinusTvdssM": 156
+    },
+    "currentFormation": "Tipam",
+    "nextFormation": {
+      "name": "Barail",
+      "topMdM": 3186,
+      "topTvdssM": 3030,
+      "uncertaintyM": 12,
+      "distanceM": 62,
+      "etaHours": 4.5
+    },
+    "casing": {
+      "shoe9_5_8inMdM": 3050,
+      "fitEmwGcc": 1.56
+    },
+    "design": {
+      "shoe": "3,050 m MD",
+      "cement": "Lead 1.50 + tail 1.90",
+      "mudSystem": "KCl-polymer, 1.38",
+      "bit": "8½-in PDC, 5-blade"
+    },
+    "lookAheadM": 150,
+    "rigStateLast2h": [
+      {
+        "state": "ROTARY",
+        "pct": 18
+      },
+      {
+        "state": "CONNECTION",
+        "pct": 3
+      },
+      {
+        "state": "ROTARY",
+        "pct": 20
+      },
+      {
+        "state": "SLIDE",
+        "pct": 8
+      },
+      {
+        "state": "CONNECTION",
+        "pct": 3
+      },
+      {
+        "state": "CIRCULATE",
+        "pct": 6
+      },
+      {
+        "state": "ROTARY",
+        "pct": 22
+      },
+      {
+        "state": "CONNECTION",
+        "pct": 3
+      },
+      {
+        "state": "ROTARY",
+        "pct": 17
+      }
+    ],
+    "formationTopsTvdssM": {
+      "Tipam": 2752,
+      "Barail": 3030
+    }
+  },
+  "live": {
+    "wellId": "OIL-WELL-104",
+    "timestamp": "2026-09-26T16:04:00+05:30",
+    "source": "eRTMAC (WITSML)",
+    "latencySeconds": 2,
+    "primary": [
+      {
+        "key": "depth",
+        "label": "DEPTH",
+        "value": 3124,
+        "unit": "m MD",
+        "note": "+18 m in the last hour",
+        "status": "NORMAL"
+      },
+      {
+        "key": "rop",
+        "label": "ROP",
+        "value": 13.7,
+        "unit": "m/h",
+        "note": "Within the normal band",
+        "status": "NORMAL"
+      },
+      {
+        "key": "torque",
+        "label": "TORQUE",
+        "value": 27.8,
+        "unit": "kN·m",
+        "note": "3.1 above the T&D model",
+        "status": "WATCH",
+        "modelResidual": 3.1,
+        "alertThreshold": 5.0
+      },
+      {
+        "key": "ecd",
+        "label": "ECD",
+        "value": 1.453,
+        "unit": "g/cm³",
+        "note": "Fracture limit 1.52",
+        "status": "WATCH",
+        "trendPerHour": 0.01,
+        "limit": 1.52
+      }
+    ],
+    "more": [
+      {
+        "key": "wob",
+        "label": "WOB",
+        "value": 82,
+        "unit": "kN"
+      },
+      {
+        "key": "rpm",
+        "label": "RPM",
+        "value": 120,
+        "unit": "rpm"
+      },
+      {
+        "key": "spp",
+        "label": "SPP",
+        "value": 182,
+        "unit": "bar"
+      },
+      {
+        "key": "hookload",
+        "label": "HOOKLOAD",
+        "value": 142,
+        "unit": "t"
+      },
+      {
+        "key": "flowIn",
+        "label": "FLOW IN",
+        "value": 2850,
+        "unit": "L/min"
+      },
+      {
+        "key": "flowOut",
+        "label": "FLOW OUT",
+        "value": 97,
+        "unit": "%",
+        "status": "WATCH",
+        "change40min": -3
+      },
+      {
+        "key": "pitVolume",
+        "label": "PIT VOLUME",
+        "value": 84.2,
+        "unit": "m³",
+        "status": "WATCH",
+        "trendPerHour": -0.4
+      },
+      {
+        "key": "mudWeight",
+        "label": "MUD WEIGHT",
+        "value": 1.38,
+        "unit": "g/cm³"
+      }
+    ],
+    "sparklines12pt": {
+      "rop": [
+        16,
+        15,
+        17,
+        14,
+        15,
+        13,
+        16,
+        14,
+        15,
+        13,
+        14,
+        12
+      ],
+      "torque": [
+        20,
+        19,
+        20,
+        18,
+        19,
+        17,
+        15,
+        16,
+        12,
+        13,
+        9,
+        8
+      ],
+      "spp": [
+        12,
+        13,
+        12,
+        12,
+        13,
+        12,
+        12,
+        13,
+        12,
+        12,
+        13,
+        12
+      ],
+      "flowOut": [
+        8,
+        8,
+        9,
+        8,
+        9,
+        10,
+        11,
+        12,
+        14,
+        15,
+        17,
+        18
+      ],
+      "pitVolume": [
+        6,
+        6,
+        7,
+        7,
+        8,
+        9,
+        10,
+        12,
+        13,
+        15,
+        16,
+        18
+      ],
+      "ecd": [
+        20,
+        19,
+        19,
+        18,
+        17,
+        17,
+        16,
+        15,
+        14,
+        13,
+        12,
+        11
+      ],
+      "_note": "Inverted pixel-style values used by the mock-ups (lower = higher value). Replace with real time series."
+    }
+  },
+  "dashboard": {
+    "wellId": "OIL-WELL-104",
+    "topRisk": {
+      "riskId": "mud_loss",
+      "name": "MUD LOSS",
+      "probability": 83,
+      "level": "HIGH",
+      "windowText": "3,180–3,240 m MD · just below the Barail top",
+      "historicalEvents": 6,
+      "similarWells": 3
+    },
+    "summary": {
+      "activeAlerts": 3,
+      "offsetWells": 7,
+      "historicalEvents": 12,
+      "riskZonesAhead": {
+        "total": 3,
+        "high": 1,
+        "medium": 2
+      }
+    }
+  },
+  "offsetWells": [
+    {
+      "id": "W-067",
+      "surfaceKm": [
+        -0.8,
+        0.9
+      ],
+      "bitDepthKm": [
+        -0.4,
+        0.4
+      ],
+      "distanceAtBitKm": 1.2,
+      "similarity": 87,
+      "tdMdM": 3420,
+      "tipamTopTvdssM": 2738,
+      "barailTopTvdssM": 3004,
+      "mdMinusTvdssM": 40,
+      "spud": 2019,
+      "status": "Producing",
+      "risk": "HIGH",
+      "hasLossEvents": true,
+      "paramsAtAlignedDepth": {
+        "rop": 15.2,
+        "wob": 78,
+        "rpm": 110,
+        "torque": 24.9,
+        "ecd": 1.462,
+        "spp": 176,
+        "mudWeight": 1.38
+      },
+      "design": {
+        "shoe": "2,990 m MD",
+        "cement": "Lead 1.50 + tail 1.90",
+        "mudSystem": "KCl-polymer, 1.38",
+        "bit": "8½-in PDC, 5-blade"
+      },
+      "lesson": "Cut flow 10 % and have a 40 ppb LCM pill ready before 3,180 m MD.",
+      "lessonSource": "W-067 cured its loss in 3.5 h this way · WCR p.47",
+      "similarityFactors": {
+        "stratigraphy": 95,
+        "trajectory": 84,
+        "mudSystem": 90,
+        "proximity": 88
+      },
+      "relevant": true
+    },
+    {
+      "id": "W-042",
+      "surfaceKm": [
+        2.6,
+        0.2
+      ],
+      "bitDepthKm": [
+        2.5,
+        0.6
+      ],
+      "distanceAtBitKm": 2.1,
+      "similarity": 81,
+      "tdMdM": 3510,
+      "tipamTopTvdssM": 2770,
+      "barailTopTvdssM": 3062,
+      "mdMinusTvdssM": 210,
+      "spud": 2016,
+      "status": "Producing",
+      "risk": "MEDIUM",
+      "hasLossEvents": true,
+      "paramsAtAlignedDepth": {
+        "rop": 11.8,
+        "wob": 90,
+        "rpm": 130,
+        "torque": 29.4,
+        "ecd": 1.441,
+        "spp": 190,
+        "mudWeight": 1.36
+      },
+      "design": {
+        "shoe": "3,210 m MD",
+        "cement": "Single slurry 1.88",
+        "mudSystem": "KCl-polymer, 1.36",
+        "bit": "8½-in PDC, 6-blade"
+      },
+      "lesson": "Fine LCM in the active system held seepage to 1 h at a lower ECD.",
+      "lessonSource": "W-042 ran ECD 1.441, 0.012 below 104 · DDR 2 Nov 2016",
+      "similarityFactors": {
+        "stratigraphy": 92,
+        "trajectory": 70,
+        "mudSystem": 85,
+        "proximity": 78
+      },
+      "relevant": true
+    },
+    {
+      "id": "W-088",
+      "surfaceKm": [
+        1.9,
+        -2.6
+      ],
+      "bitDepthKm": [
+        2.4,
+        -2.1
+      ],
+      "distanceAtBitKm": 2.6,
+      "similarity": 78,
+      "tdMdM": 3380,
+      "tipamTopTvdssM": 2790,
+      "barailTopTvdssM": 3088,
+      "mdMinusTvdssM": 95,
+      "spud": 2014,
+      "status": "Suspended",
+      "risk": "HIGH",
+      "hasLossEvents": true,
+      "paramsAtAlignedDepth": {
+        "rop": 12.5,
+        "wob": 85,
+        "rpm": 115,
+        "torque": 26.1,
+        "ecd": 1.478,
+        "spp": 185,
+        "mudWeight": 1.4
+      },
+      "design": {
+        "shoe": "3,145 m MD",
+        "cement": "Lead 1.50 + tail 1.90 · squeezed",
+        "mudSystem": "PHPA, 1.40",
+        "bit": "8½-in TCI"
+      },
+      "lesson": "Total loss came with ECD at 1.478. Keep 104 below 1.47 entering the Barail.",
+      "lessonSource": "Two pills failed, cement plug, 36 h lost · WCR p.88",
+      "similarityFactors": {
+        "stratigraphy": 90,
+        "trajectory": 76,
+        "mudSystem": 72,
+        "proximity": 74
+      },
+      "relevant": true
+    },
+    {
+      "id": "W-081",
+      "surfaceKm": [
+        -2.2,
+        -1.4
+      ],
+      "bitDepthKm": [
+        -2.0,
+        -1.7
+      ],
+      "distanceAtBitKm": 3.0,
+      "similarity": 58,
+      "tdMdM": 3300,
+      "tipamTopTvdssM": null,
+      "barailTopTvdssM": 3041,
+      "mdMinusTvdssM": null,
+      "spud": 2017,
+      "status": "Producing",
+      "risk": "LOW",
+      "hasLossEvents": true,
+      "similarityFactors": {
+        "stratigraphy": 70,
+        "trajectory": 55,
+        "mudSystem": 60,
+        "proximity": 66
+      },
+      "relevant": false
+    },
+    {
+      "id": "W-112",
+      "surfaceKm": [
+        2.9,
+        -2.4
+      ],
+      "bitDepthKm": [
+        3.2,
+        -2.6
+      ],
+      "distanceAtBitKm": 3.4,
+      "similarity": 41,
+      "tdMdM": 3640,
+      "tipamTopTvdssM": 2812,
+      "barailTopTvdssM": 3110,
+      "mdMinusTvdssM": 320,
+      "spud": 2022,
+      "status": "Producing",
+      "risk": "MEDIUM",
+      "hasLossEvents": false,
+      "similarityFactors": {
+        "stratigraphy": 48,
+        "trajectory": 40,
+        "mudSystem": 52,
+        "proximity": 58
+      },
+      "relevant": false
+    },
+    {
+      "id": "W-103",
+      "surfaceKm": [
+        -1.5,
+        3.6
+      ],
+      "bitDepthKm": [
+        -1.2,
+        3.2
+      ],
+      "distanceAtBitKm": 3.9,
+      "similarity": 36,
+      "tdMdM": 3250,
+      "tipamTopTvdssM": null,
+      "barailTopTvdssM": 2996,
+      "mdMinusTvdssM": null,
+      "spud": 2018,
+      "status": "Abandoned",
+      "risk": "MEDIUM",
+      "hasLossEvents": true,
+      "similarityFactors": {
+        "stratigraphy": 44,
+        "trajectory": 30,
+        "mudSystem": 40,
+        "proximity": 50
+      },
+      "relevant": false
+    },
+    {
+      "id": "W-121",
+      "surfaceKm": [
+        -3.8,
+        1.9
+      ],
+      "bitDepthKm": [
+        -3.2,
+        1.5
+      ],
+      "distanceAtBitKm": 4.2,
+      "similarity": 64,
+      "tdMdM": 3480,
+      "tipamTopTvdssM": 2724,
+      "barailTopTvdssM": 2985,
+      "mdMinusTvdssM": 12,
+      "spud": 2021,
+      "status": "Producing",
+      "risk": "MEDIUM",
+      "hasLossEvents": false,
+      "paramsAtAlignedDepth": {
+        "rop": 16.9,
+        "wob": 70,
+        "rpm": 125,
+        "torque": 31.0,
+        "ecd": 1.45,
+        "spp": 172,
+        "mudWeight": 1.37
+      },
+      "design": {
+        "shoe": "2,940 m MD",
+        "cement": "Lead 1.55 + tail 1.90",
+        "mudSystem": "KCl-polymer, 1.37",
+        "bit": "8½-in PDC, 5-blade"
+      },
+      "lesson": "Keep connections short and the string moving below the Barail top.",
+      "lessonSource": "W-121 stuck on a connection; 9 h lost · DDR 5 Aug 2021",
+      "similarityFactors": {
+        "stratigraphy": 72,
+        "trajectory": 60,
+        "mudSystem": 70,
+        "proximity": 48
+      },
+      "relevant": false
+    },
+    {
+      "id": "W-132",
+      "surfaceKm": [
+        5.7,
+        -2.2
+      ],
+      "bitDepthKm": [
+        6.0,
+        -2.6
+      ],
+      "distanceAtBitKm": 5.8,
+      "similarity": 44,
+      "tdMdM": 3560,
+      "tipamTopTvdssM": null,
+      "barailTopTvdssM": 3120,
+      "mdMinusTvdssM": null,
+      "spud": 2014,
+      "status": "Producing",
+      "risk": "LOW",
+      "hasLossEvents": false,
+      "similarityFactors": {
+        "stratigraphy": 55,
+        "trajectory": 40,
+        "mudSystem": 45,
+        "proximity": 35
+      },
+      "relevant": false
+    },
+    {
+      "id": "W-018",
+      "surfaceKm": [
+        -5.4,
+        2.9
+      ],
+      "bitDepthKm": [
+        -5.0,
+        2.6
+      ],
+      "distanceAtBitKm": 6.3,
+      "similarity": 52,
+      "tdMdM": 3200,
+      "tipamTopTvdssM": null,
+      "barailTopTvdssM": 3010,
+      "mdMinusTvdssM": null,
+      "spud": 1998,
+      "status": "Abandoned",
+      "risk": "LOW",
+      "hasLossEvents": false,
+      "note": "Scanned WCR: 3 extracted fields awaiting review",
+      "similarityFactors": {
+        "stratigraphy": 60,
+        "trajectory": 50,
+        "mudSystem": 40,
+        "proximity": 30
+      },
+      "relevant": false
+    }
+  ],
+  "events": [
+    {
+      "id": "EV-001",
+      "wellId": "W-067",
+      "type": "LOSS",
+      "title": "Mud loss 45 bbl/h",
+      "severity": "high",
+      "formation": "Barail",
+      "mdM": 3061,
+      "tvdssM": 3021,
+      "metresBelowBarailTop": 17,
+      "alignedMdOnActiveM": 3203,
+      "date": "2019-03-14",
+      "cause": "Fractured sand 17 m below the Barail top; ECD 1.46.",
+      "action": "Flow cut 10 %, 40 ppb LCM pill spotted.",
+      "outcome": "Cured in 3.5 h; 12 m³ lost.",
+      "nptHours": 3.5,
+      "extractionConfidence": 0.94,
+      "details": {
+        "rateBblPerHour": 45,
+        "mudLostM3": 12
+      },
+      "source": {
+        "type": "WCR",
+        "documentId": "W-067_WCR_2019.pdf",
+        "page": 47,
+        "label": "WCR W-067 p.47"
+      }
+    },
+    {
+      "id": "EV-002",
+      "wellId": "W-067",
+      "type": "TORQUE",
+      "title": "Torque spikes",
+      "severity": "low",
+      "formation": "Tipam",
+      "mdM": 2930,
+      "tvdssM": 2890,
+      "metresBelowBarailTop": -114,
+      "alignedMdOnActiveM": null,
+      "date": "2019-03-11",
+      "cause": "Interbedded Tipam sands at high WOB.",
+      "action": "Reduced WOB, added 2 % lubricant.",
+      "outcome": "Stable after 2 h.",
+      "nptHours": 0,
+      "extractionConfidence": 0.91,
+      "details": {
+        "torqueRangeKnm": [
+          30,
+          36
+        ]
+      },
+      "source": {
+        "type": "DDR",
+        "documentId": "W-067_DDR_Mar2019.pdf",
+        "page": null,
+        "label": "DDR W-067 2019-03-11"
+      }
+    },
+    {
+      "id": "EV-003",
+      "wellId": "W-042",
+      "type": "LOSS",
+      "title": "Seepage loss 8 bbl/h",
+      "severity": "med",
+      "formation": "Barail",
+      "mdM": 3290,
+      "tvdssM": 3080,
+      "metresBelowBarailTop": 18,
+      "alignedMdOnActiveM": 3204,
+      "date": "2016-11-02",
+      "cause": "Permeable sand at the top of the Barail.",
+      "action": "30 ppb fine LCM added to the active system.",
+      "outcome": "Cured in 1 h.",
+      "nptHours": 1,
+      "extractionConfidence": 0.89,
+      "details": {
+        "rateBblPerHour": 8
+      },
+      "source": {
+        "type": "DDR",
+        "documentId": "W-042_DDR_Nov2016.pdf",
+        "page": null,
+        "label": "DDR W-042 2016-11-02"
+      }
+    },
+    {
+      "id": "EV-004",
+      "wellId": "W-042",
+      "type": "STUCK",
+      "title": "Overpull 25 t",
+      "severity": "med",
+      "formation": "Barail",
+      "mdM": 3350,
+      "tvdssM": 3140,
+      "metresBelowBarailTop": 78,
+      "alignedMdOnActiveM": 3264,
+      "date": "2016-11-04",
+      "cause": "Swelling shale after 30 h of open hole.",
+      "action": "Back-reamed one stand.",
+      "outcome": "Freed; 6 h lost.",
+      "nptHours": 6,
+      "extractionConfidence": 0.87,
+      "details": {
+        "overpullT": 25
+      },
+      "source": {
+        "type": "DDR",
+        "documentId": "W-042_DDR_Nov2016.pdf",
+        "page": null,
+        "label": "DDR W-042 2016-11-04"
+      }
+    },
+    {
+      "id": "EV-005",
+      "wellId": "W-088",
+      "type": "LOSS",
+      "title": "Total loss",
+      "severity": "high",
+      "formation": "Barail",
+      "mdM": 3196,
+      "tvdssM": 3101,
+      "metresBelowBarailTop": 13,
+      "alignedMdOnActiveM": 3199,
+      "date": "2014-01-21",
+      "cause": "Fracture network; ECD 1.478 at the time.",
+      "action": "Two LCM pills failed, then a cement plug.",
+      "outcome": "Cured after 36 h.",
+      "nptHours": 36,
+      "extractionConfidence": 0.92,
+      "details": {
+        "ecdGcc": 1.478
+      },
+      "source": {
+        "type": "WCR",
+        "documentId": "W-088_WCR_2014.pdf",
+        "page": 88,
+        "label": "WCR W-088 p.88"
+      }
+    },
+    {
+      "id": "EV-006",
+      "wellId": "W-088",
+      "type": "CEMENT",
+      "title": "Poor cement bond",
+      "severity": "med",
+      "formation": "Tipam",
+      "mdM": 3145,
+      "tvdssM": 3050,
+      "metresBelowBarailTop": -38,
+      "alignedMdOnActiveM": 3148,
+      "date": "2014-01-19",
+      "cause": "Losses during displacement; channelling at the 9⅝-in shoe.",
+      "action": "Squeeze job before drilling ahead.",
+      "outcome": "Isolation restored.",
+      "nptHours": 24,
+      "extractionConfidence": 0.88,
+      "details": {},
+      "source": {
+        "type": "WCR",
+        "documentId": "W-088_WCR_2014.pdf",
+        "page": 61,
+        "label": "WCR W-088 p.61"
+      }
+    },
+    {
+      "id": "EV-007",
+      "wellId": "W-081",
+      "type": "LOSS",
+      "title": "Seepage loss 5 bbl/h",
+      "severity": "low",
+      "formation": "Barail",
+      "mdM": 3240,
+      "tvdssM": null,
+      "metresBelowBarailTop": null,
+      "alignedMdOnActiveM": null,
+      "date": "2017-09-18",
+      "cause": "Permeable Barail sand.",
+      "action": "None needed.",
+      "outcome": "Healed in 30 min.",
+      "nptHours": 0,
+      "extractionConfidence": 0.85,
+      "details": {
+        "rateBblPerHour": 5
+      },
+      "source": {
+        "type": "DDR",
+        "documentId": "W-081_WCR_2017.pdf",
+        "page": null,
+        "label": "DDR W-081 2017-09-18"
+      }
+    },
+    {
+      "id": "EV-008",
+      "wellId": "W-081",
+      "type": "OTHER",
+      "title": "Bit balling",
+      "severity": "low",
+      "formation": "Girujan",
+      "mdM": 2760,
+      "tvdssM": null,
+      "metresBelowBarailTop": null,
+      "alignedMdOnActiveM": null,
+      "date": "2017-09-12",
+      "cause": "Reactive Girujan clays.",
+      "action": "Pulled out and cleaned the bit.",
+      "outcome": "Resumed after 8 h.",
+      "nptHours": 8,
+      "extractionConfidence": 0.9,
+      "details": {},
+      "source": {
+        "type": "DDR",
+        "documentId": "W-081_WCR_2017.pdf",
+        "page": null,
+        "label": "DDR W-081 2017-09-12"
+      }
+    },
+    {
+      "id": "EV-009",
+      "wellId": "W-112",
+      "type": "KICK",
+      "title": "Gas influx 1.2 m³",
+      "severity": "high",
+      "formation": "Barail",
+      "mdM": 3510,
+      "tvdssM": 3190,
+      "metresBelowBarailTop": 80,
+      "alignedMdOnActiveM": null,
+      "date": "2022-06-07",
+      "cause": "Charged gas sand with MW at 1.44.",
+      "action": "Shut in, circulated out, weighted up to 1.52.",
+      "outcome": "Controlled in 9 h.",
+      "nptHours": 9,
+      "extractionConfidence": 0.95,
+      "details": {
+        "pitGainM3": 1.2
+      },
+      "source": {
+        "type": "DDR",
+        "documentId": "W-112_survey_2022.xlsx",
+        "page": null,
+        "label": "DDR W-112 2022-06-07"
+      }
+    },
+    {
+      "id": "EV-010",
+      "wellId": "W-103",
+      "type": "STUCK",
+      "title": "Tight hole",
+      "severity": "low",
+      "formation": "Tipam",
+      "mdM": 2880,
+      "tvdssM": null,
+      "metresBelowBarailTop": null,
+      "alignedMdOnActiveM": null,
+      "date": "2018-04-03",
+      "cause": "Tipam shale creep.",
+      "action": "Reamed through.",
+      "outcome": "No lost time.",
+      "nptHours": 0,
+      "extractionConfidence": 0.83,
+      "details": {},
+      "source": {
+        "type": "DDR",
+        "documentId": "W-103_DDR_Apr2018.zip",
+        "page": null,
+        "label": "DDR W-103 2018-04-03"
+      }
+    },
+    {
+      "id": "EV-011",
+      "wellId": "W-103",
+      "type": "CEMENT",
+      "title": "Losses while cementing",
+      "severity": "med",
+      "formation": "Barail",
+      "mdM": 3120,
+      "tvdssM": null,
+      "metresBelowBarailTop": null,
+      "alignedMdOnActiveM": null,
+      "date": "2018-04-09",
+      "cause": "Weak zone below the cement ECD.",
+      "action": "Reduced pump rate, lighter lead slurry.",
+      "outcome": "Partial returns; top of cement low.",
+      "nptHours": 4,
+      "extractionConfidence": 0.86,
+      "details": {},
+      "source": {
+        "type": "WCR",
+        "documentId": "W-103_DDR_Apr2018.zip",
+        "page": 73,
+        "label": "WCR W-103 p.73"
+      }
+    },
+    {
+      "id": "EV-012",
+      "wellId": "W-121",
+      "type": "STUCK",
+      "title": "Differential sticking",
+      "severity": "med",
+      "formation": "Barail",
+      "mdM": 3014,
+      "tvdssM": 3002,
+      "metresBelowBarailTop": 17,
+      "alignedMdOnActiveM": 3203,
+      "date": "2021-08-05",
+      "cause": "Overbalance of 16 bar; string static on a connection.",
+      "action": "Jarred, spotted a pipe-freeing pill.",
+      "outcome": "Freed after 9 h.",
+      "nptHours": 9,
+      "extractionConfidence": 0.9,
+      "details": {},
+      "source": {
+        "type": "DDR",
+        "documentId": "W-121_mudlog_2021.las",
+        "page": null,
+        "label": "DDR W-121 2021-08-05"
+      }
+    }
+  ],
+  "risks": [
+    {
+      "id": "mud_loss",
+      "name": "Mud loss",
+      "probability": 83,
+      "level": "HIGH",
+      "windowMdM": [
+        3180,
+        3240
+      ],
+      "confidence": 0.81,
+      "confidenceBand": "HIGH",
+      "evidenceSummary": "6 events · 3 wells",
+      "status": "ACT_NOW",
+      "trend": {
+        "from": 71,
+        "minutes": 40
+      },
+      "stats": [
+        {
+          "value": "3 / 3",
+          "label": "TOP OFFSETS HIT"
+        },
+        {
+          "value": "6",
+          "label": "EVENTS"
+        },
+        {
+          "value": "0.81",
+          "label": "CONFIDENCE"
+        }
+      ],
+      "reasons": [
+        "All 3 most similar offsets lost mud within 20 m below the Barail top.",
+        "ECD 1.453 and rising 0.010 g/cm³ per hour toward the 1.52 fracture limit.",
+        "Flow out down 3 % and pit volume falling 0.4 m³/h over 40 min."
+      ],
+      "evidenceEventIds": [
+        "EV-001",
+        "EV-005",
+        "EV-003"
+      ],
+      "mitigations": [
+        {
+          "text": "40 ppb LCM pill, flow cut 10 % · W-067, cured in 3.5 h",
+          "worked": true
+        },
+        {
+          "text": "30 ppb fine LCM in the active system · W-042, 1 h",
+          "worked": true
+        },
+        {
+          "text": "LCM pills alone · W-088, failed; cement plug, 36 h",
+          "worked": false
+        }
+      ],
+      "recommendation": "Pre-treat with 30–40 ppb LCM and hold ECD below 1.47 g/cm³ before 3,180 m MD.",
+      "model": {
+        "offsetPrior": 0.74,
+        "liveLikelihoodRatio": 1.6,
+        "posterior": 0.83,
+        "calibrationSet": "212 Barail entries",
+        "brier": 0.14,
+        "version": "v2.3"
+      }
+    },
+    {
+      "id": "stuck_pipe",
+      "name": "Stuck pipe",
+      "probability": 41,
+      "level": "MEDIUM",
+      "windowMdM": [
+        3200,
+        3270
+      ],
+      "confidence": 0.64,
+      "confidenceBand": "MEDIUM",
+      "evidenceSummary": "3 events · 3 wells",
+      "status": "WATCH",
+      "trend": {
+        "from": 39,
+        "minutes": 40
+      },
+      "stats": [
+        {
+          "value": "2 / 3",
+          "label": "TOP OFFSETS HIT"
+        },
+        {
+          "value": "3",
+          "label": "EVENTS"
+        },
+        {
+          "value": "0.64",
+          "label": "CONFIDENCE"
+        }
+      ],
+      "reasons": [
+        "W-121 stuck differentially 18 m below the Barail top on a connection.",
+        "W-042 pulled 25 t over at the same position in the formation.",
+        "Overbalance reaches about 16 bar at the top with 1.38 g/cm³ mud."
+      ],
+      "evidenceEventIds": [
+        "EV-012",
+        "EV-004",
+        "EV-010"
+      ],
+      "mitigations": [
+        {
+          "text": "Jarring and a pipe-free pill · W-121, 9 h",
+          "worked": true
+        },
+        {
+          "text": "Back-reaming one stand · W-042, 6 h",
+          "worked": true
+        }
+      ],
+      "recommendation": "Keep connections short and the string moving below 3,186 m MD.",
+      "model": {
+        "offsetPrior": 0.36,
+        "liveLikelihoodRatio": 1.15,
+        "posterior": 0.41,
+        "calibrationSet": "180 Barail entries",
+        "brier": 0.19,
+        "version": "v2.3"
+      }
+    },
+    {
+      "id": "overpressure",
+      "name": "Overpressure",
+      "probability": 38,
+      "level": "MEDIUM",
+      "windowMdM": [
+        3420,
+        3520
+      ],
+      "confidence": 0.52,
+      "confidenceBand": "LOW",
+      "evidenceSummary": "1 event · 1 well",
+      "status": "WATCH",
+      "trend": {
+        "from": 33,
+        "minutes": 120
+      },
+      "stats": [
+        {
+          "value": "1 / 3",
+          "label": "TOP OFFSETS HIT"
+        },
+        {
+          "value": "1",
+          "label": "EVENT"
+        },
+        {
+          "value": "0.52",
+          "label": "CONFIDENCE"
+        }
+      ],
+      "reasons": [
+        "W-112 took a 1.2 m³ gas influx at 3,510 m MD.",
+        "The zone sits beyond the current look-ahead window.",
+        "Only one offset supports this, so confidence is low."
+      ],
+      "evidenceEventIds": [
+        "EV-009"
+      ],
+      "mitigations": [
+        {
+          "text": "Shut in, circulated out, MW raised to 1.52 · W-112, 9 h",
+          "worked": true
+        }
+      ],
+      "recommendation": "Review the mud-weight plan before 3,400 m MD.",
+      "model": {
+        "offsetPrior": 0.31,
+        "liveLikelihoodRatio": 1.2,
+        "posterior": 0.38,
+        "interval": [
+          0.22,
+          0.55
+        ],
+        "version": "v2.3"
+      }
+    },
+    {
+      "id": "torque_spike",
+      "name": "Torque spike",
+      "probability": 22,
+      "level": "LOW",
+      "windowMdM": [
+        3124,
+        3180
+      ],
+      "confidence": 0.6,
+      "confidenceBand": "MEDIUM",
+      "evidenceSummary": "1 event · 1 well",
+      "status": "MONITOR",
+      "trend": {
+        "from": 18,
+        "minutes": 60
+      },
+      "stats": [
+        {
+          "value": "1 / 3",
+          "label": "TOP OFFSETS HIT"
+        },
+        {
+          "value": "1",
+          "label": "EVENT"
+        },
+        {
+          "value": "0.60",
+          "label": "CONFIDENCE"
+        }
+      ],
+      "reasons": [
+        "Torque is 3.1 kN·m above the torque-and-drag model.",
+        "W-067 had spikes in the Tipam and reamed through."
+      ],
+      "evidenceEventIds": [
+        "EV-002"
+      ],
+      "mitigations": [
+        {
+          "text": "Reduced WOB, 2 % lubricant · W-067, stable in 2 h",
+          "worked": true
+        }
+      ],
+      "recommendation": "Watch the torque residual; add lubricant if it passes +5 kN·m.",
+      "model": {
+        "liveResidualKnm": 3.1,
+        "alertThresholdKnm": 5.0,
+        "version": "v2.3"
+      }
+    },
+    {
+      "id": "wellbore_instability",
+      "name": "Wellbore instability",
+      "probability": 18,
+      "level": "LOW",
+      "windowMdM": [
+        3240,
+        3300
+      ],
+      "confidence": 0.55,
+      "confidenceBand": "MEDIUM",
+      "evidenceSummary": "2 events · 2 wells",
+      "status": "MONITOR",
+      "trend": null,
+      "stats": [
+        {
+          "value": "1 / 3",
+          "label": "TOP OFFSETS HIT"
+        },
+        {
+          "value": "2",
+          "label": "EVENTS"
+        },
+        {
+          "value": "0.55",
+          "label": "CONFIDENCE"
+        }
+      ],
+      "reasons": [
+        "Barail shales swelled in W-132 and W-042 after long open-hole time.",
+        "Current mud inhibition matches the successful offsets."
+      ],
+      "evidenceEventIds": [
+        "EV-004"
+      ],
+      "mitigations": [
+        {
+          "text": "KCl-polymer mud kept inhibition · W-067, no issue",
+          "worked": true
+        }
+      ],
+      "recommendation": "Limit open-hole time in the Barail; trip promptly after TD.",
+      "model": {
+        "offsetPrior": 0.2,
+        "liveLikelihoodRatio": 0.9,
+        "posterior": 0.18,
+        "version": "v2.3"
+      }
+    },
+    {
+      "id": "cementing",
+      "name": "Cementing",
+      "probability": 15,
+      "level": "LOW",
+      "windowMdM": [
+        3450,
+        3470
+      ],
+      "confidence": 0.58,
+      "confidenceBand": "MEDIUM",
+      "evidenceSummary": "2 events · 2 wells",
+      "status": "MONITOR",
+      "trend": null,
+      "stats": [
+        {
+          "value": "1 / 3",
+          "label": "TOP OFFSETS HIT"
+        },
+        {
+          "value": "2",
+          "label": "EVENTS"
+        },
+        {
+          "value": "0.58",
+          "label": "CONFIDENCE"
+        }
+      ],
+      "reasons": [
+        "W-088 had a poor bond at its 9⅝-in shoe.",
+        "W-103 lost returns while cementing in the Barail."
+      ],
+      "evidenceEventIds": [
+        "EV-006",
+        "EV-011"
+      ],
+      "mitigations": [
+        {
+          "text": "Squeeze job before drilling ahead · W-088, 1 day",
+          "worked": true
+        }
+      ],
+      "recommendation": "Plan a lighter lead slurry for the 7-in liner at about 3,460 m MD.",
+      "model": {
+        "note": "Offset prior only; no live signal until the liner job.",
+        "version": "v2.3"
+      }
+    },
+    {
+      "id": "kick",
+      "name": "Kick",
+      "probability": 9,
+      "level": "LOW",
+      "windowMdM": [
+        3420,
+        3520
+      ],
+      "confidence": 0.5,
+      "confidenceBand": "LOW",
+      "evidenceSummary": "1 event · 1 well",
+      "status": "MONITOR",
+      "trend": null,
+      "stats": [
+        {
+          "value": "1 / 3",
+          "label": "TOP OFFSETS HIT"
+        },
+        {
+          "value": "1",
+          "label": "EVENT"
+        },
+        {
+          "value": "0.50",
+          "label": "CONFIDENCE"
+        }
+      ],
+      "reasons": [
+        "One offset influx, deep and far outside the current window.",
+        "Pit and flow trends show losses, not gains."
+      ],
+      "evidenceEventIds": [
+        "EV-009"
+      ],
+      "mitigations": [
+        {
+          "text": "Shut in and weight up · W-112, 9 h",
+          "worked": true
+        }
+      ],
+      "recommendation": "No action now. Reassess at 3,400 m MD.",
+      "model": {
+        "offsetPrior": 0.12,
+        "liveLikelihoodRatio": 0.75,
+        "posterior": 0.09,
+        "version": "v2.3"
+      }
+    }
+  ],
+  "alerts": [
+    {
+      "id": "AL-001",
+      "time": "15:58",
+      "severity": "HIGH",
+      "category": "RISK · MUD LOSS",
+      "riskId": "mud_loss",
+      "title": "Mud-loss risk 83 % ahead of the Barail top",
+      "subtitle": "Zone 3,180–3,240 m MD starts 56 m below the bit",
+      "acknowledged": null,
+      "triggers": [
+        {
+          "value": "83 %",
+          "label": "up from 71 % in 40 min"
+        },
+        {
+          "value": "1.453",
+          "label": "ECD, g/cm³"
+        },
+        {
+          "value": "−3 %",
+          "label": "flow out, 40 min"
+        }
+      ],
+      "chart": {
+        "label": "Mud-loss probability, %",
+        "series": [
+          48,
+          49,
+          50,
+          53,
+          55,
+          58,
+          62,
+          68,
+          74,
+          78,
+          83
+        ],
+        "limit": 85
+      },
+      "offsetsSay": "W-067, W-088 and W-042, the three most similar offsets, all lost mud within 20 m below the Barail top.",
+      "action": "Pre-treat with 30–40 ppb LCM and hold ECD below 1.47 g/cm³ before 3,180 m MD."
+    },
+    {
+      "id": "AL-002",
+      "time": "15:20",
+      "severity": "WATCH",
+      "category": "PARAMETER · ECD",
+      "riskId": "mud_loss",
+      "title": "ECD trending up toward the fracture limit",
+      "subtitle": "1.453 g/cm³, rising 0.010 per hour; limit 1.52",
+      "acknowledged": null,
+      "triggers": [
+        {
+          "value": "1.453",
+          "label": "ECD, g/cm³"
+        },
+        {
+          "value": "+0.010",
+          "label": "per hour"
+        },
+        {
+          "value": "1.52",
+          "label": "fracture limit"
+        }
+      ],
+      "chart": {
+        "label": "ECD, g/cm³",
+        "series": [
+          1.433,
+          1.435,
+          1.437,
+          1.439,
+          1.441,
+          1.443,
+          1.445,
+          1.447,
+          1.449,
+          1.451,
+          1.453
+        ],
+        "limit": 1.52
+      },
+      "offsetsSay": "W-088 ran ECD 1.478 when it lost total returns at the same position in the formation.",
+      "action": "Reduce pump rate by 5 % and check hole cleaning before the Barail top."
+    },
+    {
+      "id": "AL-003",
+      "time": "14:10",
+      "severity": "WATCH",
+      "category": "PARAMETER · TORQUE",
+      "riskId": "torque_spike",
+      "title": "Torque 3.1 kN·m above the T&D model",
+      "subtitle": "At 3,106 m MD; W-067 saw spikes in the Tipam",
+      "acknowledged": null,
+      "triggers": [
+        {
+          "value": "27.8",
+          "label": "torque, kN·m"
+        },
+        {
+          "value": "+3.1",
+          "label": "above model"
+        },
+        {
+          "value": "+5.0",
+          "label": "alert threshold"
+        }
+      ],
+      "chart": {
+        "label": "Torque residual, kN·m",
+        "series": [
+          0.4,
+          0.6,
+          0.5,
+          1.0,
+          1.3,
+          1.5,
+          2.0,
+          2.3,
+          2.7,
+          2.9,
+          3.1
+        ],
+        "limit": 5.0
+      },
+      "offsetsSay": "W-067 had erratic torque at 2,930 m MD in the Tipam; reducing WOB and adding 2 % lubricant settled it in 2 h.",
+      "action": "Reduce WOB to 75 kN and add lubricant if the residual passes +5 kN·m."
+    },
+    {
+      "id": "AL-004",
+      "time": "13:32",
+      "severity": "INFO",
+      "category": "PARAMETER · FLOW",
+      "riskId": "mud_loss",
+      "title": "Flow out down 3 % over 40 min",
+      "subtitle": "Merged into the mud-loss risk at 15:58",
+      "acknowledged": {
+        "by": "DE",
+        "at": "13:40"
+      },
+      "triggers": [
+        {
+          "value": "97 %",
+          "label": "flow out"
+        },
+        {
+          "value": "−3 %",
+          "label": "in 40 min"
+        },
+        {
+          "value": "84.2",
+          "label": "pit, m³"
+        }
+      ],
+      "chart": {
+        "label": "Flow out, % of flow in",
+        "series": [
+          100,
+          100,
+          100,
+          99.6,
+          99.2,
+          98.9,
+          98.5,
+          98.0,
+          97.7,
+          97.3,
+          97.0
+        ],
+        "limit": null
+      },
+      "offsetsSay": "A slow flow-out drop preceded the W-067 losses by about 30 minutes.",
+      "action": "Keep the trip tank lined up and watch pit volume every 15 minutes."
+    },
+    {
+      "id": "AL-005",
+      "time": "11:05",
+      "severity": "MEDIUM",
+      "category": "RISK · STUCK PIPE",
+      "riskId": "stuck_pipe",
+      "title": "Stuck-pipe risk raised to 41 %",
+      "subtitle": "Window 3,200–3,270 m MD, just below the Barail top",
+      "acknowledged": {
+        "by": "DE",
+        "at": "11:12"
+      },
+      "triggers": [
+        {
+          "value": "41 %",
+          "label": "probability"
+        },
+        {
+          "value": "2 / 3",
+          "label": "top offsets hit"
+        },
+        {
+          "value": "16 bar",
+          "label": "overbalance at top"
+        }
+      ],
+      "chart": {
+        "label": "Stuck-pipe probability, %",
+        "series": [
+          33,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          39,
+          40,
+          41
+        ],
+        "limit": 60
+      },
+      "offsetsSay": "W-121 stuck differentially on a connection 18 m below the Barail top.",
+      "action": "Keep connections short and the string moving below 3,186 m MD."
+    },
+    {
+      "id": "AL-006",
+      "time": "09:05",
+      "severity": "INFO",
+      "category": "OPERATION",
+      "riskId": null,
+      "title": "Drilled out of the 9⅝-in shoe",
+      "subtitle": "FIT 1.56 g/cm³ equivalent mud weight",
+      "acknowledged": {
+        "by": "DE",
+        "at": "09:08"
+      },
+      "triggers": [
+        {
+          "value": "3,050",
+          "label": "shoe, m MD"
+        },
+        {
+          "value": "1.56",
+          "label": "FIT, g/cm³"
+        },
+        {
+          "value": "0.18",
+          "label": "kick margin"
+        }
+      ],
+      "chart": {
+        "label": "Pressure during FIT, bar",
+        "series": [
+          0,
+          20,
+          45,
+          70,
+          90,
+          100,
+          100,
+          98,
+          96,
+          94,
+          94
+        ],
+        "limit": null
+      },
+      "offsetsSay": "W-088 had a poor bond at its 9⅝-in shoe; this shoe passed its test.",
+      "action": "No action. Logged for the well record."
+    },
+    {
+      "id": "AL-007",
+      "time": "07:40",
+      "severity": "MEDIUM",
+      "category": "RISK · OVERPRESSURE",
+      "riskId": "overpressure",
+      "title": "Overpressure risk 38 % beyond 3,420 m",
+      "subtitle": "Based on one offset, W-112; low confidence",
+      "acknowledged": {
+        "by": "DE",
+        "at": "07:52"
+      },
+      "triggers": [
+        {
+          "value": "38 %",
+          "label": "probability"
+        },
+        {
+          "value": "1",
+          "label": "supporting offset"
+        },
+        {
+          "value": "0.52",
+          "label": "confidence"
+        }
+      ],
+      "chart": {
+        "label": "Overpressure probability, %",
+        "series": [
+          30,
+          31,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          38
+        ],
+        "limit": 60
+      },
+      "offsetsSay": "W-112 took a 1.2 m³ gas influx at 3,510 m MD and raised mud weight to 1.52.",
+      "action": "Review the mud-weight plan before 3,400 m MD."
+    }
+  ],
+  "documents": [
+    {
+      "id": "W-067_WCR_2019.pdf",
+      "wellId": "W-067",
+      "type": "WCR",
+      "year": 2019,
+      "pages": 112,
+      "events": 9,
+      "ocrQuality": 0.94,
+      "status": "VERIFIED"
+    },
+    {
+      "id": "W-067_DDR_Mar2019.pdf",
+      "wellId": "W-067",
+      "type": "DDR",
+      "year": 2019,
+      "pages": 46,
+      "events": 14,
+      "ocrQuality": 0.96,
+      "status": "INDEXED"
+    },
+    {
+      "id": "W-088_WCR_2014.pdf",
+      "wellId": "W-088",
+      "type": "WCR",
+      "year": 2014,
+      "pages": 128,
+      "events": 11,
+      "ocrQuality": 0.91,
+      "status": "VERIFIED"
+    },
+    {
+      "id": "W-042_DDR_Nov2016.pdf",
+      "wellId": "W-042",
+      "type": "DDR",
+      "year": 2016,
+      "pages": 61,
+      "events": 12,
+      "ocrQuality": 0.93,
+      "status": "INDEXED"
+    },
+    {
+      "id": "W-018_WCR_1998_scan.tif",
+      "wellId": "W-018",
+      "type": "WCR",
+      "year": 1998,
+      "pages": 96,
+      "events": 4,
+      "ocrQuality": 0.72,
+      "status": "NEEDS_REVIEW"
+    },
+    {
+      "id": "W-103_DDR_Apr2018.zip",
+      "wellId": "W-103",
+      "type": "DDR",
+      "year": 2018,
+      "pages": 54,
+      "events": 6,
+      "ocrQuality": 0.89,
+      "status": "PROCESSING"
+    },
+    {
+      "id": "W-121_mudlog_2021.las",
+      "wellId": "W-121",
+      "type": "MUD LOG",
+      "year": 2021,
+      "pages": 1,
+      "events": 3,
+      "ocrQuality": 1.0,
+      "status": "INDEXED"
+    },
+    {
+      "id": "W-112_survey_2022.xlsx",
+      "wellId": "W-112",
+      "type": "SURVEY",
+      "year": 2022,
+      "pages": 1,
+      "events": 0,
+      "ocrQuality": 1.0,
+      "status": "INDEXED"
+    },
+    {
+      "id": "W-081_WCR_2017.pdf",
+      "wellId": "W-081",
+      "type": "WCR",
+      "year": 2017,
+      "pages": 104,
+      "events": 7,
+      "ocrQuality": 0.92,
+      "status": "VERIFIED"
+    },
+    {
+      "id": "W-132_WCR_2014_scan.pdf",
+      "wellId": "W-132",
+      "type": "WCR",
+      "year": 2014,
+      "pages": 88,
+      "events": 5,
+      "ocrQuality": 0.76,
+      "status": "NEEDS_REVIEW"
+    }
+  ],
+  "processingJobs": [
+    {
+      "id": "JOB-018",
+      "documentId": "W-018_WCR_1998_scan.tif",
+      "description": "Scanned WCR · 96 pages",
+      "stages": {
+        "ocr": 82,
+        "nlp": 64,
+        "graph": 51
+      },
+      "state": "RUNNING"
+    },
+    {
+      "id": "JOB-103",
+      "documentId": "W-103_DDR_Apr2018.zip",
+      "description": "DDR batch · 54 reports",
+      "stages": {
+        "ocr": 100,
+        "nlp": 88,
+        "graph": 30
+      },
+      "state": "RUNNING"
+    }
+  ],
+  "libraryTotals": {
+    "documents": 1284,
+    "pagesRead": 12907,
+    "eventsExtracted": 4812,
+    "needReview": 37
+  },
+  "extraction": {
+    "documentId": "W-067_WCR_2019.pdf",
+    "page": 47,
+    "pages": 112,
+    "ocrMeanConfidence": 0.94,
+    "reviewThreshold": 0.8,
+    "pipeline": [
+      {
+        "step": "PDF",
+        "detail": "112 pages",
+        "state": "DONE"
+      },
+      {
+        "step": "OCR",
+        "detail": "0.94 mean conf.",
+        "state": "DONE"
+      },
+      {
+        "step": "LAYOUT",
+        "detail": "14 tables · 3 logs",
+        "state": "DONE"
+      },
+      {
+        "step": "NLP",
+        "detail": "1,406 sentences",
+        "state": "DONE"
+      },
+      {
+        "step": "ENTITIES",
+        "detail": "212 found",
+        "state": "DONE"
+      },
+      {
+        "step": "EVENTS",
+        "detail": "9 events",
+        "state": "DONE"
+      },
+      {
+        "step": "REVIEW",
+        "detail": "1 field to check",
+        "state": "CURRENT"
+      },
+      {
+        "step": "GRAPH",
+        "detail": "Waiting",
+        "state": "PENDING"
+      }
+    ],
+    "event": {
+      "eventId": "EV-001",
+      "fields": [
+        {
+          "id": "F-well",
+          "key": "well",
+          "label": "WELL",
+          "value": "W-067",
+          "confidence": 0.99,
+          "bbox": {
+            "page": 47,
+            "lineTops": [
+              122
+            ],
+            "note": "Line 1"
+          }
+        },
+        {
+          "id": "F-formation",
+          "key": "formation",
+          "label": "FORMATION",
+          "value": "Barail",
+          "confidence": 0.96,
+          "bbox": {
+            "page": 47,
+            "lineTops": [
+              185
+            ]
+          }
+        },
+        {
+          "id": "F-depth",
+          "key": "depth",
+          "label": "DEPTH",
+          "value": "3,061 m MD · 3,021 m TVDSS",
+          "confidence": 0.97,
+          "bbox": {
+            "page": 47,
+            "lineTops": [
+              164
+            ]
+          }
+        },
+        {
+          "id": "F-event",
+          "key": "event",
+          "label": "EVENT",
+          "value": "Partial mud loss, 45 bbl/h",
+          "confidence": 0.94,
+          "bbox": {
+            "page": 47,
+            "lineTops": [
+              185
+            ]
+          }
+        },
+        {
+          "id": "F-cause",
+          "key": "cause",
+          "label": "CAUSE",
+          "value": "Fractured, coarse sand",
+          "confidence": 0.82,
+          "bbox": {
+            "page": 47,
+            "lineTops": [
+              206
+            ]
+          }
+        },
+        {
+          "id": "F-mitigation",
+          "key": "mitigation",
+          "label": "MITIGATION",
+          "value": "Flow −10 %, 40 ppb LCM pill",
+          "confidence": 0.91,
+          "bbox": {
+            "page": 47,
+            "lineTops": [
+              227,
+              248
+            ]
+          }
+        },
+        {
+          "id": "F-outcome",
+          "key": "outcome",
+          "label": "OUTCOME",
+          "value": "Cured in 3.5 h; 12 m³ lost",
+          "confidence": 0.71,
+          "needsReview": true,
+          "reviewReason": "Two numbers on one line; please confirm.",
+          "bbox": {
+            "page": 47,
+            "lineTops": [
+              269
+            ]
+          }
+        }
+      ]
+    },
+    "pageText": [
+      "Well W-067 was drilling the 8½-in hole below the",
+      "9⅝-in shoe with KCl-polymer mud at 1.38 g/cm³.",
+      "At 3,061 m MD (3,021 m TVDSS), 17 m into the",
+      "Barail, partial losses of 45 bbl/hr were observed.",
+      "Cuttings showed fractured, coarse-grained sand.",
+      "Flow rate was reduced by 10% and a 40 ppb LCM",
+      "pill was spotted across the loss zone.",
+      "Losses cured after 3.5 hrs; total mud lost 12 m³.",
+      "Drilling resumed at 13.1 m/hr."
+    ]
+  },
+  "graph": {
+    "center": "OIL-WELL-104",
+    "hops": 2,
+    "totalNodesInStore": 38420,
+    "nodes": [
+      {
+        "id": "n104",
+        "label": "OIL-WELL-104",
+        "type": "active_well",
+        "ref": "OIL-WELL-104"
+      },
+      {
+        "id": "fTipam",
+        "label": "TIPAM",
+        "type": "formation"
+      },
+      {
+        "id": "fBarail",
+        "label": "BARAIL",
+        "type": "formation"
+      },
+      {
+        "id": "w067",
+        "label": "W-067",
+        "type": "well",
+        "ref": "W-067"
+      },
+      {
+        "id": "w088",
+        "label": "W-088",
+        "type": "well",
+        "ref": "W-088"
+      },
+      {
+        "id": "w121",
+        "label": "W-121",
+        "type": "well",
+        "ref": "W-121"
+      },
+      {
+        "id": "eLoss",
+        "label": "MUD LOSS · 3,061 m",
+        "type": "event",
+        "severity": "critical",
+        "ref": "EV-001"
+      },
+      {
+        "id": "eTotal",
+        "label": "TOTAL LOSS · 3,196 m",
+        "type": "event",
+        "severity": "critical",
+        "ref": "EV-005"
+      },
+      {
+        "id": "eStuck",
+        "label": "STUCK PIPE · 3,014 m",
+        "type": "event",
+        "severity": "medium",
+        "ref": "EV-012"
+      },
+      {
+        "id": "cSand",
+        "label": "FRACTURED SAND",
+        "type": "cause"
+      },
+      {
+        "id": "aLcm",
+        "label": "LCM PILL 40 ppb",
+        "type": "action"
+      },
+      {
+        "id": "aPlug",
+        "label": "CEMENT PLUG · 36 h",
+        "type": "action"
+      },
+      {
+        "id": "oCured",
+        "label": "CURED IN 3.5 h",
+        "type": "outcome"
+      },
+      {
+        "id": "dWcr",
+        "label": "WCR W-067 p.47",
+        "type": "document",
+        "ref": "W-067_WCR_2019.pdf#47"
+      }
+    ],
+    "edges": [
+      {
+        "id": "e1",
+        "from": "n104",
+        "to": "fTipam",
+        "relation": "DRILLING_IN",
+        "label": "DRILLING IN"
+      },
+      {
+        "id": "e2",
+        "from": "n104",
+        "to": "fBarail",
+        "relation": "NEXT_FORMATION",
+        "label": "62 m AHEAD"
+      },
+      {
+        "id": "e3",
+        "from": "n104",
+        "to": "w067",
+        "relation": "OFFSET_OF",
+        "label": "1.2 km · 87 %"
+      },
+      {
+        "id": "e4",
+        "from": "n104",
+        "to": "w088",
+        "relation": "OFFSET_OF",
+        "label": "2.6 km · 78 %"
+      },
+      {
+        "id": "e5",
+        "from": "n104",
+        "to": "w121",
+        "relation": "OFFSET_OF",
+        "label": "4.2 km · 64 %"
+      },
+      {
+        "id": "e6",
+        "from": "w067",
+        "to": "eLoss",
+        "relation": "RECORDED",
+        "label": "RECORDED"
+      },
+      {
+        "id": "e7",
+        "from": "w088",
+        "to": "eTotal",
+        "relation": "RECORDED",
+        "label": "RECORDED"
+      },
+      {
+        "id": "e8",
+        "from": "w121",
+        "to": "eStuck",
+        "relation": "RECORDED",
+        "label": "RECORDED"
+      },
+      {
+        "id": "e9",
+        "from": "eLoss",
+        "to": "fBarail",
+        "relation": "IN_FORMATION",
+        "label": "+17 m BELOW TOP"
+      },
+      {
+        "id": "e10",
+        "from": "eTotal",
+        "to": "fBarail",
+        "relation": "IN_FORMATION",
+        "label": "+13 m BELOW TOP"
+      },
+      {
+        "id": "e11",
+        "from": "eStuck",
+        "to": "fBarail",
+        "relation": "IN_FORMATION",
+        "label": "+17 m BELOW TOP"
+      },
+      {
+        "id": "e12",
+        "from": "eLoss",
+        "to": "cSand",
+        "relation": "CAUSED_BY",
+        "label": "CAUSE"
+      },
+      {
+        "id": "e13",
+        "from": "eTotal",
+        "to": "cSand",
+        "relation": "CAUSED_BY",
+        "label": "CAUSE"
+      },
+      {
+        "id": "e14",
+        "from": "eLoss",
+        "to": "aLcm",
+        "relation": "MITIGATED_BY",
+        "label": "ACTION"
+      },
+      {
+        "id": "e15",
+        "from": "aLcm",
+        "to": "oCured",
+        "relation": "RESULTED_IN",
+        "label": "OUTCOME"
+      },
+      {
+        "id": "e16",
+        "from": "eLoss",
+        "to": "dWcr",
+        "relation": "SOURCED_FROM",
+        "label": "SOURCE"
+      },
+      {
+        "id": "e17",
+        "from": "eTotal",
+        "to": "aPlug",
+        "relation": "MITIGATED_BY",
+        "label": "ACTION"
+      }
+    ],
+    "evidencePath": [
+      "e3",
+      "e6",
+      "e9",
+      "e2",
+      "e14",
+      "e15",
+      "e16"
+    ],
+    "evidencePathText": "OIL-WELL-104 → W-067 → mud loss 17 m below the Barail top → 40 ppb LCM pill → cured in 3.5 h. Source: WCR W-067 p.47."
+  },
+  "assistant": {
+    "answerSchema": [
+      "question",
+      "answer",
+      "evidence[{text, source, severity}]",
+      "similarWells[{id, similarity}]",
+      "sources[]",
+      "confidence{score, band, note}",
+      "cta{label, route}",
+      "meta{latencySeconds, model, sourceCount}"
+    ],
+    "examples": [
+      {
+        "id": "q1",
+        "chip": "Nearby events at this depth",
+        "question": "What happened in nearby wells at the depth we are about to drill?",
+        "answer": "Three of the closest offsets had trouble within 20 m below the Barail top: two lost mud and one got stuck. OIL-WELL-104 reaches that zone in about 62 m.",
+        "evidence": [
+          {
+            "text": "W-067 lost 45 bbl/h at 3,061 m MD, 17 m below its Barail top",
+            "source": "WCR W-067 p.47",
+            "severity": "high"
+          },
+          {
+            "text": "W-088 lost total returns 13 m below its Barail top",
+            "source": "WCR W-088 p.88",
+            "severity": "high"
+          },
+          {
+            "text": "W-121 stuck differentially 17 m below its Barail top",
+            "source": "DDR W-121 5 Aug 2021",
+            "severity": "med"
+          }
+        ],
+        "similarWells": [
+          {
+            "id": "W-067",
+            "similarity": 87
+          },
+          {
+            "id": "W-088",
+            "similarity": 78
+          },
+          {
+            "id": "W-121",
+            "similarity": 64
+          }
+        ],
+        "sources": [
+          "WCR W-067 p.47",
+          "WCR W-088 p.88",
+          "DDR W-121 5 Aug 2021"
+        ],
+        "confidence": {
+          "score": 0.86,
+          "band": "HIGH",
+          "note": "three independent reports agree"
+        },
+        "cta": {
+          "label": "SHOW ON MAP",
+          "route": "/nearby"
+        },
+        "meta": {
+          "latencySeconds": 1.8,
+          "model": "on-prem",
+          "sourceCount": 3
+        }
+      },
+      {
+        "id": "q2",
+        "chip": "Why 83 % mud loss?",
+        "question": "Why is the mud-loss risk 83 %?",
+        "answer": "The offsets most like this well all lost mud just below the Barail top, and the live data is starting to look like theirs did: ECD is rising and flow out is down 3 %.",
+        "evidence": [
+          {
+            "text": "All 3 top offsets lost mud within 20 m below the Barail top",
+            "source": "WCR p.47 · WCR p.88 · DDR 2 Nov 2016",
+            "severity": "high"
+          },
+          {
+            "text": "ECD 1.453 g/cm³, rising 0.010 per hour toward 1.52",
+            "source": "eRTMAC live feed",
+            "severity": "med"
+          },
+          {
+            "text": "Flow out −3 % and pit −0.4 m³/h over 40 min",
+            "source": "eRTMAC live feed",
+            "severity": "med"
+          }
+        ],
+        "similarWells": [
+          {
+            "id": "W-067",
+            "similarity": 87
+          },
+          {
+            "id": "W-042",
+            "similarity": 81
+          },
+          {
+            "id": "W-088",
+            "similarity": 78
+          }
+        ],
+        "sources": [
+          "WCR W-067 p.47",
+          "WCR W-088 p.88",
+          "DDR W-042 2 Nov 2016",
+          "eRTMAC"
+        ],
+        "confidence": {
+          "score": 0.81,
+          "band": "HIGH",
+          "note": "calibrated on 212 Barail entries"
+        },
+        "cta": {
+          "label": "VIEW EVIDENCE",
+          "route": "/risk"
+        },
+        "meta": {
+          "latencySeconds": 2.1,
+          "model": "on-prem",
+          "sourceCount": 4
+        }
+      },
+      {
+        "id": "q3",
+        "chip": "What worked for W-067?",
+        "question": "What worked when W-067 lost mud?",
+        "answer": "Cutting flow by 10 % and spotting a 40 ppb LCM pill cured it in 3.5 h with 12 m³ lost. W-088 tried pills alone at a higher ECD and needed a cement plug.",
+        "evidence": [
+          {
+            "text": "W-067: flow −10 %, 40 ppb LCM pill, cured in 3.5 h",
+            "source": "WCR W-067 p.47",
+            "severity": "low"
+          },
+          {
+            "text": "W-042: 30 ppb fine LCM in the active system, cured in 1 h",
+            "source": "DDR W-042 2 Nov 2016",
+            "severity": "low"
+          },
+          {
+            "text": "W-088: two pills failed at ECD 1.478, cement plug, 36 h",
+            "source": "WCR W-088 p.88",
+            "severity": "high"
+          }
+        ],
+        "similarWells": [
+          {
+            "id": "W-067",
+            "similarity": 87
+          },
+          {
+            "id": "W-042",
+            "similarity": 81
+          },
+          {
+            "id": "W-088",
+            "similarity": 78
+          }
+        ],
+        "sources": [
+          "WCR W-067 p.47",
+          "DDR W-042 2 Nov 2016",
+          "WCR W-088 p.88"
+        ],
+        "confidence": {
+          "score": 0.78,
+          "band": "MEDIUM_HIGH",
+          "note": "outcomes are well documented"
+        },
+        "cta": {
+          "label": "SHOW IN GRAPH",
+          "route": "/graph"
+        },
+        "meta": {
+          "latencySeconds": 1.6,
+          "model": "on-prem",
+          "sourceCount": 3
+        }
+      },
+      {
+        "id": "q4",
+        "chip": "Compare 104 vs W-067",
+        "question": "Compare OIL-WELL-104 with W-067.",
+        "answer": "Same mud system and bit, 87 % similar. OIL-WELL-104 is drilling 10 % slower with 12 % more torque, and its 9⅝-in shoe is 60 m deeper.",
+        "evidence": [
+          {
+            "text": "ROP 13.7 vs 15.2 m/h",
+            "source": "eRTMAC · DDR W-067",
+            "severity": "med"
+          },
+          {
+            "text": "Torque 27.8 vs 24.9 kN·m",
+            "source": "eRTMAC · DDR W-067",
+            "severity": "med"
+          },
+          {
+            "text": "9⅝-in shoe 3,050 vs 2,990 m MD",
+            "source": "Well plan · WCR W-067 p.12",
+            "severity": "low"
+          }
+        ],
+        "similarWells": [
+          {
+            "id": "W-067",
+            "similarity": 87
+          }
+        ],
+        "sources": [
+          "DDR W-067 Mar 2019",
+          "WCR W-067 p.12"
+        ],
+        "confidence": {
+          "score": 0.9,
+          "band": "HIGH",
+          "note": "direct measurements"
+        },
+        "cta": {
+          "label": "OPEN COMPARISON",
+          "route": "/compare"
+        },
+        "meta": {
+          "latencySeconds": 1.2,
+          "model": "on-prem",
+          "sourceCount": 2
+        }
+      }
+    ],
+    "context": {
+      "formation": "Tipam",
+      "nextTop": "Barail · 62 m",
+      "offsetsInScope": "7 within 5 km",
+      "eventsIndexed": 12,
+      "pagesSearchable": 12907,
+      "liveFeed": "eRTMAC · 2 s"
+    }
+  },
+  "analytics": {
+    "scope": {
+      "description": "24 wells within 10 km of OIL-WELL-104",
+      "years": [
+        1998,
+        2025
+      ],
+      "radiusKm": 10
+    },
+    "mudLossByFormation": [
+      {
+        "formation": "Girujan",
+        "events": 1
+      },
+      {
+        "formation": "Tipam",
+        "events": 3
+      },
+      {
+        "formation": "Barail",
+        "events": 9,
+        "highlight": true
+      }
+    ],
+    "barailEventsByMetresBelowTop": [
+      {
+        "bin": "0–10",
+        "events": 1
+      },
+      {
+        "bin": "10–20",
+        "events": 5,
+        "highlight": true,
+        "activeMdRange": [
+          3196,
+          3206
+        ]
+      },
+      {
+        "bin": "20–30",
+        "events": 2
+      },
+      {
+        "bin": "30–50",
+        "events": 1
+      },
+      {
+        "bin": "50+",
+        "events": 2
+      }
+    ],
+    "nptHoursByType": [
+      {
+        "type": "Lost circulation",
+        "hours": 61,
+        "highlight": true
+      },
+      {
+        "type": "Equipment",
+        "hours": 40
+      },
+      {
+        "type": "Stuck pipe",
+        "hours": 27
+      },
+      {
+        "type": "Cementing",
+        "hours": 24
+      },
+      {
+        "type": "Well control",
+        "hours": 18
+      }
+    ],
+    "riskByFormation": {
+      "columns": [
+        "mud loss",
+        "stuck pipe",
+        "kick",
+        "cementing",
+        "torque"
+      ],
+      "rows": [
+        {
+          "formation": "Girujan",
+          "counts": [
+            1,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "formation": "Tipam",
+          "counts": [
+            3,
+            2,
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "formation": "Barail",
+          "counts": [
+            9,
+            2,
+            1,
+            1,
+            0
+          ]
+        }
+      ]
+    },
+    "offsetSimilarity": [
+      {
+        "id": "W-067",
+        "similarity": 87,
+        "distanceKm": 1.2
+      },
+      {
+        "id": "W-042",
+        "similarity": 81,
+        "distanceKm": 2.1
+      },
+      {
+        "id": "W-088",
+        "similarity": 78,
+        "distanceKm": 2.6
+      },
+      {
+        "id": "W-081",
+        "similarity": 58,
+        "distanceKm": 3.0
+      },
+      {
+        "id": "W-112",
+        "similarity": 41,
+        "distanceKm": 3.4
+      },
+      {
+        "id": "W-103",
+        "similarity": 36,
+        "distanceKm": 3.9
+      },
+      {
+        "id": "W-121",
+        "similarity": 64,
+        "distanceKm": 4.2
+      }
+    ],
+    "relevanceThreshold": 75,
+    "mudLossPerYear": [
+      {
+        "year": 2014,
+        "events": 2,
+        "highlight": false
+      },
+      {
+        "year": 2015,
+        "events": 0,
+        "highlight": false
+      },
+      {
+        "year": 2016,
+        "events": 1,
+        "highlight": false
+      },
+      {
+        "year": 2017,
+        "events": 2,
+        "highlight": false
+      },
+      {
+        "year": 2018,
+        "events": 1,
+        "highlight": false
+      },
+      {
+        "year": 2019,
+        "events": 1,
+        "highlight": false
+      },
+      {
+        "year": 2020,
+        "events": 1,
+        "highlight": false
+      },
+      {
+        "year": 2021,
+        "events": 0,
+        "highlight": false
+      },
+      {
+        "year": 2022,
+        "events": 2,
+        "highlight": true
+      },
+      {
+        "year": 2023,
+        "events": 1,
+        "highlight": true
+      },
+      {
+        "year": 2024,
+        "events": 1,
+        "highlight": true
+      },
+      {
+        "year": 2025,
+        "events": 1,
+        "highlight": true
+      }
+    ]
+  },
+  "rigMobileChecklist": [
+    {
+      "id": "lcm",
+      "text": "LCM pill mixed, 40 ppb",
+      "sub": "Ready in the slug pit",
+      "done": true
+    },
+    {
+      "id": "flow",
+      "text": "Flow cut of 10 % agreed",
+      "sub": "With the driller and company man",
+      "done": false
+    },
+    {
+      "id": "ecd",
+      "text": "ECD held below 1.47",
+      "sub": "Now 1.453 · rising",
+      "done": false
+    },
+    {
+      "id": "trip",
+      "text": "Trip tank lined up",
+      "sub": "Watch pit every 15 min",
+      "done": true
+    }
+  ],
+  "landing": {
+    "stats": [
+      {
+        "value": "127+",
+        "label": "wells indexed"
+      },
+      {
+        "value": "4,800+",
+        "label": "events extracted"
+      },
+      {
+        "value": "12K+",
+        "label": "pages read"
+      },
+      {
+        "value": "05",
+        "label": "risk models"
+      },
+      {
+        "value": "LIVE",
+        "label": "eRTMAC feed"
+      }
+    ],
+    "note": "Figures are demo values"
+  }
+}

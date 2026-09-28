@@ -1,0 +1,587 @@
+openapi: 3.0.3
+info:
+  title: NWIS — Nearby Wells Intelligence System API
+  version: 0.1.0
+  description: |
+    API contract behind the 13 NWIS screens (SIH26121, Oil India).
+    Every response shape matches a block in `demo-data.json`, so the frontend can be built
+    against the starter server today and against the real backend later without changes.
+
+    Conventions
+    - Depths are metres. `mdM` = measured depth, `tvdssM` = true vertical depth sub-sea.
+    - Probabilities are integers 0–100 in UI payloads; model internals use 0–1.
+    - All times are ISO 8601 with offset; the demo data uses local time strings for brevity.
+    - Every derived statement (risk reason, assistant answer) carries its sources.
+servers:
+  - url: http://localhost:8000
+    description: backend-starter (demo data)
+tags:
+  - name: Wells
+  - name: Live
+  - name: Risk
+  - name: Alerts
+  - name: Knowledge
+  - name: Documents
+  - name: Analytics
+  - name: Assistant
+
+paths:
+  /api/v1/health:
+    get:
+      summary: Liveness check
+      responses:
+        '200': { description: OK }
+
+  /api/v1/wells/active:
+    get:
+      tags: [Wells]
+      summary: The well currently being drilled (sidebar card, page header chip, hero blocks)
+      responses:
+        '200':
+          description: Active well
+          content: { application/json: { schema: { $ref: '#/components/schemas/ActiveWell' } } }
+
+  /api/v1/wells/{wellId}/dashboard:
+    get:
+      tags: [Wells]
+      summary: Command Centre aggregate — hero, 4 primary metrics, 8 extra params, top risk, summary bar
+      parameters: [ { $ref: '#/components/parameters/wellId' } ]
+      responses:
+        '200':
+          description: Dashboard bundle
+          content: { application/json: { schema: { $ref: '#/components/schemas/Dashboard' } } }
+
+  /api/v1/wells/{wellId}/live:
+    get:
+      tags: [Live]
+      summary: Latest eRTMAC snapshot (primary + more parameters, sparklines)
+      parameters: [ { $ref: '#/components/parameters/wellId' } ]
+      responses:
+        '200':
+          description: Live snapshot
+          content: { application/json: { schema: { $ref: '#/components/schemas/LiveSnapshot' } } }
+
+  /ws/wells/{wellId}/live:
+    get:
+      tags: [Live]
+      summary: 'WebSocket: pushes a LiveSnapshot every ~2 s, plus alert messages when an alert fires'
+      description: 'Upgrade to WebSocket. Messages are JSON objects of the form {"type": "live" | "alert" | "risk", "data": {...}}.'
+      parameters: [ { $ref: '#/components/parameters/wellId' } ]
+      responses:
+        '101': { description: Switching protocols }
+
+  /api/v1/wells/{wellId}/offsets:
+    get:
+      tags: [Wells]
+      summary: Nearby Wells — offsets within a radius, measured at bit depth
+      parameters:
+        - { $ref: '#/components/parameters/wellId' }
+        - { name: radius_km, in: query, schema: { type: number, default: 5, enum: [1, 3, 5, 10] } }
+        - { name: min_similarity, in: query, schema: { type: integer, minimum: 0, maximum: 100 } }
+        - { name: has_loss_events, in: query, schema: { type: boolean } }
+        - { name: sort, in: query, schema: { type: string, enum: [distance, similarity], default: distance } }
+      responses:
+        '200':
+          description: Offsets
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  radiusKm: { type: number }
+                  count: { type: integer }
+                  relevantCount: { type: integer }
+                  wells: { type: array, items: { $ref: '#/components/schemas/OffsetWell' } }
+
+  /api/v1/wells/{wellId}/offsets/{offsetId}:
+    get:
+      tags: [Wells]
+      summary: One offset well with its key events (Nearby Wells drawer)
+      parameters:
+        - { $ref: '#/components/parameters/wellId' }
+        - { name: offsetId, in: path, required: true, schema: { type: string, example: W-067 } }
+      responses:
+        '200':
+          description: Offset detail
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/OffsetWell'
+                  - type: object
+                    properties:
+                      events: { type: array, items: { $ref: '#/components/schemas/Event' } }
+
+  /api/v1/wells/{wellId}/corridor:
+    get:
+      tags: [Wells]
+      summary: Active Well depth corridor — formation bands and events per well, aligned by MD, TVDSS or formation
+      parameters:
+        - { $ref: '#/components/parameters/wellId' }
+        - { name: align, in: query, schema: { type: string, enum: [md, tvdss, formation], default: tvdss } }
+        - { name: look_ahead_m, in: query, schema: { type: integer, default: 150, minimum: 50, maximum: 300 } }
+        - { name: top_m, in: query, schema: { type: integer, default: 2700 } }
+        - { name: span_m, in: query, schema: { type: integer, default: 600 } }
+      responses:
+        '200':
+          description: Corridor columns
+          content: { application/json: { schema: { $ref: '#/components/schemas/Corridor' } } }
+
+  /api/v1/wells/{wellId}/compare/{offsetId}:
+    get:
+      tags: [Wells]
+      summary: Well Comparison — parameters at the same formation-relative depth, design, events, takeaway
+      parameters:
+        - { $ref: '#/components/parameters/wellId' }
+        - { name: offsetId, in: path, required: true, schema: { type: string, example: W-067 } }
+      responses:
+        '200':
+          description: Comparison
+          content: { application/json: { schema: { $ref: '#/components/schemas/Comparison' } } }
+
+  /api/v1/wells/{wellId}/risks:
+    get:
+      tags: [Risk]
+      summary: Risk Centre matrix — all hazards ahead of the bit
+      parameters:
+        - { $ref: '#/components/parameters/wellId' }
+        - { name: level, in: query, schema: { type: string, enum: [HIGH, MEDIUM, LOW] } }
+      responses:
+        '200':
+          description: Risks
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  counts: { type: object, properties: { HIGH: { type: integer }, MEDIUM: { type: integer }, LOW: { type: integer } } }
+                  nextZone: { type: object }
+                  risks: { type: array, items: { $ref: '#/components/schemas/RiskSummary' } }
+
+  /api/v1/wells/{wellId}/risks/{riskId}:
+    get:
+      tags: [Risk]
+      summary: Evidence drawer — why this risk, historical evidence, mitigations, recommendation, model details
+      parameters:
+        - { $ref: '#/components/parameters/wellId' }
+        - { name: riskId, in: path, required: true, schema: { type: string, example: mud_loss } }
+      responses:
+        '200':
+          description: Risk detail
+          content: { application/json: { schema: { $ref: '#/components/schemas/RiskDetail' } } }
+
+  /api/v1/wells/{wellId}/alerts:
+    get:
+      tags: [Alerts]
+      summary: Alert timeline for today
+      parameters:
+        - { $ref: '#/components/parameters/wellId' }
+        - { name: status, in: query, schema: { type: string, enum: [all, open, acknowledged], default: all } }
+      responses:
+        '200':
+          description: Alerts
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  counts: { type: object, properties: { all: { type: integer }, open: { type: integer }, acknowledged: { type: integer } } }
+                  alerts: { type: array, items: { $ref: '#/components/schemas/Alert' } }
+
+  /api/v1/alerts/{alertId}/ack:
+    post:
+      tags: [Alerts]
+      summary: Acknowledge an alert
+      parameters: [ { name: alertId, in: path, required: true, schema: { type: string } } ]
+      requestBody:
+        content: { application/json: { schema: { type: object, properties: { by: { type: string } } } } }
+      responses:
+        '200': { description: Updated alert, content: { application/json: { schema: { $ref: '#/components/schemas/Alert' } } } }
+    delete:
+      tags: [Alerts]
+      summary: Undo acknowledgement
+      parameters: [ { name: alertId, in: path, required: true, schema: { type: string } } ]
+      responses:
+        '200': { description: Updated alert, content: { application/json: { schema: { $ref: '#/components/schemas/Alert' } } } }
+
+  /api/v1/events:
+    get:
+      tags: [Knowledge]
+      summary: Knowledge Centre search over extracted events
+      parameters:
+        - { name: q, in: query, description: Free text (hybrid keyword + vector search), schema: { type: string } }
+        - { name: preset, in: query, schema: { type: string, enum: [loss_near_barail, stuck_in_barail, kick, cementing, similar_to_active] } }
+        - { name: well, in: query, schema: { type: string } }
+        - { name: formation, in: query, schema: { type: string } }
+        - { name: type, in: query, schema: { type: string, enum: [LOSS, STUCK, KICK, CEMENT, TORQUE, OTHER] } }
+      responses:
+        '200':
+          description: Events sorted by aligned depth on the active well
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count: { type: integer }
+                  presets: { type: array, items: { type: object, properties: { id: { type: string }, label: { type: string }, count: { type: integer } } } }
+                  events: { type: array, items: { $ref: '#/components/schemas/Event' } }
+
+  /api/v1/events/{eventId}:
+    get:
+      tags: [Knowledge]
+      summary: One event with cause, action, outcome, lost time and source page
+      parameters: [ { name: eventId, in: path, required: true, schema: { type: string, example: EV-001 } } ]
+      responses:
+        '200': { description: Event, content: { application/json: { schema: { $ref: '#/components/schemas/Event' } } } }
+
+  /api/v1/graph/neighbourhood:
+    get:
+      tags: [Knowledge]
+      summary: Knowledge Graph — n-hop neighbourhood with the evidence path
+      parameters:
+        - { name: node, in: query, schema: { type: string, default: OIL-WELL-104 } }
+        - { name: hops, in: query, schema: { type: integer, default: 2, maximum: 3 } }
+      responses:
+        '200': { description: Graph, content: { application/json: { schema: { $ref: '#/components/schemas/Graph' } } } }
+
+  /api/v1/documents:
+    get:
+      tags: [Documents]
+      summary: Document library
+      parameters:
+        - { name: type, in: query, schema: { type: string, enum: [WCR, DDR, MUD LOG, SURVEY] } }
+      responses:
+        '200':
+          description: Documents and totals
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  totals: { type: object }
+                  documents: { type: array, items: { $ref: '#/components/schemas/Document' } }
+    post:
+      tags: [Documents]
+      summary: Upload a WCR, DDR, log or survey — starts an OCR → NLP → graph job
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file: { type: string, format: binary }
+                wellId: { type: string }
+                type: { type: string, enum: [WCR, DDR, MUD LOG, SURVEY, OTHER] }
+      responses:
+        '202': { description: Job queued, content: { application/json: { schema: { $ref: '#/components/schemas/Job' } } } }
+
+  /api/v1/jobs:
+    get:
+      tags: [Documents]
+      summary: Processing jobs with per-stage progress
+      responses:
+        '200': { description: Jobs, content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/Job' } } } } }
+
+  /api/v1/documents/{documentId}/pages/{page}/extraction:
+    get:
+      tags: [Documents]
+      summary: Document Intelligence — pipeline state, page text/lines and extracted fields with confidence and boxes
+      parameters:
+        - { name: documentId, in: path, required: true, schema: { type: string, example: W-067_WCR_2019.pdf } }
+        - { name: page, in: path, required: true, schema: { type: integer, example: 47 } }
+      responses:
+        '200': { description: Extraction, content: { application/json: { schema: { $ref: '#/components/schemas/Extraction' } } } }
+
+  /api/v1/extractions/fields/{fieldId}:
+    patch:
+      tags: [Documents]
+      summary: Edit an extracted value (human review)
+      parameters: [ { name: fieldId, in: path, required: true, schema: { type: string } } ]
+      requestBody:
+        content: { application/json: { schema: { type: object, properties: { value: { type: string } } } } }
+      responses:
+        '200': { description: Updated field }
+
+  /api/v1/extractions/fields/{fieldId}/confirm:
+    post:
+      tags: [Documents]
+      summary: Confirm a low-confidence field; when all fields pass, the event is written to the graph
+      parameters: [ { name: fieldId, in: path, required: true, schema: { type: string } } ]
+      responses:
+        '200': { description: Updated extraction (pipeline advances to GRAPH) }
+
+  /api/v1/analytics/summary:
+    get:
+      tags: [Analytics]
+      summary: The six Analytics charts
+      parameters:
+        - { name: well, in: query, schema: { type: string, default: OIL-WELL-104 } }
+        - { name: radius_km, in: query, schema: { type: number, default: 10 } }
+      responses:
+        '200': { description: Chart data, content: { application/json: { schema: { type: object } } } }
+
+  /api/v1/assistant/ask:
+    post:
+      tags: [Assistant]
+      summary: Ask NWIS — returns a structured, cited answer or a refusal when nothing supports it
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [question]
+              properties:
+                question: { type: string }
+                context: { type: object, properties: { wellId: { type: string }, depthMdM: { type: number }, radiusKm: { type: number } } }
+      responses:
+        '200': { description: Answer, content: { application/json: { schema: { $ref: '#/components/schemas/Answer' } } } }
+
+  /api/v1/assistant/suggestions:
+    get:
+      tags: [Assistant]
+      summary: Quick-question chips and the context panel
+      responses:
+        '200': { description: Suggestions }
+
+components:
+  parameters:
+    wellId:
+      name: wellId
+      in: path
+      required: true
+      schema: { type: string, example: OIL-WELL-104 }
+
+  schemas:
+    ActiveWell:
+      type: object
+      properties:
+        id: { type: string }
+        status: { type: string, enum: [DRILLING, TRIPPING, CIRCULATING, CASING, CEMENTING, SUSPENDED] }
+        rigState: { type: string }
+        holeSection: { type: string }
+        bit: { type: object, properties: { mdM: { type: number }, tvdssM: { type: number } } }
+        currentFormation: { type: string }
+        nextFormation:
+          type: object
+          properties:
+            name: { type: string }
+            topMdM: { type: number }
+            topTvdssM: { type: number }
+            uncertaintyM: { type: number }
+            distanceM: { type: number }
+            etaHours: { type: number }
+        lookAheadM: { type: integer }
+
+    Metric:
+      type: object
+      properties:
+        key: { type: string }
+        label: { type: string }
+        value: { type: number }
+        unit: { type: string }
+        note: { type: string }
+        status: { type: string, enum: [NORMAL, WATCH, ALARM] }
+
+    LiveSnapshot:
+      type: object
+      properties:
+        wellId: { type: string }
+        timestamp: { type: string }
+        source: { type: string }
+        primary: { type: array, items: { $ref: '#/components/schemas/Metric' } }
+        more: { type: array, items: { $ref: '#/components/schemas/Metric' } }
+
+    Dashboard:
+      type: object
+      properties:
+        activeWell: { $ref: '#/components/schemas/ActiveWell' }
+        live: { $ref: '#/components/schemas/LiveSnapshot' }
+        topRisk: { type: object }
+        mapWells: { type: array, items: { $ref: '#/components/schemas/OffsetWell' } }
+        summary: { type: object }
+
+    OffsetWell:
+      type: object
+      properties:
+        id: { type: string }
+        surfaceKm: { type: array, items: { type: number }, description: '[east, north] from the active surface location' }
+        bitDepthKm: { type: array, items: { type: number }, description: 'position at the active bit depth' }
+        distanceAtBitKm: { type: number }
+        similarity: { type: integer }
+        similarityFactors: { type: object, properties: { stratigraphy: { type: integer }, trajectory: { type: integer }, mudSystem: { type: integer }, proximity: { type: integer } } }
+        relevant: { type: boolean }
+        tdMdM: { type: number }
+        barailTopTvdssM: { type: number }
+        spud: { type: integer }
+        status: { type: string }
+        risk: { type: string, enum: [HIGH, MEDIUM, LOW] }
+        hasLossEvents: { type: boolean }
+
+    Event:
+      type: object
+      properties:
+        id: { type: string }
+        wellId: { type: string }
+        type: { type: string, enum: [LOSS, STUCK, KICK, CEMENT, TORQUE, OTHER] }
+        title: { type: string }
+        severity: { type: string, enum: [high, med, low] }
+        formation: { type: string }
+        mdM: { type: number }
+        tvdssM: { type: number, nullable: true }
+        metresBelowBarailTop: { type: number, nullable: true }
+        alignedMdOnActiveM: { type: number, nullable: true }
+        date: { type: string }
+        cause: { type: string }
+        action: { type: string }
+        outcome: { type: string }
+        nptHours: { type: number }
+        extractionConfidence: { type: number }
+        source: { type: object, properties: { type: { type: string }, documentId: { type: string }, page: { type: integer, nullable: true }, label: { type: string } } }
+
+    Corridor:
+      type: object
+      properties:
+        align: { type: string }
+        axis: { type: object, properties: { topM: { type: number }, spanM: { type: number }, unit: { type: string } } }
+        bit: { type: object, properties: { depthM: { type: number }, lookAheadM: { type: number } } }
+        caption: { type: string }
+        columns:
+          type: array
+          items:
+            type: object
+            properties:
+              wellId: { type: string }
+              distanceKm: { type: number }
+              shiftM: { type: number }
+              bands: { type: array, items: { type: object, properties: { name: { type: string }, fromM: { type: number }, toM: { type: number } } } }
+              events: { type: array, items: { type: object, properties: { eventId: { type: string }, depthM: { type: number }, inLookAhead: { type: boolean }, type: { type: string }, severity: { type: string }, label: { type: string } } } }
+
+    Comparison:
+      type: object
+      properties:
+        active: { type: string }
+        offset: { $ref: '#/components/schemas/OffsetWell' }
+        parameters:
+          type: array
+          items:
+            type: object
+            properties:
+              key: { type: string }
+              label: { type: string }
+              unit: { type: string }
+              active: { type: number }
+              offset: { type: number }
+              diffPct: { type: number }
+              flagged: { type: boolean, description: '|diff| > 8 %' }
+        design: { type: array, items: { type: object, properties: { label: { type: string }, active: { type: string }, offset: { type: string }, differs: { type: boolean } } } }
+        events: { type: array, items: { $ref: '#/components/schemas/Event' } }
+        takeaway: { type: object, properties: { text: { type: string }, source: { type: string } } }
+
+    RiskSummary:
+      type: object
+      properties:
+        id: { type: string }
+        name: { type: string }
+        probability: { type: integer }
+        level: { type: string, enum: [HIGH, MEDIUM, LOW] }
+        windowMdM: { type: array, items: { type: number } }
+        confidence: { type: number }
+        confidenceBand: { type: string }
+        evidenceSummary: { type: string }
+        status: { type: string, enum: [ACT_NOW, WATCH, MONITOR] }
+
+    RiskDetail:
+      allOf:
+        - $ref: '#/components/schemas/RiskSummary'
+        - type: object
+          properties:
+            stats: { type: array, items: { type: object, properties: { value: { type: string }, label: { type: string } } } }
+            reasons: { type: array, items: { type: string } }
+            evidence: { type: array, items: { $ref: '#/components/schemas/Event' } }
+            mitigations: { type: array, items: { type: object, properties: { text: { type: string }, worked: { type: boolean } } } }
+            recommendation: { type: string }
+            model: { type: object }
+
+    Alert:
+      type: object
+      properties:
+        id: { type: string }
+        time: { type: string }
+        severity: { type: string, enum: [HIGH, WATCH, MEDIUM, INFO] }
+        category: { type: string }
+        riskId: { type: string, nullable: true }
+        title: { type: string }
+        subtitle: { type: string }
+        acknowledged: { type: object, nullable: true, properties: { by: { type: string }, at: { type: string } } }
+        triggers: { type: array, items: { type: object, properties: { value: { type: string }, label: { type: string } } } }
+        chart: { type: object, properties: { label: { type: string }, series: { type: array, items: { type: number } }, limit: { type: number, nullable: true } } }
+        offsetsSay: { type: string }
+        action: { type: string }
+
+    Document:
+      type: object
+      properties:
+        id: { type: string }
+        wellId: { type: string }
+        type: { type: string }
+        year: { type: integer }
+        pages: { type: integer }
+        events: { type: integer }
+        ocrQuality: { type: number }
+        status: { type: string, enum: [VERIFIED, INDEXED, PROCESSING, NEEDS_REVIEW, QUEUED, FAILED] }
+
+    Job:
+      type: object
+      properties:
+        id: { type: string }
+        documentId: { type: string }
+        description: { type: string }
+        stages: { type: object, properties: { ocr: { type: integer }, nlp: { type: integer }, graph: { type: integer } } }
+        state: { type: string, enum: [QUEUED, RUNNING, DONE, FAILED] }
+
+    Extraction:
+      type: object
+      properties:
+        documentId: { type: string }
+        page: { type: integer }
+        reviewThreshold: { type: number }
+        pipeline: { type: array, items: { type: object, properties: { step: { type: string }, detail: { type: string }, state: { type: string, enum: [DONE, CURRENT, PENDING] } } } }
+        pageText: { type: array, items: { type: string } }
+        event:
+          type: object
+          properties:
+            eventId: { type: string }
+            fields:
+              type: array
+              items:
+                type: object
+                properties:
+                  id: { type: string }
+                  key: { type: string }
+                  label: { type: string }
+                  value: { type: string }
+                  confidence: { type: number }
+                  needsReview: { type: boolean }
+                  bbox: { type: object, description: 'Page coordinates of the source text (x, y, w, h in PDF points in the real system)' }
+
+    Graph:
+      type: object
+      properties:
+        nodes: { type: array, items: { type: object, properties: { id: { type: string }, label: { type: string }, type: { type: string, enum: [active_well, well, formation, event, cause, action, outcome, document] }, severity: { type: string }, ref: { type: string } } } }
+        edges: { type: array, items: { type: object, properties: { id: { type: string }, from: { type: string }, to: { type: string }, relation: { type: string }, label: { type: string } } } }
+        evidencePath: { type: array, items: { type: string } }
+
+    Answer:
+      type: object
+      properties:
+        question: { type: string }
+        answer: { type: string }
+        refused: { type: boolean }
+        evidence: { type: array, items: { type: object, properties: { text: { type: string }, source: { type: string }, severity: { type: string } } } }
+        similarWells: { type: array, items: { type: object, properties: { id: { type: string }, similarity: { type: integer } } } }
+        sources: { type: array, items: { type: string } }
+        confidence: { type: object, properties: { score: { type: number }, band: { type: string }, note: { type: string } } }
+        cta: { type: object, properties: { label: { type: string }, route: { type: string } } }
+        meta: { type: object }

@@ -1,0 +1,234 @@
+/* ============================================================================
+   Document Intelligence. A black page stage with an absolutely positioned
+   highlight layer, and a field list that is the source of truth for what is on
+   the page. The overlay is scaled from PDF user space, so it survives a resize.
+   ========================================================================== */
+
+.body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: var(--nw-gap);
+  flex: 1 1 auto;
+  min-height: 0;
+  min-width: 0;
+}
+
+.viewerPanel {
+  min-height: 420px;
+}
+
+.canvas {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  overflow: auto;
+  padding: var(--nw-s3);
+  background: #17171a;
+  height: 100%;
+}
+
+.canvas canvas {
+  display: block;
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.45);
+}
+
+.overlay {
+  position: absolute;
+  top: var(--nw-s3);
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.mark {
+  position: absolute;
+  background: color-mix(in srgb, var(--nw-yellow) 34%, transparent);
+  border: 0;
+  border-left: 3px solid var(--nw-yellow);
+  padding: 0;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.mark--below {
+  background: color-mix(in srgb, var(--nw-red) 26%, transparent);
+  border-left-color: var(--nw-red);
+}
+
+.mark--on {
+  background: color-mix(in srgb, var(--nw-yellow) 62%, transparent);
+  outline: 1px solid var(--nw-yellow);
+  outline-offset: 1px;
+}
+
+.pageNav {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--nw-ink-2);
+  font-size: 9.5px;
+}
+
+.sideCol {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nw-gap);
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+}
+
+/* --------------------------------------------------------------- fields -- */
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  margin-top: var(--nw-s2);
+}
+
+.field {
+  padding: 5px 0;
+  border-bottom: 1px solid var(--nw-border-dark-2);
+  cursor: pointer;
+}
+
+.field:last-child {
+  border-bottom: 0;
+}
+
+.field--on {
+  background: color-mix(in srgb, var(--nw-yellow) 14%, transparent);
+  padding-left: 5px;
+  margin-left: -5px;
+}
+
+.fieldTop {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.fieldLabel {
+  font-family: var(--nw-font-display);
+  font-size: var(--nw-fs-micro);
+  font-weight: 700;
+  letter-spacing: var(--nw-track-label);
+  text-transform: uppercase;
+  color: var(--nw-ink-3);
+}
+
+.conf {
+  font-family: var(--nw-font-mono);
+  font-size: 10px;
+  color: var(--nw-green);
+}
+
+.conf--below {
+  color: var(--nw-red);
+}
+
+.fieldValue {
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--nw-ink-2);
+  margin-top: 1px;
+}
+
+.edit {
+  width: 100%;
+  margin-top: 2px;
+  font-family: var(--nw-font-mono);
+  font-size: 11.5px;
+  color: var(--nw-ink);
+  background: var(--nw-white);
+  border: 1px solid var(--nw-yellow);
+  padding: 3px 5px;
+}
+
+.fieldWhy {
+  font-size: 9.5px;
+  color: var(--nw-red);
+  margin-top: 1px;
+}
+
+.fieldFoot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.fieldFoot > .mono {
+  font-size: 9px;
+  color: var(--nw-ink-3);
+}
+
+.fieldBtns {
+  display: flex;
+  gap: 3px;
+}
+
+/* ----------------------------------------------------------- page text -- */
+
+.text {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: none;
+}
+
+.text li {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr);
+  gap: 5px;
+  padding: 2px 3px;
+  font-size: 10.5px;
+  line-height: 1.45;
+  color: var(--nw-text-2);
+  border-bottom: 1px solid var(--nw-border);
+  cursor: pointer;
+}
+
+.text li > .mono {
+  font-size: 8.5px;
+  color: var(--nw-text-4);
+}
+
+.lineMarked {
+  background: color-mix(in srgb, var(--nw-yellow) 15%, transparent);
+  color: var(--nw-ink);
+}
+
+.links {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.links a {
+  font-size: var(--nw-fs-xs);
+  color: var(--nw-ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--nw-border);
+  padding-bottom: 3px;
+}
+
+.links a:hover {
+  border-bottom-color: var(--nw-yellow-deep);
+}
+
+.note {
+  margin: var(--nw-s2) 0 0;
+  font-size: 10px;
+  line-height: 1.5;
+  color: var(--nw-text-3);
+}
+
+@media (max-width: 1180px) {
+  .body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

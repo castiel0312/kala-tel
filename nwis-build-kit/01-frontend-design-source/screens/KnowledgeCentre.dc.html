@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>NWIS Knowledge Centre</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0;background:#F5F5F1}
+a{color:#080909}a:hover{color:#454845}
+button,input{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; display: flex; overflow: hidden; background: #F5F5F1; color: #080909; font-family: 'IBM Plex Sans', system-ui, sans-serif">
+<dc-import name="NwisSidebar" active="knowledge" hint-size="248px,900px"></dc-import>
+<div style="width: 1192px; height: 900px; display: flex; flex-direction: column">
+<dc-import name="NwisTopbar" num="07" section="Knowledge" heading="Knowledge Centre" desc="Every event NWIS has read from WCRs and DDRs, searchable by well, formation and depth." hint-size="1192px,88px"></dc-import>
+<main style="flex-grow: 1; min-height: 0; box-sizing: border-box; padding: 24px; display: flex; flex-direction: column; gap: 16px">
+
+<section aria-label="Search" style="height: 150px; flex-shrink: 0; position: relative; box-sizing: border-box; padding: 22px 28px; display: flex; flex-direction: column; gap: 14px; background: #080909; color: #FFFFFF; overflow: hidden">
+<span aria-hidden="true" style="position: absolute; right: -10px; top: -28px; font-family: 'Archivo', sans-serif; font-size: 150px; font-weight: 900; line-height: 1; letter-spacing: -0.02em; color: transparent; -webkit-text-stroke: 1px #242625; white-space: nowrap; pointer-events: none">RECALL</span>
+<div style="position: relative; display: flex; gap: 0">
+<label for="kc-q" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Search events, wells and documents</label>
+<span style="width: 52px; height: 56px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: #FFFFFF; color: #080909">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true" style="stroke-width: 2.25; stroke-linecap: round; stroke-linejoin: round"><path d="M11 4.5a6.5 6.5 0 1 0 0 13a6.5 6.5 0 1 0 0-13zM20 20l-4.2-4.2"></path></svg></span>
+<input id="kc-q" type="search" value="{{query}}" placeholder="Search 4,812 events · e.g. mud loss below the Barail top" style="flex-grow: 1; min-width: 0; height: 56px; box-sizing: border-box; padding: 0 12px 0 0; border: none; outline: none; background: #FFFFFF; color: #080909; font-size: 17px; font-weight: 500">
+<a href="AssistantPanel.dc.html" style="height: 56px; box-sizing: border-box; display: flex; align-items: center; gap: 8px; padding: 0 22px; background: #F4C400; color: #080909; font-family: 'Archivo', sans-serif; font-size: 12.5px; font-weight: 900; letter-spacing: 0.1em; text-decoration: none; white-space: nowrap">ASK NWIS
+<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true" style="stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></a>
+</div>
+<div style="position: relative; display: flex; align-items: center; gap: 8px; flex-wrap: wrap">
+<span style="font-family: 'Archivo', sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: 0.16em; color: #A3A6A1; margin-right: 4px">QUICK</span>
+<sc-for list="{{chips}}" as="c" hint-placeholder-count="5">
+<button type="button" onClick="{{c.pick}}" aria-pressed="{{c.pressed}}" style="height: 32px; display: flex; align-items: center; gap: 8px; padding: 0 12px; border: 1px solid {{c.border}}; background: {{c.bg}}; color: {{c.fg}}; font-size: 12.5px; font-weight: 500; cursor: pointer; white-space: nowrap">{{c.label}}<span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: {{c.nColor}}">{{c.n}}</span></button>
+</sc-for>
+</div>
+</section>
+
+<div style="flex-grow: 1; min-height: 0; display: flex; gap: 16px">
+
+<section aria-label="Results" style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; background: #FFFFFF; border: 1px solid #E8E9E5">
+<div style="height: 44px; flex-shrink: 0; box-sizing: border-box; display: flex; align-items: center; gap: 12px; padding: 0 16px">
+<span style="font-family: 'Archivo', sans-serif; font-size: 22px; font-weight: 900">{{count}}</span>
+<span style="font-family: 'Archivo', sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 0.14em">EVENTS</span>
+<span style="font-size: 12.5px; color: #454845">{{scope}}</span>
+<span style="flex-grow: 1"></span>
+<span style="font-size: 12px; color: #6B6E69">Sorted by depth on 104</span>
+</div>
+<div style="height: 32px; flex-shrink: 0; display: grid; grid-template-columns: 62px minmax(0, 1fr) 76px 86px 76px 44px 104px; align-items: center; gap: 0 10px; padding: 0 16px; background: #080909; color: #FFFFFF; font-family: 'Archivo', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.14em">
+<span>WELL</span><span>EVENT</span><span>FORMATION</span><span>DEPTH MD</span><span>≙ ON 104</span><span>YEAR</span><span>SOURCE</span>
+</div>
+<div style="flex-grow: 1; min-height: 0; overflow-y: auto">
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="12">
+<button type="button" onClick="{{r.pick}}" aria-pressed="{{r.pressed}}" style="width: 100%; height: 40px; box-sizing: border-box; display: grid; grid-template-columns: 62px minmax(0, 1fr) 76px 86px 76px 44px 104px; align-items: center; gap: 0 10px; padding: 0 16px 0 13px; border: none; border-left: 3px solid {{r.bar}}; border-bottom: 1px solid #EEEEEA; background: {{r.bg}}; color: #080909; text-align: left; font-size: 13px; cursor: pointer">
+<span style="font-family: 'IBM Plex Mono', monospace; font-weight: 600">{{r.well}}</span>
+<span style="display: flex; align-items: center; gap: 8px; min-width: 0"><span style="width: 8px; height: 8px; flex-shrink: 0; background: {{r.sev}}"></span><span style="font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{r.what}}</span></span>
+<span>{{r.fm}}</span>
+<span style="font-family: 'IBM Plex Mono', monospace">{{r.md}}</span>
+<span style="font-family: 'IBM Plex Mono', monospace; color: {{r.alignColor}}">{{r.align}}</span>
+<span style="font-family: 'IBM Plex Mono', monospace; color: #454845">{{r.year}}</span>
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; color: #454845; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{r.src}}</span>
+</button>
+</sc-for>
+</div>
+</section>
+
+<aside aria-label="Selected event" style="width: 360px; flex-shrink: 0; display: flex; flex-direction: column; background: #FFFFFF; border: 1px solid #E8E9E5; overflow: hidden">
+<div style="flex-shrink: 0; position: relative; padding: 16px 20px 18px; background: #080909; color: #FFFFFF">
+<div style="position: absolute; left: 0; right: 0; top: 0; height: 3px; background: {{d.sev}}"></div>
+<div style="display: flex; align-items: center; justify-content: space-between">
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 600; color: #F4C400">{{d.well}}</span>
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #A3A6A1">{{d.date}}</span>
+</div>
+<span style="display: block; margin-top: 8px; font-family: 'Archivo', sans-serif; font-size: 22px; font-weight: 900; line-height: 1.15">{{d.what}}</span>
+<span style="display: block; margin-top: 6px; font-size: 12.5px; color: #C9CBC6">{{d.fm}} · {{d.md}} · {{d.align}}</span>
+</div>
+<div style="flex-grow: 1; min-height: 0; overflow-y: auto; padding: 14px 20px; display: flex; flex-direction: column; gap: 12px">
+<dl style="margin: 0; display: grid; grid-template-columns: 80px minmax(0, 1fr); gap: 10px 12px; font-size: 13px; line-height: 1.45">
+<dt style="font-family: 'Archivo', sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: 0.12em; color: #6B6E69; padding-top: 2px">CAUSE</dt><dd style="margin: 0">{{d.cause}}</dd>
+<dt style="font-family: 'Archivo', sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: 0.12em; color: #6B6E69; padding-top: 2px">ACTION</dt><dd style="margin: 0">{{d.action}}</dd>
+<dt style="font-family: 'Archivo', sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: 0.12em; color: #6B6E69; padding-top: 2px">OUTCOME</dt><dd style="margin: 0">{{d.outcome}}</dd>
+</dl>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid #E8E9E5; border-bottom: 1px solid #E8E9E5">
+<div style="display: flex; flex-direction: column; gap: 2px; padding: 12px 0; border-right: 1px solid #E8E9E5">
+<span style="font-family: 'Archivo', sans-serif; font-size: 26px; font-weight: 900; line-height: 1">{{d.npt}}</span>
+<span style="font-family: 'Archivo', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.12em; color: #6B6E69">LOST TIME, HOURS</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 2px; padding: 12px 0 12px 16px">
+<span style="font-family: 'Archivo', sans-serif; font-size: 26px; font-weight: 900; line-height: 1">{{d.conf}}</span>
+<span style="font-family: 'Archivo', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.12em; color: #6B6E69">EXTRACTION CONFIDENCE</span>
+</div>
+</div>
+<a href="DocumentIntel.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; background: #F5F5F1; border: 1px solid #E8E9E5; color: #080909; text-decoration: none">
+<span style="width: 34px; height: 42px; flex-shrink: 0; position: relative; box-sizing: border-box; background: #FFFFFF; border: 1px solid #A3A6A1">
+<span style="position: absolute; left: 6px; right: 6px; top: 9px; height: 2px; background: #D4D6D1"></span>
+<span style="position: absolute; left: 6px; right: 10px; top: 15px; height: 2px; background: #D4D6D1"></span>
+<span style="position: absolute; left: 6px; right: 6px; top: 21px; height: 4px; background: #F4C400"></span>
+<span style="position: absolute; left: 6px; right: 12px; top: 29px; height: 2px; background: #D4D6D1"></span>
+</span>
+<span style="flex-grow: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; font-weight: 600">{{d.src}}</span><span style="font-size: 12px; color: #454845">Open the source page with the passage highlighted</span></span>
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true" style="flex-shrink: 0; stroke-width: 2.25; stroke-linecap: round; stroke-linejoin: round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+</a>
+</div>
+<div style="flex-shrink: 0; display: flex; gap: 8px; padding: 12px 20px 16px; border-top: 1px solid #E8E9E5">
+<a href="KnowledgeGraph.dc.html" style="flex-grow: 1; height: 42px; display: flex; align-items: center; justify-content: center; background: #080909; color: #FFFFFF; font-family: 'Archivo', sans-serif; font-size: 12px; font-weight: 800; letter-spacing: 0.1em; text-decoration: none">SHOW IN GRAPH</a>
+<a href="WellCompare.dc.html" style="height: 42px; box-sizing: border-box; display: flex; align-items: center; padding: 0 16px; border: 1px solid #080909; color: #080909; font-family: 'Archivo', sans-serif; font-size: 12px; font-weight: 800; letter-spacing: 0.1em; text-decoration: none">COMPARE</a>
+</div>
+</aside>
+</div>
+
+</main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { q: 'loss', sel: 'k1' };
+  }
+  renderVals() {
+    var self = this;
+    var st = this.state || {};
+    var q = st.q == null ? 'loss' : st.q;
+    var sel = st.sel || 'k1';
+    var SEV = { high: '#D9362B', med: '#080909', low: '#A3A6A1' };
+    var K = [
+      { id: 'k1', well: 'W-067', what: 'Mud loss 45 bbl/h', type: 'loss', fm: 'Barail', md: 3061, al: 3203, year: 2019, date: '14 Mar 2019', src: 'WCR p.47', sev: 'high', cause: 'Fractured sand 17 m below the Barail top; ECD 1.46.', action: 'Flow cut 10 %, 40 ppb LCM pill spotted.', outcome: 'Cured in 3.5 h; 12 m³ lost.', npt: '3.5', conf: '0.94' },
+      { id: 'k2', well: 'W-067', what: 'Torque spikes', type: 'torque', fm: 'Tipam', md: 2930, al: null, year: 2019, date: '11 Mar 2019', src: 'DDR 11 Mar 2019', sev: 'low', cause: 'Interbedded Tipam sands at high WOB.', action: 'Reduced WOB, added 2 % lubricant.', outcome: 'Stable after 2 h.', npt: '0', conf: '0.91' },
+      { id: 'k3', well: 'W-042', what: 'Seepage loss 8 bbl/h', type: 'loss', fm: 'Barail', md: 3290, al: 3204, year: 2016, date: '2 Nov 2016', src: 'DDR 2 Nov 2016', sev: 'med', cause: 'Permeable sand at the top of the Barail.', action: '30 ppb fine LCM added to the active system.', outcome: 'Cured in 1 h.', npt: '1', conf: '0.89' },
+      { id: 'k4', well: 'W-042', what: 'Overpull 25 t', type: 'stuck', fm: 'Barail', md: 3350, al: 3264, year: 2016, date: '4 Nov 2016', src: 'DDR 4 Nov 2016', sev: 'med', cause: 'Swelling shale after 30 h of open hole.', action: 'Back-reamed one stand.', outcome: 'Freed; 6 h lost.', npt: '6', conf: '0.87' },
+      { id: 'k5', well: 'W-088', what: 'Total loss', type: 'loss', fm: 'Barail', md: 3196, al: 3199, year: 2014, date: '21 Jan 2014', src: 'WCR p.88', sev: 'high', cause: 'Fracture network; ECD 1.478 at the time.', action: 'Two LCM pills failed, then a cement plug.', outcome: 'Cured after 36 h.', npt: '36', conf: '0.92' },
+      { id: 'k6', well: 'W-088', what: 'Poor cement bond', type: 'cement', fm: 'Tipam', md: 3145, al: 3148, year: 2014, date: '19 Jan 2014', src: 'WCR p.61', sev: 'med', cause: 'Losses during displacement; channelling at the 9⅝-in shoe.', action: 'Squeeze job before drilling ahead.', outcome: 'Isolation restored.', npt: '24', conf: '0.88' },
+      { id: 'k7', well: 'W-081', what: 'Seepage loss 5 bbl/h', type: 'loss', fm: 'Barail', md: 3240, al: null, year: 2017, date: '18 Sep 2017', src: 'DDR 18 Sep 2017', sev: 'low', cause: 'Permeable Barail sand.', action: 'None needed.', outcome: 'Healed in 30 min.', npt: '0', conf: '0.85' },
+      { id: 'k8', well: 'W-081', what: 'Bit balling', type: 'other', fm: 'Girujan', md: 2760, al: null, year: 2017, date: '12 Sep 2017', src: 'DDR 12 Sep 2017', sev: 'low', cause: 'Reactive Girujan clays.', action: 'Pulled out and cleaned the bit.', outcome: 'Resumed after 8 h.', npt: '8', conf: '0.90' },
+      { id: 'k9', well: 'W-112', what: 'Gas influx 1.2 m³', type: 'kick', fm: 'Barail', md: 3510, al: null, year: 2022, date: '7 Jun 2022', src: 'DDR 7 Jun 2022', sev: 'high', cause: 'Charged gas sand with MW at 1.44.', action: 'Shut in, circulated out, weighted up to 1.52.', outcome: 'Controlled in 9 h.', npt: '9', conf: '0.95' },
+      { id: 'k10', well: 'W-103', what: 'Tight hole', type: 'stuck', fm: 'Tipam', md: 2880, al: null, year: 2018, date: '3 Apr 2018', src: 'DDR 3 Apr 2018', sev: 'low', cause: 'Tipam shale creep.', action: 'Reamed through.', outcome: 'No lost time.', npt: '0', conf: '0.83' },
+      { id: 'k11', well: 'W-103', what: 'Losses while cementing', type: 'cement', fm: 'Barail', md: 3120, al: null, year: 2018, date: '9 Apr 2018', src: 'WCR p.73', sev: 'med', cause: 'Weak zone below the cement ECD.', action: 'Reduced pump rate, lighter lead slurry.', outcome: 'Partial returns; top of cement low.', npt: '4', conf: '0.86' },
+      { id: 'k12', well: 'W-121', what: 'Differential sticking', type: 'stuck', fm: 'Barail', md: 3014, al: 3203, year: 2021, date: '5 Aug 2021', src: 'DDR 5 Aug 2021', sev: 'med', cause: 'Overbalance of 16 bar; string static on a connection.', action: 'Jarred, spotted a pipe-freeing pill.', outcome: 'Freed after 9 h.', npt: '9', conf: '0.90' }
+    ];
+    var REL = { 'W-067': 1, 'W-042': 1, 'W-088': 1 };
+    var Q = [
+      { k: 'loss', label: 'Mud loss near Barail', text: 'mud loss near the Barail top', f: function (x) { return x.type === 'loss' || (x.type === 'cement' && x.fm === 'Barail'); } },
+      { k: 'stuck', label: 'Stuck pipe in Barail', text: 'stuck pipe in the Barail', f: function (x) { return x.type === 'stuck' && x.fm === 'Barail'; } },
+      { k: 'kick', label: 'Historical kick events', text: 'kick or influx events', f: function (x) { return x.type === 'kick'; } },
+      { k: 'cement', label: 'Cementing failures', text: 'cementing problems', f: function (x) { return x.type === 'cement'; } },
+      { k: 'similar', label: 'Similar to OIL-WELL-104', text: 'events in wells ≥ 75 % similar to OIL-WELL-104', f: function (x) { return !!REL[x.well]; } }
+    ];
+    var cur = Q.filter(function (x) { return x.k === q; })[0];
+    var list = cur ? K.filter(cur.f) : K.slice();
+    list.sort(function (a, b) { return (a.al || a.md + 200) - (b.al || b.md + 200); });
+    var fmt = function (n) { return n.toLocaleString('en-US'); };
+    var rows = list.map(function (x) {
+      var on = x.id === sel;
+      return {
+        well: x.well, what: x.what, fm: x.fm, md: fmt(x.md) + ' m', align: x.al ? fmt(x.al) + ' m' : '—', alignColor: x.al ? '#080909' : '#A3A6A1',
+        year: String(x.year), src: x.src, sev: SEV[x.sev],
+        pressed: on ? 'true' : 'false', bg: on ? '#FFF3B0' : '#FFFFFF', bar: on ? '#080909' : 'transparent',
+        pick: function () { self.setState({ sel: x.id }); }
+      };
+    });
+    var s = K.filter(function (x) { return x.id === sel; })[0] || K[0];
+    var chips = Q.map(function (c) {
+      var on = c.k === q;
+      return {
+        label: c.label, n: String(K.filter(c.f).length), pressed: on ? 'true' : 'false',
+        bg: on ? '#F4C400' : 'transparent', fg: on ? '#080909' : '#FFFFFF', border: on ? '#F4C400' : '#454845', nColor: on ? '#080909' : '#A3A6A1',
+        pick: function () {
+          var nl = K.filter(c.f);
+          var keep = nl.some(function (x) { return x.id === sel; });
+          self.setState({ q: on ? '' : c.k, sel: keep || on ? sel : nl[0].id });
+        }
+      };
+    });
+    return {
+      chips: chips, rows: rows, count: String(list.length),
+      query: cur ? cur.text : '',
+      scope: cur ? 'for “' + cur.label + '” · 7 offsets within 5 km' : 'All events · 7 offsets within 5 km',
+      d: {
+        well: s.well, date: s.date, what: s.what, fm: s.fm, md: fmt(s.md) + ' m MD',
+        align: s.al ? '≙ ' + fmt(s.al) + ' m on 104' : 'no aligned depth',
+        cause: s.cause, action: s.action, outcome: s.outcome, npt: s.npt, conf: s.conf, src: s.well + ' · ' + s.src, sev: SEV[s.sev] === '#080909' ? '#F4C400' : SEV[s.sev]
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>

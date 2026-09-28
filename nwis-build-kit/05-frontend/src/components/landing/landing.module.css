@@ -1,0 +1,2041 @@
+/* ============================================================================
+   The landing visual: a pumpjack on the surface, the rock under it, and the
+   well's own state. One continuous scene, so there is no card: the machine, the
+   ground it stands on and the cut below it are the same picture, and the only
+   rules in it are the ones that separate rock from rock.
+
+   The section is built so the WebGL canvas and the SVG overlay are the same
+   picture: the canvas paints rock, the overlay paints everything that has to be
+   read or hit. Both are sized from one measurement and share one projection, so
+   a label cannot drift from the thing it labels.
+   ========================================================================== */
+
+.visual {
+  display: grid;
+  /* Three rows: the machine, the section, and whatever the well has to say for itself.
+
+     The first two are cut from the panel's own height rather than left to flex, so they are the
+     same two rectangles whether the well is open or shut. That is the reason the open state does
+     not restate them: the machine the reader pressed has to still be standing at the same height,
+     at the same scale, on the same ground when the last of the rock has arrived as it was when
+     they pressed it. `min()` keeps each one from eating the other on a short viewport, and the
+     floor is what the drawing needs to stay legible rather than a preference. */
+  --nw-stage-h: clamp(240px, calc(var(--nw-hero-panel-h, 100%) * 0.44), 380px);
+  --nw-section-h: clamp(250px, calc(var(--nw-hero-panel-h, 100%) - var(--nw-stage-h)), 460px);
+  grid-template-rows: var(--nw-stage-h) var(--nw-section-h) auto;
+  height: 100%;
+  min-height: 600px;
+  background: var(--nw-black);
+  overflow: hidden;
+  position: relative;
+
+  /* ------------------------------------------------------------------ the well's state ---
+     `--nw-open` is the only thing the hero's transition writes, and it is written on this element
+     by `openSequence.ts`. Everything below is that one number read at a different moment, so the
+     ground, the bore, the contacts, the names, the neighbours and the record cannot be out of step
+     with one another. The boundaries are the eight stages documented in that file.
+
+     0 is the landing page and it is not an absence: the bands, the contacts, the lit ground the
+     machine stands on, three names and the bore hair are all on screen before anything is pressed.
+     What 1 adds is the reading of the ground, not the ground. */
+  --nw-open: 0;
+
+  /* The rock is never switched on, so it has no ramp. It is on the page in both states, and the
+     two renderers differ in how they draw it rather than in whether they draw it. */
+  --nw-rock: 1;
+
+  /* How lit the ground is. This is the whole of the landing page's difference from the open one:
+     the same bands, a stop and a half back, so the machine reads as standing on something rather
+     than on a chart. */
+  --nw-lit: clamp(0, calc(var(--nw-open) / 0.26), 1);
+  /* the lit rock rising through the flat one — ahead of the bands, which arrive as light */
+  --nw-canvas: clamp(0, calc((var(--nw-open) - 0.04) / 0.22), 1);
+  /* the three names the landing page is allowed, gone before the full column arrives so the two
+     sets can never overprint each other */
+  --nw-names: clamp(0, calc((0.3 - var(--nw-open)) / 0.12), 1);
+  /* the bore hair, which gives way to the casing as the casing runs down */
+  --nw-hair: calc(0.5 + 0.5 * clamp(0, calc((0.4 - var(--nw-open)) / 0.24), 1));
+  /* the break line, the depth axis, the rest of the names and the caption */
+  --nw-labels: clamp(0, calc((var(--nw-open) - 0.34) / 0.28), 1);
+  /* the casing runs down after the lit rock has started, so it is always inside rock */
+  --nw-casing: clamp(0, calc((var(--nw-open) - 0.1) / 0.48), 1);
+  /* the interval the well is being drilled for */
+  --nw-target: clamp(0, calc((var(--nw-open) - 0.5) / 0.24), 1);
+  /* the neighbours, as ghosted lines — subordinate, and later than the well they are near */
+  --nw-neighbours: clamp(0, calc((var(--nw-open) - 0.62) / 0.24), 1);
+  /* the record: events, risk leads, the names at surface. Last to arrive, first to leave. */
+  --nw-history: clamp(0, calc((var(--nw-open) - 0.78) / 0.22), 1);
+  /* The wellhead is picked out of the dusk at the very top of the sequence, and put back down
+     before the rock has finished arriving: it rises and falls, so it is the product of two ramps.
+
+     The `calc()` is load-bearing. Custom properties are untyped and hold a token stream, so a
+     product written bare — `clamp(...) * clamp(...)` — survives the custom-property round trip and
+     is then substituted into `opacity` as invalid CSS, which drops the declaration and leaves the
+     element at its initial value. The wash would then sit at full strength at every stage of the
+     sequence, including the landing page. */
+  --nw-lead: calc(clamp(0, calc(var(--nw-open) / 0.08), 1) * clamp(0, calc((0.4 - var(--nw-open)) / 0.16), 1));
+  /* the camera leans in on the machine and comes back out; its feet never leave the ground line */
+  --nw-rig: calc(1 + 0.07 * clamp(0, calc(var(--nw-open) / 0.16), 1) * clamp(0, calc((0.5 - var(--nw-open)) / 0.2), 1));
+}
+
+/* ------------------------------------------------------------- the machine -- */
+
+/* The stage holds the sky, the site, the machine and the wellhead, and the frame the machine
+   arrives in hangs below its box so the rig's feet reach the section's ground line. The stage
+   must not clip that overhang, and the section must not paint over it. */
+.stage {
+  position: relative;
+  z-index: 2;
+  overflow: visible;
+}
+
+/**
+ * The sky: the paper.
+ *
+ * It was a graded dusk dome with a lit horizon and a vignette over the top, and all three of those
+ * were there to make a *silhouette* readable. The stage is no longer a silhouette — the machine is
+ * black and yellow on white and has to be read as a machine, which is a job its own drawing can do.
+ * So this is now one flat white, and the vignette's corners are gone with it: a vignette darkens the
+ * edges of a photograph, and there is nothing here to photograph.
+ */
+.stageSky {
+  position: absolute;
+  inset: 0 0 var(--nw-ground-band, 0px) 0;
+  background: var(--nw-hero-paper, #ffffff);
+}
+
+/* The vignette, kept in the file but no longer drawn. Deleting a rule is a change to the drawing;
+   switching a colour off is not, and the stage is meant to be a flat sheet of paper now. */
+.stageSky::after {
+  display: none;
+}
+
+/* --------------------------------------------------------- the site on it -- */
+
+/*
+ * The site, drawn against the ground line.
+ *
+ * The stage's box ends above the ground line and the section's box begins below it, so the band
+ * between the two boxes — `--nw-ground-band` tall — is the *crust*: the cut face's own top, the
+ * surface crust and the ground surface the machine stands on. This element hangs down over that
+ * band so its baseline is the ground line, and that is exactly why it is clipped to the stage's
+ * box. Without the clip its near-ground art (ridge, road, pad) paints a near-black bar straight
+ * across the crust, and the section's ground — lit, receding, textured — is never seen at all. The
+ * site is the far distance; the ground under the machine belongs to the section.
+ */
+.stageSite {
+  position: absolute;
+  left: 0;
+  right: 0;
+  /* the site's own baseline is the ground line, which hangs below the stage's box */
+  bottom: calc(-1 * var(--nw-ground-band, 0px));
+  height: clamp(96px, 22%, 168px);
+  z-index: 1;
+  pointer-events: none;
+  clip-path: inset(0 0 var(--nw-ground-band, 0px) 0);
+}
+
+.siteSvg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/*
+ * The far lease, the near ridge and the tank battery were the dusk: two ridges, a haze band and a
+ * lit tank platform, all of it there to put a horizon behind the machine. A white stage has no
+ * horizon to put anything behind, so they are drawn in the paper colour and read as nothing.
+ *
+ * They are recoloured rather than removed on purpose. The brief for this change was a recolour —
+ * the drawing, its paths and its coordinates are to survive it — and these are paths, and the
+ * geometry check is counting them. Deleting them would have quietly become a second redesign.
+ */
+.siteRidgeFar {
+  fill: var(--nw-hero-paper, #ffffff);
+  opacity: 0.85;
+}
+
+/*
+ * The near ridge is the darkest thing in the frame on purpose: it is the silhouette the machine
+ * is read against, and the eye needs somewhere to put the machine's outline. It is still a *distant*
+ * ridge now — the lit ground surface immediately below it is the section's, not this element's.
+ */
+.siteRidge {
+  fill: var(--nw-hero-paper, #ffffff);
+}
+
+.siteTank {
+  fill: var(--nw-hero-paper, #ffffff);
+  stroke: rgba(8, 9, 9, 0.09);
+  stroke-width: 1;
+}
+
+/* The pad lamps went with the dusk they were lighting. */
+.siteLamp {
+  fill: var(--nw-hero-paper, #ffffff);
+}
+
+
+/* ------------------------------------------------------- the frame it is in -- */
+
+.stageRig {
+  position: absolute;
+  z-index: 2;
+  /* The camera leaning in, as a transform on the frame rather than on a camera: there is only one
+     machine and one ground line, and scaling the frame about its own foot is a way of moving the
+     reader closer to the wellhead that cannot put the rig's feet anywhere but on the datum. The
+     frame's bottom edge *is* the ground line for all three rungs, so `50% 100%` is the right
+     origin without knowing which rung is mounted. */
+  transform: scale(var(--nw-rig, 1));
+  transform-origin: 50% 100%;
+}
+
+/* The mask belongs to the embed and to nothing else. It exists only because Sketchfab ships its
+   own studio and ignores ui_theme, so what is left of the box is cut away: a wide feather down each
+   side, a short one over the machine's headroom, and a hard cut along the ground line so the
+   frame's overhang below it reads as section. The feathers are measured off the model, not guessed,
+   and they are capped by the machine's own margins so they can never fade the rig.
+
+   A machine we render ourselves is in no box and has no studio, so it takes the same rectangle
+   *without* this. It matters that it does: the horizontal feathers are sized off the embed's own
+   margins, which on our frame would come to nothing, and a mask whose feathers are zero is not a
+   no-op — it is a hard cut at both edges of the canvas. */
+.stageRigEmbed {
+  -webkit-mask-image: linear-gradient(
+      90deg,
+      transparent 0,
+      #000 var(--nw-feather-x, 8%),
+      #000 calc(100% - var(--nw-feather-x, 8%)),
+      transparent 100%
+    ),
+    linear-gradient(
+      180deg,
+      transparent 0,
+      #000 var(--nw-feather-top, 6%),
+      #000 var(--nw-feet, 86%),
+      transparent var(--nw-feet, 86%)
+    );
+  mask-image: linear-gradient(
+      90deg,
+      transparent 0,
+      #000 var(--nw-feather-x, 8%),
+      #000 calc(100% - var(--nw-feather-x, 8%)),
+      transparent 100%
+    ),
+    linear-gradient(
+      180deg,
+      transparent 0,
+      #000 var(--nw-feather-top, 6%),
+      #000 var(--nw-feet, 86%),
+      transparent var(--nw-feet, 86%)
+    );
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+
+.stageFrame {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+  /* The studio is lighter than the rig, which is backwards for a night site. Inverting puts the
+     rig above its own background — measured, in pumpjack-profile.mjs: rig 62 against studio 40 —
+     and the contrast that follows opens the machine's own structure without lifting the background
+     with it. The sky above is painted to the value this leaves. */
+  filter: invert(0.92) brightness(0.34) contrast(1.1) saturate(0.92);
+}
+
+.stageGlb {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.stageStatus {
+  position: absolute;
+  left: 0;
+  bottom: calc(var(--nw-s2) + var(--nw-ground-band, 0px));
+  z-index: 4;
+  font-size: var(--nw-fs-micro);
+  letter-spacing: var(--nw-track-label);
+  text-transform: uppercase;
+  color: var(--nw-ink-3);
+}
+
+.stageCredit {
+  position: absolute;
+  right: 0;
+  bottom: calc(var(--nw-s1) + var(--nw-ground-band, 0px));
+  z-index: 4;
+  margin: 0;
+  font-size: var(--nw-fs-micro);
+  color: var(--nw-ink-3);
+  opacity: 0.72;
+}
+
+.stageCredit a {
+  color: var(--nw-ink-2);
+  text-decoration-color: var(--nw-border-dark-2);
+  text-underline-offset: 2px;
+}
+
+.stageCredit a:hover {
+  color: var(--nw-ink);
+}
+
+/* ------------------------------------------------------------- the wellhead -- */
+
+/* The wellhead's base is the bottom of its viewBox, so it is dropped on the ground line. It is
+   drawn in front of the frame: the rod is what ties the machine to the bore. */
+.wellheadSvg {
+  position: absolute;
+  left: 50%;
+  z-index: 3;
+  width: 106px;
+  height: 132px;
+  transform: translateX(-50%);
+  pointer-events: none;
+  overflow: visible;
+  filter: drop-shadow(0 3px 10px rgba(0, 0, 0, 0.7));
+}
+
+.whGround {
+  stroke: var(--nw-ink-3);
+  stroke-width: 1.4;
+  opacity: 0.62;
+}
+
+.whStack {
+  fill: #0d0f0e;
+  stroke: var(--nw-ink-2);
+  stroke-width: 1.4;
+}
+
+.whFlange {
+  stroke: var(--nw-ink-3);
+  stroke-width: 1.6;
+}
+
+.whValveArm {
+  stroke: var(--nw-ink-2);
+  stroke-width: 1.2;
+}
+
+.whValve {
+  fill: #0d0f0e;
+  stroke: var(--nw-yellow);
+  stroke-width: 1.4;
+}
+
+.whRod {
+  stroke: var(--nw-ink);
+  stroke-width: 2;
+}
+
+.whBox {
+  fill: var(--nw-yellow-deep);
+  stroke: var(--nw-yellow);
+  stroke-width: 1;
+}
+
+/* ------------------------------------------------------------------ the wellhead's cue ---
+   The first stage of the sequence happens at the wellhead, not in the rock: the thing the reader
+   pressed is lit before anything below it moves, so the eye is told what it just opened before it
+   is sent down. It is a wash of light, not a colour change — the wellhead is drawn in dusk greys
+   and yellow is reserved for the machine that is doing the work.
+
+   Centred on the bottom edge, because that is where the wellhead is: the rig's feet are placed on
+   the ground line, and the ground line is the stage's own bottom edge. The negative margin is what
+   puts a circle's centre on an edge rather than its top. */
+.whLead {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 128px;
+  height: 128px;
+  margin: 0 0 -64px -64px;
+  z-index: 2;
+  pointer-events: none;
+  border-radius: 50%;
+  opacity: var(--nw-lead, 0);
+  background: radial-gradient(circle, rgba(245, 197, 24, 0.34) 0%, rgba(245, 197, 24, 0.1) 42%, rgba(245, 197, 24, 0) 72%);
+}
+
+/* -------------------------------------------------------------- the section -- */
+
+/**
+ * The one bright panel in the hero.
+ *
+ * Above the ground line the section is the same dark dome the machine is silhouetted against, so
+ * the two panels meet with no seam and the studio stays continuous. Below the line it is the
+ * paper a geological section is drawn on, and the rock on it is bright — the only saturated,
+ * daylight-coloured thing in the hero, bounded on three sides by the gutters the ruler and the
+ * formation names are printed in. Everything else keeps the dark it always had.
+ */
+.section {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  background: linear-gradient(
+    to bottom,
+    var(--nw-strata-sky) 0,
+    var(--nw-strata-sky) var(--nw-ground-band, 6%),
+    var(--nw-strata-gutter) var(--nw-ground-band, 6%),
+    var(--nw-strata-gutter) 100%
+  );
+}
+
+.fallback,
+.canvas,
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
+/**
+ * The two renderers of one section, and the order they stack in.
+ *
+ * The flat section is never taken down. It is the landing page's picture — the same bands, the same
+ * contacts, the same bore, drawn through the same projection with the relief left off — and it is
+ * also the floor the lit rock rises through, so the two hand over without the cut ever emptying.
+ * It costs a dozen rectangles and it is what the page has if WebGL never arrives, so there is no
+ * arrangement in which a reader gets a black rectangle where the ground should be.
+ *
+ * Both are held back a stop and a half on the landing page, and lit by the same `--nw-lit` ramp, so
+ * the muted section and the lit one are the same picture at two exposures rather than two designs.
+ */
+.fallback,
+.canvas {
+  filter: saturate(calc(0.74 + 0.26 * var(--nw-lit, 0)));
+}
+
+.canvas {
+  opacity: 0;
+  transition: opacity 200ms linear;
+}
+
+.canvas--on {
+  opacity: var(--nw-canvas, 0);
+}
+
+.fallback {
+  animation: none;
+}
+
+/* ============================================================================
+   THE GROUND, AND THE EIGHT STAGES
+   ----------------------------------------------------------------------------
+   The hero has one state the reader arrives at, and it is not a chart with the
+   rock switched off. It is a machine standing on a lit cross-section, with the
+   bore running down the middle of it and three names on the rock. Everything
+   below is how the second state is reached from the first, and how the first is
+   recovered from the second.
+
+   The rule the whole thing rests on: the section's box never moves. The cut is
+   cut in place, under a fixed height, and the transition is entirely opacity,
+   position and one mask. A section that resized as the well opened would have to
+   remeasure its projection on every frame of the animation and rebuild the WebGL
+   scene sixty times a second to keep the ruler honest with the rock.
+   ========================================================================== */
+
+/* ----------------------------------------------------- the lit ground line --- */
+
+/**
+ * The top of the cut.
+ *
+ * This is the one line in the hero that has to be right in both states, because it is the line
+ * that says the machine is standing on this and the bore starts here. It is drawn in the overlay
+ * rather than by either renderer: the lit scene draws a receding surface behind it and the flat one
+ * draws nothing, and a single 3px lip over both is what stops the lit rock from dissolving into the
+ * sky at the horizon.
+ *
+ * The soft wash above it is the crust catching the last of the light — the one warm thing between
+ * the dusk and the topsoil, and the reason the top of the section does not read as a hard seam.
+ */
+.groundLip {
+  fill: var(--nw-strata-surface);
+  opacity: 0.95;
+}
+
+.groundWash {
+  fill: url(#nw-ground-wash);
+  opacity: calc(0.55 + 0.45 * var(--nw-lit, 0));
+}
+
+.groundHair {
+  fill: none;
+  stroke: var(--nw-hero-contact, rgba(8, 9, 9, 0.35));
+  stroke-width: 1;
+}
+
+/* -------------------------------------------------------------- the bore hair --- */
+
+/**
+ * The bore before it is a casing run.
+ *
+ * On the landing page the well is a hairline down the centre of the cut, from the wellhead to the
+ * bit: enough to say that the machine above is attached to something three kilometres down, and
+ * nothing more. It is drawn in both states, because the shaft that replaces it arrives by growing
+ * down the same line — so as the casing runs, the hair gets out of its way rather than the picture
+ * losing the connection it had.
+ */
+.boreHair {
+  fill: none;
+  stroke: var(--nw-strata-ink);
+  stroke-width: 1;
+  stroke-dasharray: 3 4;
+  opacity: calc(0.62 * var(--nw-hair, 0.5));
+  transition: opacity 120ms linear;
+}
+
+/** The one number the landing page prints on the rock: how far down it goes. */
+.boreDepth {
+  font-family: var(--nw-font-mono);
+  font-size: var(--nw-fs-label);
+  letter-spacing: 0.14em;
+  fill: rgba(30, 24, 16, 0.5);
+  opacity: calc(var(--nw-hair, 0.5) - 0.5);
+}
+
+/** The bit's mark, so the hair ends at something rather than simply stopping. */
+.boreHairTick {
+  fill: none;
+  stroke: var(--nw-strata-ink);
+  stroke-width: 1.2;
+  opacity: calc(0.7 * var(--nw-hair, 0.5));
+}
+
+/* ------------------------------------------------------- the staged overlay --- */
+
+/*
+ * The overlay is a stack of things that arrive at different moments, so it is built as a stack of
+ * groups, one per stage, and each group reads the one number `--nw-open` for its own moment. No
+ * per-frame React render, and the groups stay exactly where they are in the drawing order: opacity
+ * never changes what is on top of what.
+ */
+
+/**
+ * The ground itself: the lit lip, the contacts between the bands, the break chevrons, the horizontal
+ * scale and the three names. All of it is on the page before anything is pressed, because all of it
+ * is a description of the rock rather than of the well — the bands are the rock, the contacts are
+ * the rock, the scale is a property of the drawing's own frame.
+ */
+.stGround {
+  opacity: 1;
+}
+
+/** The three names the landing page is allowed, and only the three. */
+.stNames {
+  opacity: var(--nw-names, 1);
+}
+
+/* The reading of the ground: the depth axis, the break caption, the full name column, the band count. */
+.stRock {
+  opacity: var(--nw-labels, 0);
+}
+
+.stLabels {
+  opacity: var(--nw-labels, 0);
+}
+
+/* The neighbours' bores. Ghosted, subordinate, and later than the well they sit beside. */
+.stNeighbours {
+  opacity: var(--nw-neighbours, 0);
+}
+
+/* The interval the well is being drilled for. */
+.stTarget {
+  opacity: var(--nw-target, 0);
+}
+
+/* The record: events, risk leads, names at surface. */
+.stHistory {
+  opacity: var(--nw-history, 0);
+}
+
+/**
+ * The casing, growing.
+ *
+ * A `scaleY` about the ground line rather than a redrawn line per frame, so the shaft is a
+ * transform and not sixty geometry passes. The tree at its top is deliberately outside this group:
+ * the wellhead does not travel down the hole, and the machine's own rod is already arriving on it
+ * from above. `non-scaling-stroke` keeps the shaft the same weight at every stage, so a growing
+ * casing reads as casing and not as a tapering cone.
+ */
+.stCasing {
+  transform-box: view-box;
+  transform-origin: 0 var(--nw-casing-origin, 0px);
+  transform: scaleY(var(--nw-casing, 0));
+}
+
+.stCasing line,
+.stCasing path,
+.stCasing circle {
+  vector-effect: non-scaling-stroke;
+}
+
+/* The bit, the plan and the perforations are at the *end* of the shaft, so they arrive with it. */
+.stBoreTools {
+  opacity: var(--nw-casing, 0);
+}
+
+/**
+ * A closed well has nothing to hover.
+ *
+ * The hit targets are still in the document — removing them would move focus between states, and
+ * the keyboard path has to be the same as the pointer one — but an invisible, unreachable target
+ * that still reports itself to assistive technology is worse than none. So they are made inert in
+ * both senses at once, the moment the cover comes off.
+ */
+.overlay[data-open='false'] .bandHit,
+.overlay[data-open='false'] .formRow,
+.overlay[data-open='false'] .bore,
+.overlay[data-open='false'] .wellbore,
+.overlay[data-open='false'] .glyph {
+  pointer-events: none;
+}
+
+/* --------------------------------------------------------------- the close --- */
+
+/**
+ * The way back, in one word.
+ *
+ * Placed in the section's own top corner rather than in the drawer at the foot of the column,
+ * because the drawer is below the fold by the time the reader has finished reading it, and a
+ * control they have to scroll to find is not a control. It arrives with the last stage and leaves
+ * with the first, so there is never a way out on screen before there is something to come out of.
+ *
+ * The machine is the way in and it is the way back too — pressing it again collapses the section.
+ * This is the second route, for a reader who has already read what the machine does and would
+ * rather press the word.
+ */
+.sectionClose {
+  position: absolute;
+  z-index: 6;
+  top: calc(var(--nw-ground-band, 6%) + 6px);
+  right: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 7px;
+  border: 1px solid var(--nw-strata-ink);
+  background: rgba(255, 255, 255, 0.86);
+  color: var(--nw-strata-ink);
+  font-family: var(--nw-font-mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  cursor: pointer;
+  opacity: var(--nw-history, 0);
+  pointer-events: none;
+  transition:
+    background 140ms var(--nw-ease),
+    opacity 200ms var(--nw-ease);
+}
+
+.sectionClose[data-on='true'] {
+  pointer-events: auto;
+}
+
+.sectionClose:hover,
+.sectionClose:focus-visible {
+  background: var(--nw-yellow);
+  border-color: var(--nw-yellow-deep);
+}
+
+.sectionClose:focus-visible {
+  outline: 2px solid var(--nw-yellow-deep);
+  outline-offset: 2px;
+}
+
+.sectionCloseMark {
+  font-size: 12px;
+  line-height: 1;
+}
+
+/* The paper either side of the cut. Drawn here as well as in the scene so the flat fallback is
+   already the finished composition and not a version of it with the frame left off. */
+.gutters rect {
+  fill: var(--nw-strata-gutter);
+}
+
+.fallbackContacts line {
+  stroke: rgba(30, 24, 16, 0.28);
+  stroke-width: 1;
+}
+
+/**
+ * The flat section, lit on the same clock as the real one.
+ *
+ * A reader who asked for less motion, or a machine with no WebGL, gets this instead of the scene —
+ * so it cannot be a picture of the section that appears all at once while the WebGL one is
+ * assembled band by band. Each band carries its own `--at`, how far down the cut it begins, and
+ * reveals off the same `--nw-open` the lit section does, which is the whole reason the flat drawing
+ * takes its depth from the shared projection rather than from a second guess at the layout.
+ *
+ * The bands are all present on the landing page — the ground does not arrive, it is only lit — so
+ * the per-band `--at` stagger is spent on the *lit* renderer instead, and here it is simply the
+ * order the bands are printed in. Kept as a formula rather than a constant so the two renderers
+ * still share one definition of "where in the cut does this band begin".
+ */
+.fallbackBand {
+  opacity: clamp(0, calc((var(--nw-rock, 1) - var(--at, 0) * 0.82) / 0.18), 1);
+}
+
+.fallbackContacts {
+  opacity: 1;
+}
+
+/**
+ * The well this cut is for.
+ *
+ * Always drawn, because the bore is the connection between the machine above and the rock below and
+ * the landing page cannot do without it. It gives way to the casing as the casing runs down.
+ */
+.fallbackBoreActive {
+  opacity: var(--nw-hair, 0.5);
+}
+
+.fallbackBores {
+  opacity: var(--nw-neighbours, 0);
+}
+
+.fallbackTarget {
+  fill: none;
+  stroke: var(--nw-strata-ink);
+  stroke-width: 1.4;
+}
+
+.fallbackBores line {
+  stroke: rgba(25, 27, 26, 0.4);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+}
+
+.fallbackBoreActive line {
+  stroke: var(--nw-strata-ink);
+  stroke-width: 1.8;
+  stroke-dasharray: none;
+}
+
+/* ------------------------------------------------------------------ bands -- */
+
+/* The bands are the hit targets, so a reader can find out about the rock by moving over it
+   rather than by hunting for a legend. The hit area is the whole band, not the label: the rock
+   is the thing being asked about. */
+.bandHit {
+  fill: transparent;
+  cursor: crosshair;
+}
+
+.bandHit--on {
+  fill: rgba(255, 255, 255, 0.07);
+}
+
+.bandWash {
+  fill: rgba(255, 255, 255, 0.09);
+}
+
+/* Annotation is ink, and ink is dark. A band is outlined in the same ink as the ruler beside it,
+   so "this interval" is stated in one vocabulary and not two. */
+.bandOutline {
+  fill: none;
+  stroke: var(--nw-strata-ink);
+  stroke-width: 1;
+  stroke-dasharray: 3 2.5;
+  opacity: 0.45;
+}
+
+/* ---------------------------------------------------------------- contacts -- */
+
+.contacts line {
+  shape-rendering: crispEdges;
+}
+
+.contact {
+  stroke: rgba(30, 24, 16, 0.3);
+  stroke-width: 1;
+}
+
+.contactLit {
+  stroke: rgba(255, 255, 255, 0.4);
+  stroke-width: 1;
+}
+
+/*
+ * The cut's own edge, along the ground line.
+ *
+ * This is the one boundary in the picture that is genuinely an edge — a sawn face against the
+ * ground surface behind it — so it is drawn as a line, and it is drawn *dark*, because a shadow
+ * falls into a sawn corner. It is 1px rather than 1.5: at 1.5 it was wide enough to read as a black
+ * rule laid across the join, which is the opposite of what a contact should do.
+ */
+.cutEdge {
+  stroke: var(--nw-strata-ink);
+  stroke-width: 1;
+  opacity: 0.55;
+}
+
+/* The break is the one place in the picture that is not to scale, so it is the one place that is
+   drawn as an edge rather than as a surface. */
+.breakLine {
+  fill: none;
+  stroke: rgba(25, 27, 26, 0.5);
+  stroke-width: 1.1;
+}
+
+.breakText,
+.railCap,
+.surfaceCap,
+.eventLabel,
+.eventDepth,
+.surfaceLabel,
+.bitDepth,
+.bitNext {
+  paint-order: stroke;
+  stroke: rgba(24, 18, 10, 0.5);
+  stroke-width: 2.6;
+  stroke-linejoin: round;
+}
+
+.breakText {
+  fill: rgba(255, 255, 255, 0.78);
+  font-family: var(--nw-font-body);
+  font-size: var(--nw-fs-label);
+  font-weight: 500;
+  letter-spacing: 0.14em;
+}
+
+/* ------------------------------------------------------------------ ruler -- */
+
+.rulerRule {
+  stroke: rgba(25, 27, 26, 0.26);
+  stroke-width: 1;
+}
+
+.rulerTick {
+  stroke: rgba(25, 27, 26, 0.32);
+  stroke-width: 1;
+}
+
+.rulerText {
+  fill: rgba(25, 27, 26, 0.62);
+  font-family: var(--nw-font-mono);
+  font-size: var(--nw-fs-label);
+}
+
+.rulerCap {
+  fill: rgba(25, 27, 26, 0.5);
+  font-family: var(--nw-font-body);
+  font-size: var(--nw-fs-label);
+  font-weight: 500;
+  letter-spacing: 0.12em;
+}
+
+/* No .scaleBar rules: the horizontal scale bar was removed from the section, so its styling went
+   with it rather than sitting in the sheet as dead code. The vertical ruler is the scale now. */
+
+/* --------------------------------------------------------- formation names -- */
+
+.formLeader {
+  fill: none;
+  stroke: rgba(25, 27, 26, 0.32);
+  stroke-width: 1;
+  stroke-dasharray: 2 2.5;
+}
+
+.formSwatch {
+  stroke: rgba(25, 27, 26, 0.32);
+  stroke-width: 0.5;
+}
+
+.formName {
+  fill: var(--nw-strata-ink);
+  font-family: var(--nw-font-display);
+  font-size: var(--nw-fs-label-b);
+  font-weight: 700;
+  letter-spacing: 0.13em;
+}
+
+/* The one interval the section is arguing for gets the one colour in the gutters that is not
+   ink, and no other band may take it. */
+.formRow--target .formName {
+  fill: #0a6459;
+}
+
+.formDepth {
+  fill: rgba(25, 27, 26, 0.55);
+  font-family: var(--nw-font-mono);
+  font-size: var(--nw-fs-label);
+  letter-spacing: 0.01em;
+}
+
+.formRow--target .formDepth {
+  fill: rgba(10, 100, 89, 0.8);
+}
+
+.sectionHead text {
+  fill: rgba(25, 27, 26, 0.4);
+  font-family: var(--nw-font-body);
+  font-size: var(--nw-fs-label);
+  font-weight: 500;
+  letter-spacing: 0.14em;
+}
+
+/* ------------------------------------------------------------- the wellbore -- */
+
+/**
+ * One object, three thicknesses, one colour.
+ *
+ * The casing is a solid dark shaft, the open hole narrows below the shoe, and the planned path
+ * dashes on to the target. The rock is bright, so the bore is charcoal and not another hue: a
+ * coloured bore would read as a ninth formation, and the only thing in the picture that is not
+ * rock has to be the thing that is not rock.
+ */
+.wellbore {
+  cursor: pointer;
+}
+
+.boreShadow {
+  stroke: rgba(56, 38, 18, 0.26);
+  stroke-width: 7;
+}
+
+/*
+ * The casing is the spine of the whole picture, so it is the one thing in the overlay that is
+ * drawn as steel rather than as ink.
+ *
+ * It used to be a 6px line of near-black, which measured 42 and 45 units *darker* than the rock
+ * on either side of it all the way down to 660px: a hole in the strata rather than a pipe running
+ * through them. The fix is to stop drawing a dark line and start drawing a light one — a body that
+ * is lighter than the rock, a dark seam down one side for the cylinder's own shadow, a specular
+ * highlight down the other, and the lit face in the site's yellow. Four strokes, and the bore
+ * reads as a bright thread with a direction to it.
+ */
+.casing {
+  stroke: #b9bdb8;
+  stroke-width: 6;
+}
+
+.casingShadow {
+  stroke: rgba(38, 30, 16, 0.5);
+  stroke-width: 2.4;
+}
+
+.casingSpec {
+  stroke: rgba(252, 251, 247, 0.85);
+  stroke-width: 1.2;
+}
+
+.casingLit {
+  stroke: rgba(245, 197, 24, 0.9);
+  stroke-width: 1.6;
+}
+
+.hole {
+  stroke: #232421;
+  stroke-width: 2.4;
+  stroke-dasharray: 5 3;
+  opacity: 0.9;
+}
+
+.planned {
+  stroke: #2c2825;
+  stroke-width: 2.2;
+  stroke-dasharray: 2 4;
+  opacity: 0.8;
+}
+
+.treeBase {
+  fill: #17191a;
+  stroke: rgba(247, 246, 242, 0.42);
+  stroke-width: 0.8;
+}
+
+.treeStack {
+  stroke: #17191a;
+  stroke-width: 1.6;
+}
+
+.shoe line {
+  stroke: #f7f6f2;
+  stroke-width: 1.2;
+}
+
+.perfs line {
+  stroke: #f7f6f2;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  opacity: 0.9;
+}
+
+.td path {
+  fill: var(--nw-yellow);
+  stroke: #17191a;
+  stroke-width: 0.8;
+}
+
+/* The bit's own numbers are ink with a light halo: they have to read on the topsoil and in the
+   reservoir alike, and the two are nine stops apart. */
+.bitDepth {
+  fill: var(--nw-strata-ink);
+  font-family: var(--nw-font-mono);
+  font-size: var(--nw-fs-label-b);
+  font-weight: 700;
+  stroke: rgba(255, 255, 255, 0.6);
+  stroke-width: 2.8;
+}
+
+.bitNext {
+  fill: rgba(25, 27, 26, 0.62);
+  font-family: var(--nw-font-mono);
+  font-size: var(--nw-fs-label);
+  stroke: rgba(255, 255, 255, 0.55);
+}
+
+/* ------------------------------------------------------------- the target -- */
+
+/* A bracket and a dot, in ink, and nothing else. The reservoir already glows, the planned path
+   already ends inside it in yellow, and its name is already the only coloured name in the
+   gutter. A third signal would be one too many. */
+.targetMark path {
+  fill: none;
+  stroke: var(--nw-strata-ink);
+  stroke-width: 1.4;
+}
+
+.targetMark circle {
+  fill: var(--nw-strata-ink);
+}
+
+/* ------------------------------------------------------------- the offsets -- */
+
+.bore {
+  cursor: pointer;
+}
+
+.bore .hole {
+  opacity: 0.45;
+}
+
+.bore--sel .hole {
+  stroke: var(--nw-strata-ink);
+  stroke-width: 2.2;
+  stroke-dasharray: none;
+  opacity: 1;
+}
+
+.hit {
+  fill: none;
+  stroke: rgba(25, 27, 26, 0.45);
+  stroke-width: 1;
+}
+
+/* ------------------------------------------------------- risk windows, rail -- */
+
+.riskLabel {
+  font-family: var(--nw-font-body);
+  font-size: var(--nw-fs-label);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  stroke: rgba(255, 255, 255, 0.72);
+  stroke-width: 2.6;
+}
+
+.riskLead {
+  stroke-width: 1.2;
+}
+
+.railLine,
+.railLead {
+  stroke: rgba(25, 27, 26, 0.3);
+  stroke-width: 1;
+}
+
+.railLead {
+  stroke-dasharray: 2 2;
+}
+
+.glyph {
+  stroke-width: 1.3;
+  cursor: pointer;
+}
+
+.glyph--on {
+  stroke-width: 2;
+  filter: drop-shadow(0 0 3px rgba(245, 197, 24, 0.7));
+}
+
+.eventLabel {
+  font-family: var(--nw-font-display);
+  font-size: var(--nw-fs-label-b);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.eventDepth {
+  fill: rgba(25, 27, 26, 0.58);
+  font-family: var(--nw-font-mono);
+  font-size: var(--nw-fs-label);
+  stroke: rgba(255, 255, 255, 0.62);
+}
+
+.railCap {
+  fill: rgba(25, 27, 26, 0.55);
+  font-family: var(--nw-font-body);
+  font-size: var(--nw-fs-label);
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  stroke: rgba(255, 255, 255, 0.6);
+}
+
+/* The neighbours are named just under the ground line, over the topsoil — the one band dark
+   enough to take light ink. */
+.surfaceCap {
+  fill: rgba(255, 255, 255, 0.7);
+  font-family: var(--nw-font-body);
+  font-size: var(--nw-fs-label);
+  font-weight: 500;
+  letter-spacing: 0.14em;
+}
+
+.surfaceLead {
+  stroke: rgba(255, 255, 255, 0.42);
+  stroke-width: 1;
+}
+
+.surfaceLabel {
+  fill: rgba(255, 255, 255, 0.88);
+  font-family: var(--nw-font-mono);
+  font-size: var(--nw-fs-label);
+  letter-spacing: 0.04em;
+}
+
+/* ----------------------------------------------------------- the tooltips -- */
+
+.bandTip {
+  position: absolute;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 214px;
+  padding: 8px 10px 9px;
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(25, 27, 26, 0.14);
+  border-left: 2px solid var(--nw-strata-ink);
+  border-radius: var(--nw-r1);
+  box-shadow: 0 12px 28px rgba(34, 26, 14, 0.24);
+  pointer-events: none;
+  color: var(--nw-strata-ink);
+}
+
+/* The name is underlined in the band's own colour — the only place the palette comes back as a
+   swatch, because a tooltip has room for exactly one. */
+.bandTipName {
+  align-self: flex-start;
+  padding-bottom: 3px;
+  border-bottom: 2px solid;
+  font-family: var(--nw-font-display);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.bandTipType {
+  font-size: 9.5px;
+  color: rgba(25, 27, 26, 0.72);
+}
+
+.bandTipDepth {
+  font-family: var(--nw-font-mono);
+  font-size: 8.5px;
+  color: rgba(25, 27, 26, 0.6);
+}
+
+.bandTipNote {
+  font-size: 9.5px;
+  line-height: 1.35;
+  color: rgba(25, 27, 26, 0.82);
+}
+
+.bandTipWell {
+  margin-top: 3px;
+  padding-top: 5px;
+  border-top: 1px solid rgba(25, 27, 26, 0.12);
+  font-family: var(--nw-font-mono);
+  font-size: 8px;
+  line-height: 1.4;
+  color: rgba(25, 27, 26, 0.6);
+}
+
+.bandTipFlag {
+  font-size: 7.5px;
+  letter-spacing: 0.1em;
+  color: #8a6d1f;
+}
+
+.inspector {
+  position: absolute;
+  left: var(--nw-s3);
+  bottom: var(--nw-s3);
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  max-width: 60%;
+  padding: 8px 10px;
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(25, 27, 26, 0.14);
+  border-left: 2px solid var(--nw-yellow);
+  border-radius: var(--nw-r1);
+  box-shadow: 0 12px 28px rgba(34, 26, 14, 0.24);
+  pointer-events: none;
+  color: var(--nw-strata-ink);
+}
+
+.inspectorTitle {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--nw-strata-ink);
+}
+
+.inspectorMeta {
+  font-family: var(--nw-font-mono);
+  font-size: 8.5px;
+  color: rgba(25, 27, 26, 0.6);
+}
+
+.inspectorBody {
+  font-size: 10px;
+  line-height: 1.35;
+  color: rgba(25, 27, 26, 0.82);
+}
+
+
+/* ------------------------------------------------------------- well system -- */
+
+/* Not a panel: a strip of readouts under the scene, held off it by one rule and nothing else.
+   The cells are the same links they were — the hero is a way into the section that has the
+   detail, not a place that holds it — so they keep their states, they just stop being a table
+   inside a card. */
+.system {
+  border-top: 1px solid var(--nw-border-dark);
+  background: var(--nw-black);
+}
+
+.systemBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--nw-s3);
+  padding: var(--nw-s2) 0;
+}
+
+.systemSrc {
+  font-size: var(--nw-fs-micro);
+  letter-spacing: var(--nw-track-label);
+  text-transform: uppercase;
+  color: var(--nw-ink-3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.systemCells {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.systemCell {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 0 var(--nw-s3) var(--nw-s2) 0;
+  border: 0;
+  border-left: 1px solid var(--nw-border-dark);
+  border-top: 1px solid var(--nw-border-dark);
+  border-top-color: transparent;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  min-width: 0;
+  transition: background 140ms ease;
+}
+
+.systemCell:first-child {
+  border-left: 0;
+  padding-left: 0;
+}
+
+.systemCell:hover,
+.systemCell:focus-visible {
+  background: var(--nw-charcoal);
+  outline: none;
+}
+
+.systemCell:focus-visible {
+  box-shadow: inset 0 1px 0 0 var(--nw-yellow);
+}
+
+.systemLabel {
+  font-size: var(--nw-fs-micro);
+  letter-spacing: var(--nw-track-label);
+  text-transform: uppercase;
+  color: var(--nw-ink-3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.systemValue {
+  font-size: var(--nw-fs-md);
+  line-height: 1.15;
+  color: var(--nw-ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.systemValue--signal {
+  color: var(--nw-yellow);
+}
+
+.systemUnit {
+  font-size: 9.5px;
+  color: var(--nw-ink-3);
+  margin-left: 3px;
+  letter-spacing: 0.04em;
+}
+
+.systemNote {
+  font-size: 9px;
+  line-height: 1.3;
+  color: var(--nw-ink-3);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ------------------------------------------------------------- responsive -- */
+
+@media (max-width: 900px) {
+  .visual {
+    min-height: 0;
+  }
+
+  .systemCells {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .systemCell {
+    border-top: 1px solid var(--nw-border-dark);
+    border-left: 1px solid var(--nw-border-dark);
+    padding: var(--nw-s2) var(--nw-s3) var(--nw-s2) 0;
+  }
+
+  .systemCell:nth-child(odd) {
+    border-left: 0;
+    padding-left: 0;
+  }
+
+  .stageCredit {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .canvas {
+    transition: none;
+  }
+}
+
+/* ============================================================================
+   The way in.
+   The machine is the control. One flag in the hero decides whether the section is
+   lit, and the machine is the only thing in the picture that toggles it: there
+   is no second screen, no "explore" button on the ground, and no state in which
+   the reader has to find a control before they can see the rock.
+   ========================================================================== */
+
+/* ------------------------------------------------------------ the hotspot -- */
+
+/**
+ * A button drawn on the machine, not a label next to it.
+ *
+ * It is the machine's own box — feet on the ground line, head at the height the machine was given —
+ * so the whole rig is the hit area and a reader never has to find a 30px target on a wellhead to
+ * get at three kilometres of rock. It is transparent over the rig and carries a ring at its foot, so
+ * the control exists without putting chrome on the model: hovering grows the ring, lifts the
+ * machine's own light, and warms the hint; pressing it lights the ground underneath.
+ *
+ * The box stops at the ground line. The section is a sibling element below it and the wellhead is
+ * part of the section's picture, so a button that reached over the datum would be a control sitting
+ * on top of the thing it is meant to reveal.
+ */
+.stageHotspot {
+  position: absolute;
+  z-index: 3;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--nw-ink-2);
+  cursor: pointer;
+  font: inherit;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.stageHotspot:focus-visible {
+  outline: 1px solid var(--nw-yellow);
+  outline-offset: -2px;
+}
+
+/**
+ * The machine answering the pointer.
+ *
+ * A stop and a half of brightness on the rig itself, on the two rungs we render and not on the one
+ * we do not — a brightness filter over an iframe lifts its studio as well as its model, and there
+ * is no studio to lift on the other two. The wash is the halo, kept well under the strength of the
+ * signal yellow so it reads as light falling on steel rather than as a highlight somebody drew.
+ *
+ * Both selectors are on the sibling combinator, so the machine and the wash are drawn *after* the
+ * button in the source and the stacking is carried by `z-index` rather than by document order.
+ */
+.stageHotspot:hover ~ .rigGlow,
+.stageHotspot:focus-visible ~ .rigGlow {
+  opacity: 1;
+}
+
+.rigGlow {
+  position: absolute;
+  z-index: 1;
+  pointer-events: none;
+  /* the pad's light cone, off: there is no lamp pool on a white sheet of paper, only the
+     machine's own contact shadow */
+  background: none;
+  opacity: 0;
+  transition: opacity 200ms var(--nw-ease);
+}
+
+.stageHotspot:hover ~ .stageRig:not(.stageRigEmbed),
+.stageHotspot:focus-visible ~ .stageRig:not(.stageRigEmbed) {
+  filter: brightness(1.16) saturate(1.06);
+}
+
+/* The ring is centred on the machine's foot, which is the wellhead — the thing the machine is for,
+   and the one point of the stage both the embed and the built rig agree on. It breathes only while
+   the section is dark; once the rock is lit the section itself says what the ring was asking. */
+.hotspotRing {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 30px;
+  height: 30px;
+  margin: 0 0 -15px -15px;
+  border: 1px solid rgba(245, 197, 24, 0.55);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(245, 197, 24, 0.16) 0%, rgba(245, 197, 24, 0) 70%);
+  transition: width 220ms cubic-bezier(0.22, 0.61, 0.36, 1), height 220ms cubic-bezier(0.22, 0.61, 0.36, 1),
+    margin 220ms cubic-bezier(0.22, 0.61, 0.36, 1), border-color 180ms ease, opacity 200ms var(--nw-ease);
+}
+
+.stageHotspot[data-open='true'] .hotspotRing {
+  opacity: 0;
+}
+
+/* One slow ring, so the control says "here" without animating for its own sake. */
+.hotspotRing::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border: 1px solid rgba(245, 197, 24, 0.35);
+  border-radius: 50%;
+  animation: hotspotPulse 3.4s cubic-bezier(0.3, 0, 0.2, 1) infinite;
+}
+
+.stageHotspot[data-open='true'] .hotspotRing::after {
+  animation: none;
+}
+
+@keyframes hotspotPulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  70%,
+  100% {
+    transform: scale(2.3);
+    opacity: 0;
+  }
+}
+
+/* Below the machine, not over it: the machine is what the reader is looking at. The hint lands on
+   the rock just under the datum, where a dark chip on a bright band is the most legible thing it
+   could be — and it is one line of one word, because the machine is already the affordance and a
+   paragraph here would turn a picture into a form. */
+.hotspotLabel {
+  position: absolute;
+  top: calc(100% - 10px);
+  left: 50%;
+  transform: translate(-50%, 0);
+  padding: 3px 7px;
+  background: rgba(10, 11, 11, 0.82);
+  border: 1px solid var(--nw-border-dark-2);
+  border-radius: var(--nw-r1);
+  font-family: var(--nw-font-mono);
+  font-size: var(--nw-fs-micro);
+  letter-spacing: var(--nw-track-label);
+  text-transform: uppercase;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 180ms ease, color 180ms ease, border-color 180ms ease;
+}
+
+/*
+ * No pointer/coarse split any more. There were two wordings here once — "Click" for a pointer, "Tap"
+ * for a finger — and they existed only to describe the gesture that opens the section. With the
+ * opening prompt gone the one remaining label is "Close well view", which is the same sentence on
+ * every input, so branching on it would be inventing a difference. The rule that used to hide the
+ * whole label on touch went with them: it was there to suppress the word "Click", and there is no
+ * longer a word to suppress.
+ */
+.stageHotspot:hover .hotspotLabel,
+.stageHotspot:focus-visible .hotspotLabel {
+  opacity: 1;
+  border-color: var(--nw-yellow-deep);
+  color: var(--nw-yellow);
+}
+
+.stageHotspot:hover .hotspotRing,
+.stageHotspot:focus-visible .hotspotRing {
+  width: 44px;
+  height: 44px;
+  margin: 0 0 -22px -22px;
+  border-color: var(--nw-yellow);
+}
+
+/* ------------------------------------------------------- the strip's own -- */
+
+.systemBar {
+  flex-wrap: wrap;
+}
+
+.systemToggle {
+  flex: none;
+  padding: 3px 8px;
+  background: transparent;
+  border: 1px solid var(--nw-border-dark-2);
+  border-radius: var(--nw-r1);
+  color: var(--nw-ink-3);
+  font-family: var(--nw-font-body);
+  font-size: var(--nw-fs-micro);
+  letter-spacing: var(--nw-track-label);
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color 140ms ease, border-color 140ms ease, background 140ms ease;
+}
+
+.systemToggle:hover,
+.systemToggle:focus-visible {
+  color: var(--nw-yellow);
+  border-color: var(--nw-yellow-deep);
+  background: rgba(245, 197, 24, 0.06);
+  outline: none;
+}
+
+.systemToggle[aria-expanded='true'] {
+  color: var(--nw-ink-2);
+  border-color: var(--nw-border-dark);
+}
+
+/* --------------------------------------------------------------- the drawer -- */
+
+/**
+ * The drawer is a fourth row in the same column as the machine, the rock and the strip, not a
+ * page that replaces them: the reader opens the well and the well is still there above. It is
+ * dark because it is the console, and it is bounded because the bright rock above is the thing
+ * that was worth the click.
+ */
+/* The open state, in fixed row heights rather than percentages.
+   The parent has left the fold (`height: auto`), and a percentage or an `fr` against an auto
+   height resolves to the row's minimum — which would collapse the machine to nothing, because
+   everything in the stage is absolutely positioned and it has no content to be sized by. Two
+   fixed heights, then the strip and the drawer at their own content, and the column grows to
+   whatever the drawer turns out to need. */
+/* Opening the well adds the record as a fourth row and lets the column grow downward. The first
+   two rows are inherited unchanged from `.visual` on purpose — see the note there. */
+.visual--open {
+  height: auto;
+  grid-template-rows: var(--nw-stage-h) var(--nw-section-h) auto auto;
+}
+
+.detail {
+  display: flex;
+  flex-direction: column;
+  /* The drawer is capped and scrolls itself, and that is a layout decision rather than a
+     convenience. Uncapped it is three columns of 27 rows and 800px tall, which on a laptop is most
+     of the fold: the reader would open the well and push the machine and the rock off the screen
+     to see a history, and the whole argument of the hero is that the machine and the well are one
+     object. Capped, the hero grows by about half a screen, the machine stays above the fold, and
+     the bar — with its close button — never scrolls out of reach. */
+  max-height: 46dvh;
+  border-top: 1px solid var(--nw-border-dark);
+  background: var(--nw-black);
+  animation: detailIn 260ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+/* The one visible scrollbar in the hero, kept to the house ink. */
+.detailGrid::-webkit-scrollbar {
+  width: 8px;
+}
+
+.detailGrid::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.detailGrid::-webkit-scrollbar-thumb {
+  background: var(--nw-border-dark-2);
+  border-radius: var(--nw-r-pill);
+}
+
+.detailGrid::-webkit-scrollbar-thumb:hover {
+  background: var(--nw-steel);
+}
+
+@keyframes detailIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.detailBar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--nw-s3);
+  padding: var(--nw-s2) 0 var(--nw-s2);
+  border-bottom: 1px solid var(--nw-border-dark);
+}
+
+.detailTitle {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin: 0;
+  min-width: 0;
+}
+
+.detailTitle:focus {
+  outline: none;
+}
+
+.detailEyebrow {
+  font-size: var(--nw-fs-micro);
+  letter-spacing: var(--nw-track-label);
+  text-transform: uppercase;
+  color: var(--nw-ink-3);
+}
+
+.detailHeadline {
+  font-family: var(--nw-font-display);
+  font-size: var(--nw-fs-lg);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--nw-ink);
+}
+
+.detailClose {
+  flex: none;
+  padding: 4px 9px;
+  background: transparent;
+  border: 1px solid var(--nw-border-dark-2);
+  border-radius: var(--nw-r1);
+  color: var(--nw-ink-3);
+  font-size: var(--nw-fs-micro);
+  letter-spacing: var(--nw-track-label);
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.detailClose:hover,
+.detailClose:focus-visible {
+  color: var(--nw-yellow);
+  border-color: var(--nw-yellow-deep);
+  outline: none;
+}
+
+.detailBar {
+  flex: none;
+}
+
+.detailGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--nw-s3);
+  padding: var(--nw-s3) 0 var(--nw-s3);
+  /* min-height:0 is what lets a grid child scroll inside a flex column rather than stretching it */
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.detailCol {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nw-s1);
+  min-width: 0;
+  padding-left: var(--nw-s3);
+  border-left: 1px solid var(--nw-border-dark);
+}
+
+.detailCol:first-child {
+  padding-left: 0;
+  border-left: 0;
+}
+
+.detailHead {
+  margin: 0;
+  font-size: var(--nw-fs-micro);
+  font-weight: 600;
+  letter-spacing: var(--nw-track-label);
+  text-transform: uppercase;
+  color: var(--nw-ink-2);
+}
+
+.detailNote {
+  margin: 0 0 2px;
+  font-size: 9.5px;
+  line-height: 1.4;
+  color: var(--nw-ink-3);
+}
+
+.detailStrata,
+.detailEvents,
+.detailRisks,
+.detailLessons,
+.detailReasons {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.detailBand {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  gap: 2px 6px;
+  padding: 3px 0;
+  border-bottom: 1px solid var(--nw-border-dark);
+}
+
+.detailBandTop {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--nw-ink-2);
+}
+
+.detailChip {
+  width: 7px;
+  height: 7px;
+  border: 1px solid var(--nw-border-dark-2);
+}
+
+.detailTargetTag {
+  padding: 0 3px;
+  border: 1px solid var(--nw-teal, var(--nw-steel));
+  border-radius: 2px;
+  font-size: 7px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--nw-ink-2);
+}
+
+.detailBandMeta {
+  font-family: var(--nw-font-mono);
+  font-size: 8px;
+  color: var(--nw-ink-3);
+}
+
+.detailFlag {
+  grid-column: 1 / -1;
+  font-size: 7.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--nw-ink-3);
+  opacity: 0.75;
+}
+
+.detailBand--target .detailBandTop {
+  color: var(--nw-ink);
+}
+
+.detailBand--target .detailBandMeta {
+  color: var(--nw-ink-2);
+}
+
+.detailEvent,
+.detailRisk {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 5px 0;
+  border-bottom: 1px solid var(--nw-border-dark);
+}
+
+.detailEventTop,
+.detailRiskTop {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px;
+  font-size: 9.5px;
+  color: var(--nw-ink);
+}
+
+.detailEventTop b,
+.detailRiskTop b {
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.detailEventTop .mono,
+.detailRiskTop .mono {
+  flex: none;
+  font-size: 8px;
+  color: var(--nw-ink-3);
+}
+
+.detailEventMeta,
+.detailRiskMeta {
+  font-family: var(--nw-font-mono);
+  font-size: 8px;
+  color: var(--nw-ink-3);
+}
+
+.detailEventBody,
+.detailRiskBody {
+  font-size: 9.5px;
+  line-height: 1.4;
+  color: var(--nw-ink-2);
+}
+
+.detailReasons {
+  gap: 1px;
+}
+
+.detailReasons li {
+  font-size: 9px;
+  line-height: 1.35;
+  color: var(--nw-ink-3);
+  padding-left: 8px;
+  position: relative;
+}
+
+.detailReasons li::before {
+  content: '·';
+  position: absolute;
+  left: 2px;
+  color: var(--nw-steel);
+}
+
+.detailStats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  font-family: var(--nw-font-mono);
+  font-size: 8px;
+  color: var(--nw-ink-2);
+}
+
+.detailStats i {
+  font-style: normal;
+  color: var(--nw-ink-3);
+}
+
+.detailLessons li {
+  font-size: 9.5px;
+  line-height: 1.4;
+  color: var(--nw-ink-2);
+  padding: 3px 0;
+  border-bottom: 1px solid var(--nw-border-dark);
+}
+
+.detailLessons b {
+  color: var(--nw-ink);
+  font-family: var(--nw-font-mono);
+  font-size: 8.5px;
+}
+
+.detailSrc {
+  display: block;
+  font-size: 7.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--nw-ink-3);
+}
+
+.detailEmpty {
+  padding: 4px 0;
+  font-size: 9.5px;
+  color: var(--nw-ink-3);
+}
+
+.detailLinks {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--nw-s1) var(--nw-s2);
+  margin-top: var(--nw-s1);
+}
+
+.detailLink {
+  padding: 0;
+  background: none;
+  border: 0;
+  border-bottom: 1px solid var(--nw-border-dark-2);
+  color: var(--nw-ink-2);
+  font-family: var(--nw-font-mono);
+  font-size: 8.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  align-self: flex-start;
+}
+
+.detailLink:hover,
+.detailLink:focus-visible {
+  color: var(--nw-yellow);
+  border-bottom-color: var(--nw-yellow);
+  outline: none;
+}
+
+.detailLive {
+  font-family: var(--nw-font-mono);
+  font-size: 8px;
+  color: var(--nw-ink-3);
+  margin-left: auto;
+}
+
+/* ------------------------------------------------- the machine's hover, in the rock -- */
+
+.bandTargetLit {
+  fill: none;
+  stroke: var(--nw-yellow);
+  stroke-width: 1.4;
+  stroke-dasharray: 5 3;
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+.wellbore[data-lit='true'] .casingLit {
+  stroke: var(--nw-yellow);
+  stroke-width: 1.6;
+}
+
+.wellbore[data-lit='true'] .perfs line {
+  stroke: var(--nw-yellow);
+  stroke-width: 1.8;
+}
+
+.wellbore[data-lit='true'] .shoe line {
+  stroke: var(--nw-yellow);
+  stroke-width: 1.8;
+}
+
+/* ------------------------------------------------------------- responsive -- */
+
+@media (max-width: 1180px) {
+  .detailGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .detailGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .detailCol {
+    padding-left: 0;
+    border-left: 0;
+    border-top: 1px solid var(--nw-border-dark);
+    padding-top: var(--nw-s2);
+  }
+
+  .detailCol:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  /* On a phone the two tracks are set outright, because a percentage of a 390px-wide panel is a
+     letterbox and the section below is taller than the room the machine would leave it. Set here
+     on the base rather than on `.visual--open`, so the closed and open states are the same two
+     rectangles and the machine cannot lose height as the well opens. */
+  .visual {
+    --nw-stage-h: 200px;
+    --nw-section-h: minmax(260px, auto);
+  }
+
+  .hotspotLabel {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hotspotRing::after {
+    animation: none;
+  }
+
+  .detail {
+    animation: none;
+  }
+}
+
+/* ------------------------------------------------ the annotation groups, spelled -- */
+
+/* These four carry no drawing of their own. They are here so that "this is an annotation and not
+   a thing you can click" is stated once, at the group, instead of being re-decided per label. */
+
+/* The name column's empty paper is not a hit target; its rows are. Without this the gutter eats
+   every hover meant for the rock behind it. */
+.formationLabels {
+  pointer-events: none;
+}
+
+.formRow {
+  pointer-events: auto;
+  cursor: crosshair;
+}
+
+/* The bit's numbers are printed over the rock, so they must not take the pointer that belongs to
+   the band underneath them. */
+.bitLabels {
+  pointer-events: none;
+}
+
+/* One typeface for the whole ruler, set on the group rather than repeated on five children. */
+.ruler {
+  font-family: var(--nw-font-mono);
+  pointer-events: none;
+}

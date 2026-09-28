@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>NWIS Nearby Wells</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0;background:#F5F5F1}
+a{color:#080909}a:hover{color:#454845}
+button{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; display: flex; overflow: hidden; background: #F5F5F1; color: #080909; font-family: 'IBM Plex Sans', system-ui, sans-serif">
+<dc-import name="NwisSidebar" active="nearby" hint-size="248px,900px"></dc-import>
+<div style="width: 1192px; height: 900px; display: flex; flex-direction: column">
+<dc-import name="NwisTopbar" num="02" section="Spatial intelligence" heading="Nearby Wells" desc="Offset wells around OIL-WELL-104, measured at bit depth, ranked by how similar they are." hint-size="1192px,88px"></dc-import>
+<main style="flex-grow: 1; min-height: 0; box-sizing: border-box; padding: 24px; display: flex; gap: 16px">
+
+<div style="width: 784px; flex-shrink: 0; display: flex; flex-direction: column; gap: 16px">
+
+<section aria-label="Offset well map" style="height: 440px; flex-shrink: 0; box-sizing: border-box; display: flex; flex-direction: column; background: #FFFFFF; border: 1px solid #E8E9E5">
+<div style="height: 52px; flex-shrink: 0; box-sizing: border-box; display: flex; align-items: center; gap: 10px; padding: 0 16px; border-bottom: 1px solid #E8E9E5">
+<span style="font-family: 'Archivo', sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: 0.16em; color: #6B6E69">RADIUS</span>
+<div role="group" aria-label="Search radius" style="display: flex">
+<sc-for list="{{radii}}" as="r" hint-placeholder-count="4">
+<button type="button" onClick="{{r.pick}}" aria-pressed="{{r.pressed}}" style="width: 48px; height: 32px; margin-left: -1px; border: 1px solid {{r.border}}; background: {{r.bg}}; color: {{r.fg}}; font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600; cursor: pointer">{{r.label}}</button>
+</sc-for>
+</div>
+<span style="width: 1px; height: 24px; margin: 0 6px; background: #E8E9E5"></span>
+<span style="font-family: 'Archivo', sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: 0.16em; color: #6B6E69">FILTER</span>
+<button type="button" onClick="{{toggleRel}}" aria-pressed="{{relPressed}}" style="height: 32px; display: flex; align-items: center; gap: 7px; padding: 0 12px; border: 1px solid {{relBorder}}; background: {{relBg}}; color: #080909; font-family: 'Archivo', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; cursor: pointer">
+<span style="width: 9px; height: 9px; box-sizing: border-box; border-radius: 50%; background: #F4C400; border: 1.5px solid #080909"></span>≥ 75% SIMILAR</button>
+<button type="button" onClick="{{toggleLoss}}" aria-pressed="{{lossPressed}}" style="height: 32px; display: flex; align-items: center; gap: 7px; padding: 0 12px; border: 1px solid {{lossBorder}}; background: {{lossBg}}; color: #080909; font-family: 'Archivo', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; cursor: pointer">
+<span style="width: 8px; height: 8px; border-radius: 50%; background: #D9362B"></span>LOSS EVENTS</button>
+<span style="flex-grow: 1"></span>
+<span style="font-size: 12.5px; color: #454845; white-space: nowrap"><span style="font-family: 'IBM Plex Mono', monospace; font-weight: 600; color: #080909">{{count}}</span> wells · <span style="font-family: 'IBM Plex Mono', monospace; font-weight: 600; color: #080909">{{relCount}}</span> relevant</span>
+</div>
+
+<div style="position: relative; flex-grow: 1; min-height: 0; overflow: hidden; background: #F5F5F1">
+<svg width="782" height="386" viewBox="0 0 782 386" role="img" aria-label="{{mapAria}}" style="position: absolute; left: 0; top: 0; display: block">
+<defs><pattern id="nw-grid" x="11" y="18" width="35" height="35" patternUnits="userSpaceOnUse"><path d="M35 0H0V35" fill="none" stroke="#ECECE7"></path></pattern></defs>
+<rect x="0" y="0" width="782" height="386" fill="url(#nw-grid)"></rect>
+<path d="M0 78C130 36 260 104 390 64S640 34 782 92" fill="none" stroke="#DEDFD9" style="stroke-width: 1.2"></path>
+<path d="M0 114C150 80 250 142 400 106S650 84 782 134" fill="none" stroke="#E4E5DF"></path>
+<path d="M0 296C170 268 260 336 430 304S650 268 782 316" fill="none" stroke="#DEDFD9" style="stroke-width: 1.2"></path>
+<path d="M0 340C180 318 290 370 450 344S660 312 782 354" fill="none" stroke="#E4E5DF"></path>
+<circle cx="391" cy="193" r="35" fill="none" stroke="#E1E2DC"></circle>
+<circle cx="391" cy="193" r="70" fill="none" stroke="#E1E2DC"></circle>
+<circle cx="391" cy="193" r="105" fill="none" stroke="#E1E2DC"></circle>
+<circle cx="391" cy="193" r="140" fill="none" stroke="#E1E2DC"></circle>
+<circle cx="391" cy="193" r="175" fill="rgba(244,196,0,0.05)" stroke="#454845" style="stroke-width: 1.25; stroke-dasharray: 5 5"></circle>
+<text x="397" y="14" fill="#454845" style="font-family: 'IBM Plex Mono', monospace; font-size: 11px">{{radiusLabel}}</text>
+<path d="{{p.w067.d}}" fill="none" stroke="{{p.w067.c}}" style="stroke-width: {{p.w067.w}}; stroke-linecap: round"></path>
+<path d="{{p.w042.d}}" fill="none" stroke="{{p.w042.c}}" style="stroke-width: {{p.w042.w}}; stroke-linecap: round"></path>
+<path d="{{p.w088.d}}" fill="none" stroke="{{p.w088.c}}" style="stroke-width: {{p.w088.w}}; stroke-linecap: round"></path>
+<path d="{{p.w081.d}}" fill="none" stroke="{{p.w081.c}}" style="stroke-width: {{p.w081.w}}; stroke-linecap: round"></path>
+<path d="{{p.w112.d}}" fill="none" stroke="{{p.w112.c}}" style="stroke-width: {{p.w112.w}}; stroke-linecap: round"></path>
+<path d="{{p.w103.d}}" fill="none" stroke="{{p.w103.c}}" style="stroke-width: {{p.w103.w}}; stroke-linecap: round"></path>
+<path d="{{p.w121.d}}" fill="none" stroke="{{p.w121.c}}" style="stroke-width: {{p.w121.w}}; stroke-linecap: round"></path>
+<path d="{{p.w132.d}}" fill="none" stroke="{{p.w132.c}}" style="stroke-width: {{p.w132.w}}; stroke-linecap: round"></path>
+<path d="{{p.w018.d}}" fill="none" stroke="{{p.w018.c}}" style="stroke-width: {{p.w018.w}}; stroke-linecap: round"></path>
+<circle cx="{{p.w067.sx}}" cy="{{p.w067.sy}}" r="{{p.w067.sr}}" fill="#FFFFFF" stroke="#6B6E69"></circle>
+<circle cx="{{p.w042.sx}}" cy="{{p.w042.sy}}" r="{{p.w042.sr}}" fill="#FFFFFF" stroke="#6B6E69"></circle>
+<circle cx="{{p.w088.sx}}" cy="{{p.w088.sy}}" r="{{p.w088.sr}}" fill="#FFFFFF" stroke="#6B6E69"></circle>
+<circle cx="{{p.w081.sx}}" cy="{{p.w081.sy}}" r="{{p.w081.sr}}" fill="#FFFFFF" stroke="#6B6E69"></circle>
+<circle cx="{{p.w112.sx}}" cy="{{p.w112.sy}}" r="{{p.w112.sr}}" fill="#FFFFFF" stroke="#6B6E69"></circle>
+<circle cx="{{p.w103.sx}}" cy="{{p.w103.sy}}" r="{{p.w103.sr}}" fill="#FFFFFF" stroke="#6B6E69"></circle>
+<circle cx="{{p.w121.sx}}" cy="{{p.w121.sy}}" r="{{p.w121.sr}}" fill="#FFFFFF" stroke="#6B6E69"></circle>
+<circle cx="{{p.w132.sx}}" cy="{{p.w132.sy}}" r="{{p.w132.sr}}" fill="#FFFFFF" stroke="#6B6E69"></circle>
+<circle cx="{{p.w018.sx}}" cy="{{p.w018.sy}}" r="{{p.w018.sr}}" fill="#FFFFFF" stroke="#6B6E69"></circle>
+<path d="{{act.path}}" fill="none" stroke="#080909" style="stroke-width: 6; stroke-linecap: round"></path>
+<path d="{{act.path}}" fill="none" stroke="#F4C400" style="stroke-width: 2.5; stroke-linecap: round"></path>
+<path d="{{act.ahead}}" fill="none" stroke="#080909" style="stroke-width: 1.5; stroke-dasharray: 3 3"></path>
+<rect x="385" y="187" width="12" height="12" fill="#080909"></rect>
+<rect x="389" y="191" width="4" height="4" fill="#F4C400"></rect>
+<path d="{{act.bit}}" fill="#F4C400" stroke="#080909" style="stroke-width: 1.25"></path>
+<path d="M752 22V40M752 22l-5 8M752 22l5 8" fill="none" stroke="#080909" style="stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round"></path>
+<text x="752" y="54" fill="#080909" style="font-family: 'Archivo', sans-serif; font-size: 11px; font-weight: 800; text-anchor: middle">N</text>
+<line x1="732" y1="366" x2="767" y2="366" stroke="#080909" style="stroke-width: 2"></line>
+<text x="726" y="370" fill="#454845" style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; text-anchor: end">{{scaleLabel}}</text>
+</svg>
+<span style="position: absolute; left: 404px; top: 158px; height: 22px; box-sizing: border-box; display: flex; align-items: center; padding: 0 8px; background: #080909; color: #FFFFFF; font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; white-space: nowrap">OIL-WELL-104</span>
+<sc-for list="{{lossDots}}" as="ld" hint-placeholder-count="3">
+<span style="position: absolute; left: {{ld.x}}px; top: {{ld.y}}px; width: 9px; height: 9px; box-sizing: border-box; border-radius: 50%; background: #D9362B; border: 1.5px solid #FFFFFF; pointer-events: none"></span>
+</sc-for>
+<sc-for list="{{mapWells}}" as="w" hint-placeholder-count="7">
+<button type="button" aria-label="{{w.aria}}" aria-pressed="{{w.pressed}}" onClick="{{w.pick}}" style="position: absolute; left: {{w.bx}}px; top: {{w.by}}px; width: 28px; height: 28px; padding: 0; border: none; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center">
+<span style="display: block; width: 12px; height: 12px; box-sizing: border-box; border-radius: 50%; background: {{w.fill}}; border: 1.5px solid {{w.stroke}}; box-shadow: {{w.ring}}"></span>
+</button>
+<sc-if value="{{w.showLabel}}" hint-placeholder-val="{{false}}">
+<span style="position: absolute; left: {{w.lx}}; right: {{w.rx}}; top: {{w.ly}}px; height: 20px; box-sizing: border-box; display: flex; align-items: center; padding: 0 7px; background: {{w.labelBg}}; color: {{w.labelFg}}; border: 1px solid {{w.labelBorder}}; font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; white-space: nowrap; pointer-events: none">{{w.label}}</span>
+</sc-if>
+</sc-for>
+<sc-if value="{{empty}}" hint-placeholder-val="{{false}}">
+<div style="position: absolute; left: 50%; top: 40px; transform: translateX(-50%); display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: #080909; color: #FFFFFF; font-size: 13px; white-space: nowrap">
+<span style="width: 18px; height: 3px; background: #F4C400"></span>{{emptyText}}</div>
+</sc-if>
+<div style="position: absolute; left: 14px; bottom: 12px; display: flex; gap: 14px; padding: 6px 10px; background: rgba(255,255,255,0.94); border: 1px solid #E8E9E5; font-size: 11.5px; color: #454845">
+<span style="display: flex; align-items: center; gap: 6px"><span style="width: 10px; height: 10px; background: #080909; box-shadow: inset 0 0 0 3px #080909, inset 0 0 0 5px #F4C400"></span>Active</span>
+<span style="display: flex; align-items: center; gap: 6px"><span style="width: 10px; height: 10px; box-sizing: border-box; border-radius: 50%; background: #F4C400; border: 1.5px solid #080909"></span>≥ 75% similar</span>
+<span style="display: flex; align-items: center; gap: 6px"><span style="width: 10px; height: 10px; box-sizing: border-box; border-radius: 50%; background: #FFFFFF; border: 1.5px solid #6B6E69"></span>Other offset</span>
+<span style="display: flex; align-items: center; gap: 6px"><span style="width: 8px; height: 8px; border-radius: 50%; background: #D9362B"></span>Loss event</span>
+<span style="display: flex; align-items: center; gap: 6px"><span style="width: 14px; height: 0; border-top: 2px solid #D6A900"></span>Trajectory</span>
+</div>
+</div>
+</section>
+
+<section aria-label="Offset wells table" style="flex-grow: 1; min-height: 0; box-sizing: border-box; display: flex; flex-direction: column; background: #FFFFFF; border: 1px solid #E8E9E5">
+<div style="height: 44px; flex-shrink: 0; box-sizing: border-box; display: flex; align-items: center; gap: 10px; padding: 0 16px">
+<span style="display: flex; align-items: center; gap: 8px; font-family: 'Archivo', sans-serif; font-size: 12px; font-weight: 800; letter-spacing: 0.14em"><span style="width: 18px; height: 3px; background: #F4C400"></span>OFFSET WELLS</span>
+<span style="flex-grow: 1"></span>
+<span style="font-family: 'Archivo', sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: 0.16em; color: #6B6E69">SORT</span>
+<div role="group" aria-label="Sort table" style="display: flex">
+<sc-for list="{{sorts}}" as="so" hint-placeholder-count="2">
+<button type="button" onClick="{{so.pick}}" aria-pressed="{{so.pressed}}" style="height: 28px; margin-left: -1px; padding: 0 12px; border: 1px solid {{so.border}}; background: {{so.bg}}; color: {{so.fg}}; font-family: 'Archivo', sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: 0.1em; cursor: pointer">{{so.label}}</button>
+</sc-for>
+</div>
+</div>
+<div style="height: 32px; flex-shrink: 0; display: grid; grid-template-columns: 112px 104px 96px 120px minmax(0, 1fr) 72px 96px; align-items: center; padding: 0 16px; background: #080909; color: #FFFFFF; font-family: 'Archivo', sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: 0.14em">
+<span>WELL</span><span>DISTANCE</span><span>TD (MD)</span><span>BARAIL TOP</span><span>SIMILARITY</span><span>EVENTS</span><span>RISK</span>
+</div>
+<div style="flex-grow: 1; min-height: 0; overflow-y: auto">
+<sc-for list="{{rows}}" as="row" hint-placeholder-count="7">
+<button type="button" onClick="{{row.pick}}" aria-pressed="{{row.pressed}}" style="width: 100%; height: 32px; box-sizing: border-box; display: grid; grid-template-columns: 112px 104px 96px 120px minmax(0, 1fr) 72px 96px; align-items: center; padding: 0 16px 0 13px; border: none; border-left: 3px solid {{row.bar}}; border-bottom: 1px solid #EEEEEA; background: {{row.bg}}; color: #080909; text-align: left; font-size: 13px; cursor: pointer">
+<span style="font-family: 'IBM Plex Mono', monospace; font-weight: 600">{{row.id}}</span>
+<span style="font-family: 'IBM Plex Mono', monospace">{{row.dist}}</span>
+<span style="font-family: 'IBM Plex Mono', monospace">{{row.td}}</span>
+<span style="font-family: 'IBM Plex Mono', monospace">{{row.top}}</span>
+<span style="display: flex; align-items: center; gap: 10px; padding-right: 20px"><span style="flex-grow: 1; height: 6px; background: #E8E9E5; position: relative"><span style="position: absolute; left: 0; top: 0; bottom: 0; width: {{row.sim}}%; background: {{row.simBar}}"></span></span><span style="width: 36px; font-family: 'IBM Plex Mono', monospace; font-weight: 600; text-align: right">{{row.sim}}%</span></span>
+<span style="font-family: 'IBM Plex Mono', monospace">{{row.evCount}}</span>
+<span><span style="display: inline-flex; align-items: center; height: 20px; padding: 0 8px; background: {{row.riskBg}}; color: {{row.riskFg}}; font-family: 'Archivo', sans-serif; font-size: 10px; font-weight: 800; letter-spacing: 0.12em">{{row.risk}}</span></span>
+</button>
+</sc-for>
+</div>
+</section>
+</div>
+
+<aside aria-label="Selected offset well" style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; background: #FFFFFF; border: 1px solid #E8E9E5; overflow: hidden">
+<div style="flex-shrink: 0; position: relative; padding: 20px 22px 22px; background: #080909; color: #FFFFFF">
+<div style="position: absolute; left: 0; right: 0; top: 0; height: 3px; background: #F4C400"></div>
+<span style="display: flex; align-items: center; gap: 8px; font-family: 'Archivo', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; color: #F4C400"><span style="width: 18px; height: 3px; background: #F4C400"></span>OFFSET WELL</span>
+<div style="margin-top: 8px; display: flex; align-items: flex-end; justify-content: space-between">
+<span style="font-family: 'Archivo', sans-serif; font-size: 40px; font-weight: 900; line-height: 1">{{d.id}}</span>
+<span style="display: flex; flex-direction: column; align-items: flex-end"><span style="font-family: 'Archivo', sans-serif; font-size: 30px; font-weight: 900; line-height: 1; color: {{d.simColor}}">{{d.sim}}%</span><span style="font-family: 'Archivo', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.14em; color: #A3A6A1">SIMILAR</span></span>
+</div>
+<div style="margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap">
+<span style="height: 24px; box-sizing: border-box; display: flex; align-items: center; padding: 0 9px; border: 1px solid #3A3D3B; font-size: 12px; color: #D4D6D1">{{d.status}}</span>
+<span style="height: 24px; box-sizing: border-box; display: flex; align-items: center; padding: 0 9px; border: 1px solid #3A3D3B; font-size: 12px; color: #D4D6D1">Spud {{d.spud}}</span>
+<span style="height: 24px; box-sizing: border-box; display: flex; align-items: center; padding: 0 9px; background: {{d.riskBg}}; color: {{d.riskFg}}; font-family: 'Archivo', sans-serif; font-size: 10.5px; font-weight: 800; letter-spacing: 0.12em">{{d.risk}} RISK</span>
+</div>
+</div>
+<div style="flex-shrink: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-bottom: 1px solid #E8E9E5">
+<div style="display: flex; flex-direction: column; gap: 3px; padding: 14px 16px 14px 22px; border-right: 1px solid #E8E9E5">
+<span style="font-family: 'Archivo', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.14em; color: #6B6E69">DISTANCE</span>
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 17px; font-weight: 600">{{d.dist}}</span>
+<span style="font-size: 11px; color: #6B6E69">at bit depth</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 3px; padding: 14px 16px; border-right: 1px solid #E8E9E5">
+<span style="font-family: 'Archivo', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.14em; color: #6B6E69">TOTAL DEPTH</span>
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 17px; font-weight: 600">{{d.td}}</span>
+<span style="font-size: 11px; color: #6B6E69">m MD</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 3px; padding: 14px 16px">
+<span style="font-family: 'Archivo', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.14em; color: #6B6E69">BARAIL TOP</span>
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 17px; font-weight: 600">{{d.top}}</span>
+<span style="font-size: 11px; color: #6B6E69">m TVDSS</span>
+</div>
+</div>
+
+<div style="flex-grow: 1; min-height: 0; overflow-y: auto; padding: 16px 22px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<span style="font-family: 'Archivo', sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 0.14em">KEY EVENTS</span>
+<sc-for list="{{d.events}}" as="e" hint-placeholder-count="2">
+<div style="display: flex; gap: 12px; padding: 10px 12px; background: #F5F5F1; border-left: 3px solid {{e.color}}">
+<div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px">
+<span style="font-family: 'Archivo', sans-serif; font-size: 12px; font-weight: 800; letter-spacing: 0.06em">{{e.type}}</span>
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600; white-space: nowrap">{{e.md}}</span>
+</div>
+<span style="font-size: 12.5px; color: #454845; line-height: 1.4">{{e.note}}</span>
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px">
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #080909">{{e.align}}</span>
+<a href="DocumentIntel.dc.html" style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #454845">{{e.src}}</a>
+</div>
+</div>
+</div>
+</sc-for>
+</div>
+<div style="display: flex; flex-direction: column; gap: 9px">
+<span style="font-family: 'Archivo', sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 0.14em">WHY IT IS SIMILAR</span>
+<sc-for list="{{d.why}}" as="y" hint-placeholder-count="4">
+<div style="display: grid; grid-template-columns: 108px minmax(0, 1fr) 34px; align-items: center; gap: 10px; font-size: 12px">
+<span style="color: #454845">{{y.label}}</span>
+<span style="height: 6px; background: #E8E9E5; position: relative"><span style="position: absolute; left: 0; top: 0; bottom: 0; width: {{y.v}}%; background: {{y.bar}}"></span></span>
+<span style="font-family: 'IBM Plex Mono', monospace; font-weight: 600; text-align: right">{{y.v}}</span>
+</div>
+</sc-for>
+</div>
+</div>
+
+<div style="flex-shrink: 0; display: flex; gap: 8px; padding: 14px 22px 18px; border-top: 1px solid #E8E9E5">
+<a href="WellCompare.dc.html" style="flex-grow: 1; height: 44px; display: flex; align-items: center; justify-content: center; gap: 8px; background: #F4C400; color: #080909; font-family: 'Archivo', sans-serif; font-size: 12px; font-weight: 900; letter-spacing: 0.1em; text-decoration: none">COMPARE WITH 104
+<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true" style="stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></a>
+<a href="KnowledgeCentre.dc.html" style="height: 44px; box-sizing: border-box; display: flex; align-items: center; padding: 0 14px; background: #080909; color: #FFFFFF; font-family: 'Archivo', sans-serif; font-size: 12px; font-weight: 800; letter-spacing: 0.1em; text-decoration: none">EVENTS</a>
+<a href="DocumentLibrary.dc.html" style="height: 44px; box-sizing: border-box; display: flex; align-items: center; padding: 0 14px; border: 1px solid #080909; color: #080909; font-family: 'Archivo', sans-serif; font-size: 12px; font-weight: 800; letter-spacing: 0.1em; text-decoration: none">DOCS</a>
+</div>
+</aside>
+
+</main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { sel: 'W-067', r: 5, fRel: false, fLoss: false, sort: 'dist' };
+  }
+  renderVals() {
+    var self = this;
+    var st = this.state || {};
+    var sel = st.sel || 'W-067';
+    var R = st.r || 5;
+    var fRel = !!st.fRel, fLoss = !!st.fLoss;
+    var sort = st.sort || 'dist';
+    var s = 175 / R, cx = 391, cy = 193;
+    function P(k) { return { x: Math.round((cx + k[0] * s) * 10) / 10, y: Math.round((cy - k[1] * s) * 10) / 10 }; }
+    var RED = '#D9362B', YEL = '#F4C400', BLK = '#080909', GRY = '#A3A6A1';
+    var W = [
+      { id: 'W-067', key: 'w067', su: [-0.8, 0.9], de: [-0.4, 0.4], dist: 1.2, sim: 87, td: '3,420', top: '3,004', spud: '2019', status: 'Producing', risk: 'HIGH', loss: true, side: 'left', why: [95, 84, 90, 88],
+        events: [
+          { type: 'MUD LOSS', sev: 'high', md: '3,061 m MD', note: '45 bbl/h. Flow cut 10 %, 40 ppb LCM pill; cured in 3.5 h, 12 m³ lost.', align: '≙ 3,203 m on OIL-WELL-104', src: 'WCR p.47' },
+          { type: 'TORQUE SPIKES', sev: 'low', md: '2,930 m MD', note: 'Tipam. Reamed through, no lost time.', align: 'Tipam, above the Barail top', src: 'DDR 11 Mar 2019' }
+        ] },
+      { id: 'W-042', key: 'w042', su: [2.6, 0.2], de: [2.5, 0.6], dist: 2.1, sim: 81, td: '3,510', top: '3,062', spud: '2016', status: 'Producing', risk: 'MEDIUM', loss: true, side: 'right', why: [92, 70, 85, 78],
+        events: [
+          { type: 'SEEPAGE LOSS', sev: 'med', md: '3,290 m MD', note: '8 bbl/h. 30 ppb fine LCM; cured in 1 h.', align: '≙ 3,204 m on OIL-WELL-104', src: 'DDR 2 Nov 2016' },
+          { type: 'OVERPULL', sev: 'med', md: '3,350 m MD', note: '25 t on trip out. Back-reamed, 6 h lost.', align: '≙ 3,264 m on OIL-WELL-104', src: 'DDR 4 Nov 2016' }
+        ] },
+      { id: 'W-088', key: 'w088', su: [1.9, -2.6], de: [2.4, -2.1], dist: 2.6, sim: 78, td: '3,380', top: '3,088', spud: '2014', status: 'Suspended', risk: 'HIGH', loss: true, side: 'left', why: [90, 76, 72, 74],
+        events: [
+          { type: 'TOTAL LOSS', sev: 'high', md: '3,196 m MD', note: 'Two LCM pills failed; cement plug set. 36 h lost.', align: '≙ 3,199 m on OIL-WELL-104', src: 'WCR p.88' },
+          { type: 'POOR CEMENT BOND', sev: 'med', md: '3,145 m MD', note: '9⅝-in shoe. Squeezed before drilling ahead.', align: '≙ 3,148 m on OIL-WELL-104', src: 'WCR p.61' }
+        ] },
+      { id: 'W-081', key: 'w081', su: [-2.2, -1.4], de: [-2.0, -1.7], dist: 3.0, sim: 58, td: '3,300', top: '3,041', spud: '2017', status: 'Producing', risk: 'LOW', loss: true, side: 'left', why: [70, 55, 60, 66],
+        events: [
+          { type: 'SEEPAGE LOSS', sev: 'low', md: '3,240 m MD', note: '5 bbl/h in the Barail. Healed without treatment.', align: 'Barail', src: 'DDR 18 Sep 2017' },
+          { type: 'BIT BALLING', sev: 'low', md: '2,760 m MD', note: 'Girujan clays. Pulled and cleaned the bit.', align: 'Girujan', src: 'DDR 12 Sep 2017' }
+        ] },
+      { id: 'W-112', key: 'w112', su: [2.9, -2.4], de: [3.2, -2.6], dist: 3.4, sim: 41, td: '3,640', top: '3,110', spud: '2022', status: 'Producing', risk: 'MEDIUM', loss: false, side: 'right', why: [48, 40, 52, 58],
+        events: [
+          { type: 'GAS INFLUX', sev: 'high', md: '3,510 m MD', note: '1.2 m³ gain. Shut in; mud weight raised to 1.52.', align: 'Deeper than the 104 plan', src: 'DDR 7 Jun 2022' }
+        ] },
+      { id: 'W-103', key: 'w103', su: [-1.5, 3.6], de: [-1.2, 3.2], dist: 3.9, sim: 36, td: '3,250', top: '2,996', spud: '2018', status: 'Abandoned', risk: 'MEDIUM', loss: true, side: 'right', why: [44, 30, 40, 50],
+        events: [
+          { type: 'TIGHT HOLE', sev: 'low', md: '2,880 m MD', note: 'Tipam. Reamed; no lost time.', align: 'Tipam', src: 'DDR 3 Apr 2018' },
+          { type: 'LOSSES WHILE CEMENTING', sev: 'med', md: '3,120 m MD', note: 'Partial returns during the 7-in job.', align: 'Barail', src: 'WCR p.73' }
+        ] },
+      { id: 'W-121', key: 'w121', su: [-3.8, 1.9], de: [-3.2, 1.5], dist: 4.2, sim: 64, td: '3,480', top: '2,985', spud: '2021', status: 'Producing', risk: 'MEDIUM', loss: false, side: 'right', why: [72, 60, 70, 48],
+        events: [
+          { type: 'DIFFERENTIAL STICKING', sev: 'med', md: '3,014 m MD', note: 'Jarred free with a pipe-free pill; 9 h lost.', align: '≙ 3,203 m on OIL-WELL-104', src: 'DDR 5 Aug 2021' }
+        ] },
+      { id: 'W-132', key: 'w132', su: [5.7, -2.2], de: [6.0, -2.6], dist: 5.8, sim: 44, td: '3,560', top: '3,120', spud: '2014', status: 'Producing', risk: 'LOW', loss: false, side: 'left', why: [55, 40, 45, 35],
+        events: [
+          { type: 'TIGHT HOLE', sev: 'low', md: '3,300 m MD', note: 'Barail. Back-reamed one stand.', align: 'Barail', src: 'DDR 21 Jan 2014' }
+        ] },
+      { id: 'W-018', key: 'w018', su: [-5.4, 2.9], de: [-5.0, 2.6], dist: 6.3, sim: 52, td: '3,200', top: '3,010', spud: '1998', status: 'Abandoned', risk: 'LOW', loss: false, side: 'right', why: [60, 50, 40, 30],
+        events: [
+          { type: '3 FIELDS AWAITING REVIEW', sev: 'info', md: 'Scanned WCR', note: 'OCR confidence below 0.80 on formation tops and one event depth.', align: 'Review in Document Intelligence', src: 'WCR 1998 (scan)' }
+        ] }
+    ];
+    var sevColor = { high: RED, med: YEL, low: GRY, info: '#6B6E69' };
+    var riskStyle = { HIGH: [RED, '#FFFFFF'], MEDIUM: [YEL, BLK], LOW: ['#E8E9E5', BLK] };
+    function visible(w) { return w.dist <= R && (!fRel || w.sim >= 75) && (!fLoss || w.loss); }
+
+    var p = {}, mapWells = [], lossDots = [], count = 0, relCount = 0;
+    W.forEach(function (w) {
+      var v = visible(w), on = w.id === sel, rel = w.sim >= 75;
+      var S = P(w.su), D = P(w.de);
+      var c = { x: Math.round((S.x + (D.x - S.x) * 0.15) * 10) / 10, y: Math.round((S.y + (D.y - S.y) * 0.85) * 10) / 10 };
+      p[w.key] = {
+        d: v ? 'M' + S.x + ' ' + S.y + 'Q' + c.x + ' ' + c.y + ' ' + D.x + ' ' + D.y : 'M0 0',
+        c: v ? (on ? BLK : (rel ? '#D6A900' : GRY)) : 'transparent',
+        w: on ? 3 : (rel ? 2.25 : 1.5),
+        sx: S.x, sy: S.y, sr: v ? 3 : 0
+      };
+      if (!v) return;
+      if (w.dist <= R) { count++; if (rel) relCount++; }
+      if (w.loss) lossDots.push({ x: D.x + 3, y: D.y - 13 });
+      mapWells.push({
+        aria: w.id + ', ' + w.dist.toFixed(1) + ' kilometres at bit depth, ' + w.sim + ' percent similar',
+        pressed: on ? 'true' : 'false',
+        pick: function () { self.setState({ sel: w.id }); },
+        bx: D.x - 14, by: D.y - 14,
+        fill: rel ? YEL : '#FFFFFF',
+        stroke: rel || on ? BLK : '#6B6E69',
+        ring: on ? '0 0 0 3px #FFFFFF, 0 0 0 5px #080909' : 'none',
+        showLabel: rel || on,
+        label: w.id + ' · ' + w.sim + '%',
+        lx: w.side === 'right' ? (D.x + 14) + 'px' : 'auto',
+        rx: w.side === 'left' ? (782 - D.x + 14) + 'px' : 'auto',
+        ly: D.y - 10,
+        labelBg: on ? BLK : '#FFFFFF',
+        labelFg: on ? '#FFFFFF' : BLK,
+        labelBorder: on ? BLK : '#D4D6D1'
+      });
+    });
+
+    var B = P([0.6, -0.3]), A = P([0.93, -0.5]);
+    var act = {
+      path: 'M391 193Q' + (391 + (B.x - 391) * 0.3) + ' ' + (193 + (B.y - 193) * 0.9) + ' ' + B.x + ' ' + B.y,
+      ahead: 'M' + B.x + ' ' + B.y + 'L' + A.x + ' ' + A.y,
+      bit: 'M' + (B.x - 6) + ' ' + (B.y - 5) + 'h12l-6 10z'
+    };
+
+    var list = W.filter(visible).slice();
+    list.sort(function (a, b) { return sort === 'sim' ? b.sim - a.sim : a.dist - b.dist; });
+    var rows = list.map(function (w) {
+      var on = w.id === sel, rs = riskStyle[w.risk];
+      return {
+        id: w.id, dist: w.dist.toFixed(1) + ' km', td: w.td + ' m', top: w.top + ' m', sim: w.sim,
+        simBar: w.sim >= 75 ? YEL : GRY, evCount: String(w.events.length), risk: w.risk,
+        riskBg: rs[0], riskFg: rs[1],
+        pressed: on ? 'true' : 'false', bg: on ? '#FFF3B0' : '#FFFFFF', bar: on ? BLK : 'transparent',
+        pick: function () { self.setState({ sel: w.id }); }
+      };
+    });
+
+    var sw = W.filter(function (w) { return w.id === sel; })[0] || W[0];
+    var ds = riskStyle[sw.risk];
+    var whyLabels = ['Stratigraphy', 'Trajectory', 'Mud system', 'Proximity'];
+    var d = {
+      id: sw.id, sim: sw.sim, simColor: sw.sim >= 75 ? YEL : '#FFFFFF',
+      status: sw.status, spud: sw.spud, risk: sw.risk, riskBg: ds[0], riskFg: ds[1],
+      dist: sw.dist.toFixed(1) + ' km', td: sw.td, top: sw.top,
+      events: sw.events.map(function (e) { return { type: e.type, md: e.md, note: e.note, align: e.align, src: e.src, color: sevColor[e.sev] }; }),
+      why: sw.why.map(function (v, i) { return { label: whyLabels[i], v: v, bar: v >= 75 ? YEL : GRY }; })
+    };
+
+    var radii = [1, 3, 5, 10].map(function (r) {
+      var on = r === R;
+      return { label: r + ' km', pressed: on ? 'true' : 'false', bg: on ? BLK : '#FFFFFF', fg: on ? '#FFFFFF' : BLK, border: on ? BLK : '#D4D6D1', pick: function () { self.setState({ r: r }); } };
+    });
+    var sorts = [['dist', 'DISTANCE'], ['sim', 'SIMILARITY']].map(function (x) {
+      var on = x[0] === sort;
+      return { label: x[1], pressed: on ? 'true' : 'false', bg: on ? BLK : '#FFFFFF', fg: on ? '#FFFFFF' : BLK, border: on ? BLK : '#D4D6D1', pick: function () { self.setState({ sort: x[0] }); } };
+    });
+    var scaleKm = { 1: '0.2 km', 3: '0.6 km', 5: '1 km', 10: '2 km' };
+    return {
+      p: p, act: act, mapWells: mapWells, lossDots: lossDots, rows: rows, d: d, radii: radii, sorts: sorts,
+      count: String(count), relCount: String(relCount),
+      radiusLabel: R + ' km', scaleLabel: scaleKm[R] || '1 km',
+      empty: mapWells.length === 0,
+      emptyText: R === 1 ? 'No offsets within 1 km. The nearest is W-067 at 1.2 km.' : 'No wells match these filters.',
+      mapAria: 'Map of OIL-WELL-104 with ' + count + ' offset wells within ' + R + ' kilometres.',
+      toggleRel: function () { self.setState({ fRel: !fRel }); },
+      relPressed: fRel ? 'true' : 'false', relBg: fRel ? '#FFF3B0' : '#FFFFFF', relBorder: fRel ? BLK : '#D4D6D1',
+      toggleLoss: function () { self.setState({ fLoss: !fLoss }); },
+      lossPressed: fLoss ? 'true' : 'false', lossBg: fLoss ? '#FFF3B0' : '#FFFFFF', lossBorder: fLoss ? BLK : '#D4D6D1'
+    };
+  }
+}
+</script>
+</body>
+</html>

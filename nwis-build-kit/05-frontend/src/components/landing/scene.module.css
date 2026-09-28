@@ -1,0 +1,160 @@
+/* ============================================================================
+   Landing hero scene. The oil barrel is the visual anchor; the oil leaving it
+   becomes data, the data becomes a trajectory, the trajectory reaches a well.
+   Motion is slow and continuous: no parallax, no bounce.
+   ========================================================================== */
+
+.scene {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+
+.grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.5;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+  background-size: 3px 3px;
+  mix-blend-mode: screen;
+}
+
+/* strata: very slow vertical drift so the section feels alive */
+@keyframes strataDrift {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-14px);
+  }
+}
+
+.strata {
+  animation: strataDrift 26s linear infinite alternate;
+}
+
+/* the oil: slow creep down the barrel wall and out of the puncture */
+@keyframes oilDrip {
+  0% {
+    transform: translateY(-6px) scaleY(0.7);
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(96px) scaleY(1.25);
+    opacity: 0;
+  }
+}
+
+.oilDrip {
+  animation: oilDrip 3.6s var(--nw-ease) infinite;
+  transform-origin: top center;
+}
+
+@keyframes oilSheen {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-70px);
+  }
+}
+
+.oilSheen {
+  animation: oilSheen 5.5s linear infinite;
+}
+
+/* data travelling from the barrel toward the well */
+@keyframes travel {
+  from {
+    offset-distance: 0%;
+  }
+  to {
+    offset-distance: 100%;
+  }
+}
+
+.traveller {
+  animation: travel 5.2s linear infinite;
+}
+
+@keyframes dashFlow {
+  to {
+    stroke-dashoffset: -180;
+  }
+}
+
+.flow {
+  animation: dashFlow 3.4s linear infinite;
+}
+
+/* the bit: slow breathing pulse, the heartbeat of the platform */
+@keyframes bitPulse {
+  0%,
+  100% {
+    r: 7;
+    opacity: 0.28;
+  }
+  50% {
+    r: 15;
+    opacity: 0;
+  }
+}
+
+.bitRing {
+  animation: bitPulse 3.2s var(--nw-ease) infinite;
+}
+
+@keyframes wellPulse {
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.75;
+    transform: scale(1.5);
+  }
+}
+
+.wellRing {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: wellPulse 3.6s var(--nw-ease) infinite;
+}
+
+/* the trajectory is drawn once, slowly, on load */
+@keyframes draw {
+  from {
+    stroke-dashoffset: 1200;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.draw {
+  animation: draw 3.4s var(--nw-ease) forwards;
+}
+
+.draw--delay {
+  animation-delay: 0.5s;
+}
+
+@keyframes scanSweep {
+  from {
+    transform: translateY(-40px);
+  }
+  to {
+    transform: translateY(560px);
+  }
+}
+
+.scan {
+  animation: scanSweep 9s linear infinite;
+  opacity: 0.5;
+}

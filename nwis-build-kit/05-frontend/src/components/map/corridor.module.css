@@ -1,0 +1,296 @@
+/* ============================================================================
+   Depth corridor. Parallel well columns against one depth axis. The banding is
+   formation, the glyphs are historical events, and the only yellow is the
+   look-ahead window and the depth marks that belong to it.
+   ========================================================================== */
+
+.wrap {
+  display: flex;
+  align-items: flex-start;
+  min-height: 0;
+  overflow: auto hidden;
+}
+
+.axis {
+  position: sticky;
+  left: 0;
+  background: var(--nw-white);
+  z-index: 2;
+  padding-right: 2px;
+}
+
+.columns {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.col {
+  flex: 1 1 0;
+  min-width: 74px;
+  max-width: 130px;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid var(--nw-border);
+}
+
+.col--active {
+  border-left: 2px solid var(--nw-ink);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--nw-yellow) 7%, transparent), transparent 120px);
+}
+
+.col--selected {
+  background: color-mix(in srgb, var(--nw-yellow) 12%, transparent);
+}
+
+.colHead {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 6px;
+  border-bottom: 1px solid var(--nw-border);
+  min-height: 24px;
+  flex-wrap: wrap;
+  row-gap: 1px;
+  overflow: hidden;
+}
+
+.colBtn {
+  appearance: none;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  border: 0;
+  background: none;
+  padding: 0;
+  font-family: var(--nw-font-mono);
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--nw-ink);
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: var(--nw-yellow);
+  text-underline-offset: 2px;
+}
+
+.colId {
+  font-family: var(--nw-font-mono);
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--nw-ink);
+}
+
+.colDist,
+.colActive,
+.colShift {
+  font-family: var(--nw-font-display);
+  font-size: var(--nw-fs-micro);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--nw-text-4);
+}
+
+.colActive {
+  color: var(--nw-ink);
+  background: var(--nw-yellow);
+  padding: 0 3px;
+}
+
+.colShift {
+  color: var(--nw-text-3);
+}
+
+.colBody {
+  position: relative;
+  flex: 1 1 auto;
+  background: var(--nw-surface-2);
+  overflow: hidden;
+}
+
+/* bands ------------------------------------------------------------------- */
+
+.band {
+  position: absolute;
+  /* The band is a query container, so its own height decides whether the vertical name still fits. */
+  container-type: size;
+  left: 0;
+  right: 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--nw-ink) 16%, transparent);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 2px;
+  overflow: hidden;
+}
+
+.bandName {
+  font-family: var(--nw-font-display);
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--nw-ink);
+  opacity: 0.85;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  white-space: nowrap;
+  overflow: hidden;
+  /* The name is set vertically inside a band that can be only a few pixels tall while a layout
+     settles; clipping it is correct, but letting it spill out of the column is not. */
+  max-height: 100%;
+  max-width: 100%;
+}
+
+/* A short band keeps a smaller vertical name, and a band too short for even that drops the name:
+   a clipped formation name is worse than no name. */
+@container (max-height: 56px) {
+  .bandName {
+    font-size: 7.5px;
+    letter-spacing: 0.04em;
+  }
+}
+
+@container (max-height: 44px) {
+  .bandName {
+    font-size: 6.8px;
+    letter-spacing: 0;
+  }
+}
+
+@container (max-height: 30px) {
+  .bandName {
+    display: none;
+  }
+}
+
+/* A band that runs past the bottom of the slice is drawn clipped, with a torn edge to say so. */
+.band--continues {
+  border-bottom: 0;
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 7px), transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 7px), transparent 100%);
+}
+
+/* look-ahead -------------------------------------------------------------- */
+
+.lookAhead {
+  position: absolute;
+  left: 0;
+  right: 0;
+  background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--nw-yellow) 22%, transparent) 0 4px, transparent 4px 8px);
+  border-top: 1px solid var(--nw-yellow-deep);
+  border-bottom: 1px solid var(--nw-yellow-deep);
+  pointer-events: none;
+}
+
+.bitLine {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 0;
+  border-top: 2px solid var(--nw-ink);
+  pointer-events: none;
+}
+
+.bitLine::before {
+  content: '';
+  position: absolute;
+  left: -1px;
+  top: -4px;
+  border: 4px solid transparent;
+  border-left-color: var(--nw-ink);
+}
+
+/* events ------------------------------------------------------------------ */
+
+.event {
+  position: absolute;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 1px 2px 1px 3px;
+  background: var(--nw-white);
+  border: 0;
+  border-top: 1px solid var(--nw-border);
+  border-bottom: 1px solid var(--nw-border);
+  cursor: pointer;
+  transform: translateY(-50%);
+  z-index: 1;
+  text-align: left;
+}
+
+.event:hover {
+  background: var(--nw-yellow);
+  z-index: 3;
+}
+
+.event--window {
+  border-left: 3px solid var(--nw-red);
+}
+
+.event--window:hover {
+  border-left-color: var(--nw-ink);
+}
+
+.eventLabel {
+  font-size: 9px;
+  line-height: 1.25;
+  color: var(--nw-text-2);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* readout ----------------------------------------------------------------- */
+
+.readout {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px var(--nw-s3);
+  border-top: 1px solid var(--nw-border);
+  font-size: var(--nw-fs-xs);
+  color: var(--nw-text-2);
+  background: var(--nw-paper);
+}
+
+.readoutT {
+  font-weight: 600;
+  color: var(--nw-ink);
+}
+
+.readoutFlag {
+  font-family: var(--nw-font-display);
+  font-size: var(--nw-fs-micro);
+  font-weight: 700;
+  letter-spacing: var(--nw-track-label);
+  text-transform: uppercase;
+  color: var(--nw-red);
+}
+
+.readoutFlagMuted {
+  font-family: var(--nw-font-display);
+  font-size: var(--nw-fs-micro);
+  font-weight: 700;
+  letter-spacing: var(--nw-track-label);
+  text-transform: uppercase;
+  color: var(--nw-text-4);
+}
+
+/* Phone: the corridor keeps its true column widths and scrolls sideways, with the depth ruler
+   pinned, rather than compressing five wells into a phone. */
+@media (max-width: 767px) {
+  .wrap {
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+  .columns {
+    flex: 0 0 auto;
+  }
+  .col {
+    min-width: 86px;
+  }
+}

@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>NWIS Document Intelligence</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0;background:#F5F5F1}
+a{color:#080909}a:hover{color:#454845}
+button,input{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; display: flex; overflow: hidden; background: #F5F5F1; color: #080909; font-family: 'IBM Plex Sans', system-ui, sans-serif">
+<dc-import name="NwisSidebar" active="docintel" hint-size="248px,900px"></dc-import>
+<div style="width: 1192px; height: 900px; display: flex; flex-direction: column">
+<dc-import name="NwisTopbar" num="10" section="Data" heading="Document Intelligence" desc="See exactly what NWIS read from a page, how sure it is, and fix anything it got wrong." hint-size="1192px,88px"></dc-import>
+<main style="flex-grow: 1; min-height: 0; box-sizing: border-box; padding: 24px; display: flex; flex-direction: column; gap: 16px">
+
+<section aria-label="Processing pipeline" style="height: 84px; flex-shrink: 0; display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); background: #FFFFFF; border: 1px solid #E8E9E5">
+<sc-for list="{{steps}}" as="s" hint-placeholder-count="8">
+<div style="position: relative; display: flex; flex-direction: column; justify-content: center; gap: 4px; padding: 0 14px; background: {{s.bg}}; color: {{s.fg}}; border-right: 1px solid {{s.edge}}">
+<div style="position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: {{s.bar}}"></div>
+<span style="display: flex; align-items: center; gap: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: {{s.numColor}}">{{s.n}}
+<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="{{s.checkColor}}" aria-hidden="true" style="stroke-width: 3.5; stroke-linecap: round; stroke-linejoin: round"><path d="{{s.icon}}"></path></svg></span>
+<span style="font-family: 'Archivo', sans-serif; font-size: 13px; font-weight: 900; letter-spacing: 0.08em">{{s.label}}</span>
+<span style="font-size: 11px; color: {{s.subColor}}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{s.sub}}</span>
+</div>
+</sc-for>
+</section>
+
+<div style="flex-grow: 1; min-height: 0; display: flex; gap: 16px">
+
+<section aria-label="Source page" style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; background: #FFFFFF; border: 1px solid #E8E9E5">
+<div style="height: 44px; flex-shrink: 0; box-sizing: border-box; display: flex; align-items: center; gap: 12px; padding: 0 16px; border-bottom: 1px solid #E8E9E5">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#080909" aria-hidden="true" style="stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round"><path d="M7 3h7l5 5v13H7zM14 3v5h5"></path></svg>
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 600">W-067_WCR_2019.pdf</span>
+<span style="font-size: 12px; color: #6B6E69">Well completion report · OCR 0.94</span>
+<span style="flex-grow: 1"></span>
+<span style="height: 28px; box-sizing: border-box; display: flex; align-items: center; border: 1px solid #D4D6D1; font-family: 'IBM Plex Mono', monospace; font-size: 12px">
+<span style="padding: 0 10px; color: #6B6E69">‹</span><span style="padding: 0 6px; font-weight: 600">p. 47 / 112</span><span style="padding: 0 10px; color: #6B6E69">›</span></span>
+<span style="height: 28px; box-sizing: border-box; display: flex; align-items: center; padding: 0 10px; border: 1px solid #D4D6D1; font-family: 'IBM Plex Mono', monospace; font-size: 12px">100 %</span>
+</div>
+<div style="position: relative; flex-grow: 1; min-height: 0; overflow: hidden; background: #E8E9E5">
+<div style="position: absolute; left: 50%; top: 16px; width: 500px; height: 580px; margin-left: -250px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(8,9,9,0.12), 0 8px 24px rgba(8,9,9,0.08); font-family: Georgia, 'Times New Roman', serif; color: #242625">
+<span style="position: absolute; left: 36px; top: 24px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.08em; color: #6B6E69">WELL COMPLETION REPORT · W-067</span>
+<span style="position: absolute; right: 36px; top: 24px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #6B6E69">Page 47</span>
+<span style="position: absolute; left: 36px; right: 36px; top: 44px; height: 1px; background: #242625"></span>
+<span style="position: absolute; left: 36px; top: 62px; font-size: 14px; font-weight: 700; letter-spacing: 0.04em">7&nbsp;&nbsp;DRILLING HAZARDS ENCOUNTERED</span>
+<span style="position: absolute; left: 36px; top: 92px; font-size: 12.5px; font-weight: 700">7.3&nbsp;&nbsp;Lost circulation, 8½-in section</span>
+
+<div style="position: absolute; left: 30px; right: 30px; top: {{hl.top}}px; height: {{hl.h}}px; background: rgba(244,196,0,0.38); box-shadow: inset 3px 0 0 #080909"></div>
+<span style="position: absolute; right: 18px; top: {{hl.tagTop}}px; height: 18px; display: flex; align-items: center; padding: 0 6px; background: #080909; color: #FFFFFF; font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; white-space: nowrap">{{hl.tag}}</span>
+
+<span style="position: absolute; left: 36px; top: 122px; font-size: 12.5px; line-height: 21px; white-space: nowrap">Well W-067 was drilling the 8½-in hole below the</span>
+<span style="position: absolute; left: 36px; top: 143px; font-size: 12.5px; line-height: 21px; white-space: nowrap">9⅝-in shoe with KCl-polymer mud at 1.38 g/cm³.</span>
+<span style="position: absolute; left: 36px; top: 164px; font-size: 12.5px; line-height: 21px; white-space: nowrap">At 3,061 m MD (3,021 m TVDSS), 17 m into the</span>
+<span style="position: absolute; left: 36px; top: 185px; font-size: 12.5px; line-height: 21px; white-space: nowrap">Barail, partial losses of 45 bbl/hr were observed.</span>
+<span style="position: absolute; left: 36px; top: 206px; font-size: 12.5px; line-height: 21px; white-space: nowrap">Cuttings showed fractured, coarse-grained sand.</span>
+<span style="position: absolute; left: 36px; top: 227px; font-size: 12.5px; line-height: 21px; white-space: nowrap">Flow rate was reduced by 10% and a 40 ppb LCM</span>
+<span style="position: absolute; left: 36px; top: 248px; font-size: 12.5px; line-height: 21px; white-space: nowrap">pill was spotted across the loss zone.</span>
+<span style="position: absolute; left: 36px; top: 269px; font-size: 12.5px; line-height: 21px; white-space: nowrap">Losses cured after 3.5 hrs; total mud lost 12 m³.</span>
+<span style="position: absolute; left: 36px; top: 290px; font-size: 12.5px; line-height: 21px; white-space: nowrap">Drilling resumed at 13.1 m/hr.</span>
+
+<span style="position: absolute; left: 36px; top: 326px; font-size: 11px; font-style: italic">Table 7.3-1&nbsp;&nbsp;Mud properties at time of loss</span>
+<div style="position: absolute; left: 36px; right: 36px; top: 346px; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); border: 1px solid #242625; font-size: 11.5px">
+<span style="padding: 5px 8px; border-right: 1px solid #242625; border-bottom: 1px solid #242625; font-weight: 700">MW</span>
+<span style="padding: 5px 8px; border-right: 1px solid #242625; border-bottom: 1px solid #242625; font-weight: 700">ECD</span>
+<span style="padding: 5px 8px; border-right: 1px solid #242625; border-bottom: 1px solid #242625; font-weight: 700">PV</span>
+<span style="padding: 5px 8px; border-right: 1px solid #242625; border-bottom: 1px solid #242625; font-weight: 700">YP</span>
+<span style="padding: 5px 8px; border-bottom: 1px solid #242625; font-weight: 700">API FL</span>
+<span style="padding: 5px 8px; border-right: 1px solid #242625">1.38</span>
+<span style="padding: 5px 8px; border-right: 1px solid #242625">1.46</span>
+<span style="padding: 5px 8px; border-right: 1px solid #242625">18 cP</span>
+<span style="padding: 5px 8px; border-right: 1px solid #242625">22</span>
+<span style="padding: 5px 8px">4.2 ml</span>
+</div>
+
+<span style="position: absolute; left: 36px; top: 420px; font-size: 12.5px; font-weight: 700; color: #6B6E69">7.4&nbsp;&nbsp;Tight hole</span>
+<span style="position: absolute; left: 36px; top: 446px; font-size: 12.5px; line-height: 21px; white-space: nowrap; color: #8E918C">Minor overpull of 10 t was recorded on the trip out</span>
+<span style="position: absolute; left: 36px; top: 467px; font-size: 12.5px; line-height: 21px; white-space: nowrap; color: #8E918C">at 3,140 m MD. The interval was reamed once and</span>
+<span style="position: absolute; left: 36px; top: 488px; font-size: 12.5px; line-height: 21px; white-space: nowrap; color: #8E918C">the trip continued without further drag.</span>
+<span style="position: absolute; left: 36px; right: 36px; bottom: 22px; display: flex; justify-content: space-between; font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: #A3A6A1"><span>DEMO DOCUMENT · NWIS PROTOTYPE</span><span>47</span></span>
+</div>
+</div>
+</section>
+
+<aside aria-label="Extracted fields" style="width: 404px; flex-shrink: 0; display: flex; flex-direction: column; background: #FFFFFF; border: 1px solid #E8E9E5; overflow: hidden">
+<div style="height: 48px; flex-shrink: 0; box-sizing: border-box; display: flex; align-items: center; gap: 10px; padding: 0 18px; background: #080909; color: #FFFFFF">
+<span style="display: flex; align-items: center; gap: 8px; font-family: 'Archivo', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; color: #F4C400"><span style="width: 18px; height: 3px; background: #F4C400"></span>EXTRACTED EVENT</span>
+<span style="flex-grow: 1"></span>
+<span style="font-size: 12px; color: #C9CBC6">{{summary}}</span>
+</div>
+<div style="flex-grow: 1; min-height: 0; overflow-y: auto">
+<sc-for list="{{fields}}" as="f" hint-placeholder-count="7">
+<div style="border-bottom: 1px solid #EEEEEA; border-left: 3px solid {{f.bar}}; background: {{f.bg}}">
+<button type="button" onClick="{{f.pick}}" aria-pressed="{{f.pressed}}" style="width: 100%; display: grid; grid-template-columns: 86px minmax(0, 1fr) 64px; align-items: center; gap: 10px; padding: 10px 16px 10px 15px; border: none; background: transparent; color: #080909; text-align: left; cursor: pointer">
+<span style="font-family: 'Archivo', sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: 0.12em; color: #6B6E69">{{f.label}}</span>
+<span style="font-size: 13.5px; font-weight: 600; line-height: 1.35">{{f.value}}</span>
+<span style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px">
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600; color: {{f.confColor}}">{{f.confText}}</span>
+<span style="width: 56px; height: 4px; background: #E8E9E5; position: relative"><span style="position: absolute; left: 0; top: 0; bottom: 0; width: {{f.conf}}%; background: {{f.confBar}}"></span></span>
+</span>
+</button>
+<sc-if value="{{f.review}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; flex-direction: column; gap: 8px; padding: 0 16px 12px 15px">
+<span style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: #454845"><span style="height: 18px; display: flex; align-items: center; padding: 0 6px; background: #F4C400; color: #080909; font-family: 'Archivo', sans-serif; font-size: 9.5px; font-weight: 800; letter-spacing: 0.12em">CHECK</span>Two numbers on one line; please confirm.</span>
+<sc-if value="{{editing}}" hint-placeholder-val="{{false}}">
+<label for="di-edit" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Outcome</label>
+<input id="di-edit" type="text" value="Cured in 3.5 h; 12 m³ lost" style="height: 36px; box-sizing: border-box; padding: 0 10px; border: 2px solid #080909; background: #FFFFFF; font-size: 13px">
+</sc-if>
+<div style="display: flex; gap: 8px">
+<button type="button" onClick="{{confirm}}" style="height: 36px; padding: 0 16px; border: none; background: #080909; color: #FFFFFF; font-family: 'Archivo', sans-serif; font-size: 11.5px; font-weight: 800; letter-spacing: 0.1em; cursor: pointer">{{confirmLabel}}</button>
+<button type="button" onClick="{{toggleEdit}}" style="height: 36px; padding: 0 16px; border: 1px solid #080909; background: #FFFFFF; color: #080909; font-family: 'Archivo', sans-serif; font-size: 11.5px; font-weight: 800; letter-spacing: 0.1em; cursor: pointer">{{editLabel}}</button>
+</div>
+</div>
+</sc-if>
+</div>
+</sc-for>
+</div>
+<div style="flex-shrink: 0; padding: 14px 18px 16px; border-top: 1px solid #E8E9E5; display: flex; flex-direction: column; gap: 8px">
+<span style="font-family: 'Archivo', sans-serif; font-size: 10.5px; font-weight: 800; letter-spacing: 0.14em">{{linkTitle}}</span>
+<div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap; font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600">
+<span style="height: 24px; display: flex; align-items: center; padding: 0 7px; background: #080909; color: #FFFFFF">W-067</span><span style="color: #6B6E69">→</span>
+<span style="height: 24px; display: flex; align-items: center; padding: 0 7px; background: #D9362B; color: #FFFFFF">MUD LOSS</span><span style="color: #6B6E69">→</span>
+<span style="height: 24px; display: flex; align-items: center; padding: 0 7px; background: #E8E9E5; border: 1px solid #080909; box-sizing: border-box">BARAIL</span><span style="color: #6B6E69">→</span>
+<span style="height: 24px; display: flex; align-items: center; padding: 0 7px; border: 1px solid #080909; box-sizing: border-box">LCM PILL</span><span style="color: #6B6E69">→</span>
+<span style="height: 24px; display: flex; align-items: center; padding: 0 7px; border: 1px {{outcomeBorder}} #080909; box-sizing: border-box; background: {{outcomeBg}}">CURED 3.5 h</span>
+</div>
+<a href="KnowledgeGraph.dc.html" style="align-self: flex-start; font-family: 'Archivo', sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 0.1em; text-decoration-color: #F4C400; text-decoration-thickness: 2px; text-underline-offset: 4px">OPEN IN GRAPH →</a>
+</div>
+</aside>
+</div>
+
+</main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { sel: 'depth', confirmed: false, editing: false };
+  }
+  renderVals() {
+    var self = this;
+    var st = this.state || {};
+    var sel = st.sel || 'depth';
+    var confirmed = !!st.confirmed;
+    var editing = !!st.editing;
+    var F = [
+      { k: 'well', label: 'WELL', value: 'W-067', conf: 99, top: 122, h: 21 },
+      { k: 'formation', label: 'FORMATION', value: 'Barail', conf: 96, top: 185, h: 21 },
+      { k: 'depth', label: 'DEPTH', value: '3,061 m MD · 3,021 m TVDSS', conf: 97, top: 164, h: 21 },
+      { k: 'event', label: 'EVENT', value: 'Partial mud loss, 45 bbl/h', conf: 94, top: 185, h: 21 },
+      { k: 'cause', label: 'CAUSE', value: 'Fractured, coarse sand', conf: 82, top: 206, h: 21 },
+      { k: 'mitigation', label: 'MITIGATION', value: 'Flow −10 %, 40 ppb LCM pill', conf: 91, top: 227, h: 42 },
+      { k: 'outcome', label: 'OUTCOME', value: 'Cured in 3.5 h; 12 m³ lost', conf: 71, top: 269, h: 21 }
+    ];
+    var fields = F.map(function (f) {
+      var on = f.k === sel;
+      var isOut = f.k === 'outcome';
+      var c = isOut && confirmed ? 100 : f.conf;
+      var low = c < 80;
+      return {
+        label: f.label, value: f.value, conf: c,
+        confText: isOut && confirmed ? '✓ 1.00' : (c / 100).toFixed(2),
+        confColor: isOut && confirmed ? '#278052' : '#080909',
+        confBar: isOut && confirmed ? '#278052' : (low ? '#D6A900' : '#080909'),
+        pressed: on ? 'true' : 'false',
+        bg: on ? '#FFF3B0' : (isOut && !confirmed ? '#FFFCEB' : '#FFFFFF'),
+        bar: on ? '#080909' : (isOut && !confirmed ? '#F4C400' : 'transparent'),
+        review: isOut && !confirmed,
+        pick: function () { self.setState({ sel: f.k }); }
+      };
+    });
+    var s = F.filter(function (f) { return f.k === sel; })[0] || F[2];
+    var S = [
+      ['PDF', '112 pages'], ['OCR', '0.94 mean conf.'], ['LAYOUT', '14 tables · 3 logs'], ['NLP', '1,406 sentences'],
+      ['ENTITIES', '212 found'], ['EVENTS', '9 events'], ['REVIEW', confirmed ? 'All confirmed' : '1 field to check'], ['GRAPH', confirmed ? '38 links added' : 'Waiting']
+    ];
+    var cur = confirmed ? 99 : 6;
+    var steps = S.map(function (x, i) {
+      var done = i < cur, now = i === cur;
+      return {
+        n: '0' + (i + 1), label: x[0], sub: x[1],
+        bg: now ? '#F4C400' : (done ? '#FFFFFF' : '#F5F5F1'),
+        fg: now ? '#080909' : (done ? '#080909' : '#A3A6A1'),
+        edge: '#E8E9E5', bar: done ? '#080909' : (now ? '#080909' : 'transparent'),
+        numColor: now ? '#080909' : '#6B6E69', subColor: now ? '#080909' : '#6B6E69',
+        icon: done ? 'M5 12.5l4.5 4.5L19 7.5' : (now ? 'M12 7v6M12 17h.01' : ''),
+        checkColor: done ? '#278052' : '#080909'
+      };
+    });
+    return {
+      steps: steps, fields: fields, editing: editing,
+      hl: { top: s.top - 1, h: s.h + 2, tagTop: s.top + 1, tag: s.label + ' · ' + (s.k === 'outcome' && confirmed ? '1.00' : (s.conf / 100).toFixed(2)) },
+      summary: confirmed ? '7 of 7 confirmed' : '6 of 7 above 0.80',
+      confirmLabel: editing ? 'SAVE' : 'CONFIRM', editLabel: editing ? 'CANCEL' : 'EDIT',
+      confirm: function () { self.setState({ confirmed: true, editing: false, sel: 'outcome' }); },
+      toggleEdit: function () { self.setState({ editing: !editing, sel: 'outcome' }); },
+      linkTitle: confirmed ? 'LINKED IN THE GRAPH ✓' : 'WILL BE LINKED AFTER REVIEW',
+      outcomeBorder: confirmed ? 'solid' : 'dashed', outcomeBg: confirmed ? '#FFFFFF' : '#FFF3B0'
+    };
+  }
+}
+</script>
+</body>
+</html>

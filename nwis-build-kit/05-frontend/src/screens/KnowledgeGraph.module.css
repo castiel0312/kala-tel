@@ -1,0 +1,289 @@
+/* ============================================================================
+   Knowledge Graph. A full-bleed black canvas with a compact HUD, and a right
+   column that explains whatever is selected. The graph owns the screen; the
+   panels are captions for it.
+   ========================================================================== */
+
+.body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 330px;
+  gap: var(--nw-gap);
+  flex: 1 1 auto;
+  min-height: 0;
+  min-width: 0;
+}
+
+.canvas {
+  min-height: 380px;
+}
+
+.skel {
+  padding: var(--nw-s3);
+}
+
+.cy {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background:
+    linear-gradient(var(--nw-border-dark-2) 1px, transparent 1px) 0 0 / 100% 32px,
+    linear-gradient(90deg, var(--nw-border-dark-2) 1px, transparent 1px) 0 0 / 32px 100%;
+  cursor: grab;
+}
+
+.cy:active {
+  cursor: grabbing;
+}
+
+.hud {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--nw-s3);
+  padding: 6px var(--nw-s3);
+  background: linear-gradient(to top, color-mix(in srgb, var(--nw-ink) 92%, transparent), transparent);
+  pointer-events: none;
+}
+
+.hud > * {
+  pointer-events: auto;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+}
+
+.legendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--nw-font-display);
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--nw-ink-3);
+}
+
+.legendItem i {
+  width: 8px;
+  height: 8px;
+  display: block;
+  border-radius: 50%;
+}
+
+.hudBtns {
+  display: flex;
+  gap: 4px;
+  flex: 0 0 auto;
+}
+
+.sideCol {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nw-gap);
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+}
+
+/* ------------------------------------------------------------------ node -- */
+
+.node {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.nodeHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.nodeId {
+  font-family: var(--nw-font-mono);
+  font-size: 9.5px;
+  color: var(--nw-text-4);
+}
+
+.nodeRef {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--nw-font-mono);
+  font-size: 12px;
+  color: var(--nw-ink);
+  text-decoration: none;
+}
+
+.nodeRef:hover {
+  text-decoration: underline;
+}
+
+.nodeLinks {
+  margin-top: 3px;
+  border-top: 1px solid var(--nw-border);
+  padding-top: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.nodeLinkK {
+  font-family: var(--nw-font-display);
+  font-size: var(--nw-fs-micro);
+  font-weight: 700;
+  letter-spacing: var(--nw-track-label);
+  text-transform: uppercase;
+  color: var(--nw-text-4);
+  margin-bottom: 1px;
+}
+
+.nodeLink {
+  display: grid;
+  grid-template-columns: 8px minmax(0, 1fr) auto;
+  gap: 6px;
+  align-items: center;
+  background: none;
+  border: 0;
+  border-bottom: 1px solid var(--nw-border);
+  padding: 3px 0;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+}
+
+.nodeLink i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.nodeLink span {
+  font-size: var(--nw-fs-xs);
+  color: var(--nw-ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nodeLink small {
+  font-family: var(--nw-font-display);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--nw-text-4);
+}
+
+.nodeLink:hover span {
+  text-decoration: underline;
+}
+
+.hint,
+.dim {
+  margin: 0;
+  font-size: 10.5px;
+  line-height: 1.5;
+  color: var(--nw-text-3);
+}
+
+/* ------------------------------------------------------------------ path -- */
+
+.pathText {
+  margin: 0 0 var(--nw-s2);
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--nw-ink-2);
+}
+
+.pathEdges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+
+.pathEdge {
+  font-family: var(--nw-font-mono);
+  font-size: 9.5px;
+  padding: 1px 5px;
+  background: var(--nw-yellow);
+  color: var(--nw-ink);
+  white-space: nowrap;
+}
+
+.pathNote {
+  margin: var(--nw-s2) 0 0;
+  font-size: 9.5px;
+  line-height: 1.5;
+  color: var(--nw-ink-3);
+}
+
+/* ----------------------------------------------------------------- store -- */
+
+.store {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.store > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.store b {
+  font-size: 14px;
+  color: var(--nw-ink);
+}
+
+.store span {
+  font-family: var(--nw-font-display);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--nw-text-4);
+}
+
+.links {
+  display: flex;
+  gap: 10px;
+  margin-top: var(--nw-s3);
+  padding-top: var(--nw-s2);
+  border-top: 1px solid var(--nw-border);
+}
+
+.links a {
+  font-family: var(--nw-font-display);
+  font-size: var(--nw-fs-micro);
+  font-weight: 700;
+  letter-spacing: var(--nw-track-label);
+  text-transform: uppercase;
+  color: var(--nw-text-3);
+  text-decoration: none;
+}
+
+.links a:hover {
+  color: var(--nw-ink);
+  text-decoration: underline;
+}
+
+@media (max-width: 1100px) {
+  .body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .canvas {
+    height: 460px;
+  }
+}

@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>NWIS Alerts</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0;background:#F5F5F1}
+a{color:#080909}a:hover{color:#454845}
+button{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; display: flex; overflow: hidden; background: #F5F5F1; color: #080909; font-family: 'IBM Plex Sans', system-ui, sans-serif">
+<dc-import name="NwisSidebar" active="alerts" hint-size="248px,900px"></dc-import>
+<div style="width: 1192px; height: 900px; display: flex; flex-direction: column">
+<dc-import name="NwisTopbar" num="06" section="Intelligence" heading="Alerts" desc="What NWIS flagged on OIL-WELL-104 today, and which ones still need a decision." hint-size="1192px,88px"></dc-import>
+<main style="flex-grow: 1; min-height: 0; box-sizing: border-box; padding: 24px; display: flex; gap: 16px">
+
+<section aria-label="Alert timeline" style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+<div style="height: 52px; flex-shrink: 0; display: flex; align-items: stretch; background: #FFFFFF; border: 1px solid #E8E9E5">
+<div role="tablist" aria-label="Filter alerts" style="display: flex">
+<sc-for list="{{tabs}}" as="t" hint-placeholder-count="3">
+<button type="button" role="tab" aria-selected="{{t.selected}}" onClick="{{t.pick}}" style="position: relative; display: flex; align-items: center; gap: 10px; padding: 0 22px; border: none; border-right: 1px solid #E8E9E5; background: {{t.bg}}; color: {{t.fg}}; font-family: 'Archivo', sans-serif; font-size: 12px; font-weight: 800; letter-spacing: 0.12em; cursor: pointer">
+{{t.label}}
+<span style="min-width: 22px; height: 22px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; padding: 0 6px; background: {{t.countBg}}; color: #080909; font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; font-weight: 600; letter-spacing: 0">{{t.n}}</span>
+</button>
+</sc-for>
+</div>
+<span style="flex-grow: 1"></span>
+<span style="display: flex; align-items: center; gap: 8px; padding: 0 18px; font-size: 12.5px; color: #454845; white-space: nowrap"><span style="width: 8px; height: 8px; border-radius: 50%; background: #278052"></span>Sent to rig-floor tablet and on-call engineer</span>
+</div>
+
+<ol style="flex-grow: 1; min-height: 0; margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; overflow-y: auto">
+<sc-for list="{{items}}" as="a" hint-placeholder-count="7">
+<li style="display: grid; grid-template-columns: 56px 22px minmax(0, 1fr); gap: 0 10px">
+<span style="padding-top: 16px; font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; font-weight: 600; color: {{a.timeColor}}">{{a.time}}</span>
+<span style="display: flex; flex-direction: column; align-items: center">
+<span style="width: 1px; height: 16px; background: {{a.lineTop}}"></span>
+<span style="width: 14px; height: 14px; flex-shrink: 0; box-sizing: border-box; background: {{a.node}}; border: 2px solid #080909"></span>
+<span style="flex-grow: 1; width: 1px; background: #D4D6D1"></span>
+</span>
+<div style="padding: 4px 0">
+<div style="position: relative; display: flex; align-items: center; gap: 14px; padding: 10px 14px 10px 18px; background: #FFFFFF; border: 1px solid {{a.border}}; box-shadow: {{a.shadow}}">
+<span style="position: absolute; left: -1px; top: -1px; bottom: -1px; width: 4px; background: {{a.bar}}"></span>
+<button type="button" onClick="{{a.pick}}" aria-pressed="{{a.pressed}}" style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; padding: 0; border: none; background: transparent; color: #080909; text-align: left; cursor: pointer">
+<span style="display: flex; align-items: center; gap: 8px">
+<span style="height: 20px; display: flex; align-items: center; padding: 0 7px; background: {{a.sevBg}}; color: {{a.sevFg}}; border: 1px solid {{a.sevBorder}}; font-family: 'Archivo', sans-serif; font-size: 9.5px; font-weight: 800; letter-spacing: 0.12em">{{a.sev}}</span>
+<span style="font-family: 'Archivo', sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: 0.12em; color: #6B6E69">{{a.cat}}</span>
+</span>
+<span style="font-family: 'Archivo', sans-serif; font-size: 15.5px; font-weight: 800; line-height: 1.25">{{a.title}}</span>
+<span style="font-size: 12.5px; color: #454845">{{a.sub}}</span>
+</button>
+<sc-if value="{{a.needs}}" hint-placeholder-val="{{true}}">
+<button type="button" onClick="{{a.ack}}" style="flex-shrink: 0; height: 40px; padding: 0 16px; border: none; background: #080909; color: #FFFFFF; font-family: 'Archivo', sans-serif; font-size: 11.5px; font-weight: 800; letter-spacing: 0.12em; cursor: pointer">ACK</button>
+</sc-if>
+<sc-if value="{{a.done}}" hint-placeholder-val="{{false}}">
+<span style="flex-shrink: 0; display: flex; flex-direction: column; align-items: flex-end; gap: 2px">
+<span style="display: flex; align-items: center; gap: 6px; font-family: 'Archivo', sans-serif; font-size: 10.5px; font-weight: 800; letter-spacing: 0.12em; color: #278052">
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true" style="stroke-width: 3; stroke-linecap: round; stroke-linejoin: round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>ACKNOWLEDGED</span>
+<span style="font-size: 11.5px; color: #6B6E69">{{a.by}}</span>
+</span>
+</sc-if>
+</div>
+</div>
+</li>
+</sc-for>
+</ol>
+</section>
+
+<aside aria-label="Selected alert" style="width: 424px; flex-shrink: 0; position: relative; display: flex; flex-direction: column; background: #080909; color: #FFFFFF; overflow: hidden">
+<div style="height: 6px; flex-shrink: 0; background: repeating-linear-gradient(-45deg, #F4C400 0 8px, #080909 8px 16px)"></div>
+<div style="flex-grow: 1; min-height: 0; overflow-y: auto; padding: 18px 22px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; align-items: center; gap: 8px">
+<span style="height: 22px; display: flex; align-items: center; padding: 0 8px; background: {{d.sevBg}}; color: {{d.sevFg}}; font-family: 'Archivo', sans-serif; font-size: 10px; font-weight: 800; letter-spacing: 0.12em">{{d.sev}}</span>
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #A3A6A1">{{d.time}} today · OIL-WELL-104</span>
+</div>
+<span style="font-family: 'Archivo', sans-serif; font-size: 25px; font-weight: 900; line-height: 1.15">{{d.title}}</span>
+
+<div style="display: flex; flex-direction: column; gap: 8px">
+<span style="font-family: 'Archivo', sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: 0.16em; color: #F4C400">WHAT TRIGGERED IT</span>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid #2A2C2B; border-bottom: 1px solid #2A2C2B">
+<sc-for list="{{d.trig}}" as="g" hint-placeholder-count="3">
+<div style="display: flex; flex-direction: column; gap: 3px; padding: 10px 10px 10px 0">
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 16px; font-weight: 600">{{g.v}}</span>
+<span style="font-size: 11px; color: #A3A6A1">{{g.l}}</span>
+</div>
+</sc-for>
+</div>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 6px">
+<div style="display: flex; justify-content: space-between; font-size: 11.5px; color: #A3A6A1"><span>{{d.chartLabel}}</span><span>last 2 h</span></div>
+<svg width="380" height="84" viewBox="0 0 380 84" role="img" aria-label="{{d.chartAria}}" style="display: block; background: #121414">
+<line x1="0" y1="21" x2="380" y2="21" stroke="#242625"></line>
+<line x1="0" y1="42" x2="380" y2="42" stroke="#242625"></line>
+<line x1="0" y1="63" x2="380" y2="63" stroke="#242625"></line>
+<line x1="0" y1="{{d.limitY}}" x2="380" y2="{{d.limitY}}" stroke="{{d.limitColor}}" style="stroke-width: 1.25; stroke-dasharray: 4 4"></line>
+<polyline points="{{d.pts}}" fill="none" stroke="#F4C400" style="stroke-width: 2.25; stroke-linejoin: round"></polyline>
+<circle cx="376" cy="{{d.lastY}}" r="4" fill="#F4C400" stroke="#080909" style="stroke-width: 2"></circle>
+</svg>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span style="font-family: 'Archivo', sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: 0.16em; color: #F4C400">WHAT THE OFFSETS SAY</span>
+<span style="font-size: 13px; line-height: 1.5; color: #D4D6D1">{{d.offsets}}</span>
+</div>
+
+<div style="padding: 12px 14px; background: #F4C400; color: #080909">
+<span style="font-family: 'Archivo', sans-serif; font-size: 10.5px; font-weight: 800; letter-spacing: 0.14em">RECOMMENDED ACTION</span>
+<p style="margin: 4px 0 0; font-size: 13.5px; font-weight: 600; line-height: 1.45">{{d.action}}</p>
+</div>
+</div>
+
+<div style="flex-shrink: 0; display: flex; gap: 8px; padding: 14px 22px 20px; border-top: 1px solid #2A2C2B">
+<sc-if value="{{d.needs}}" hint-placeholder-val="{{true}}">
+<button type="button" onClick="{{d.ack}}" style="flex-grow: 1; height: 46px; border: none; background: #F4C400; color: #080909; font-family: 'Archivo', sans-serif; font-size: 12.5px; font-weight: 900; letter-spacing: 0.1em; cursor: pointer">ACKNOWLEDGE</button>
+</sc-if>
+<sc-if value="{{d.done}}" hint-placeholder-val="{{false}}">
+<button type="button" onClick="{{d.undo}}" style="flex-grow: 1; height: 46px; border: 1px solid #3FB57A; background: transparent; color: #FFFFFF; font-family: 'Archivo', sans-serif; font-size: 12px; font-weight: 800; letter-spacing: 0.1em; cursor: pointer">✓ ACKNOWLEDGED · UNDO</button>
+</sc-if>
+<a href="{{d.href}}" style="height: 46px; box-sizing: border-box; display: flex; align-items: center; padding: 0 16px; border: 1px solid #454845; color: #FFFFFF; font-family: 'Archivo', sans-serif; font-size: 12px; font-weight: 800; letter-spacing: 0.1em; text-decoration: none">EVIDENCE →</a>
+</div>
+</aside>
+
+</main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { sel: 'a1', tab: 'all', acked: { a4: '13:40', a5: '11:12', a6: '09:08', a7: '07:52' } };
+  }
+  renderVals() {
+    var self = this;
+    var st = this.state || {};
+    var sel = st.sel || 'a1';
+    var tab = st.tab || 'all';
+    var acked = st.acked || {};
+    var SEV = { HIGH: ['#D9362B', '#FFFFFF', '#D9362B'], WATCH: ['#F4C400', '#080909', '#F4C400'], MEDIUM: ['#FFF3B0', '#080909', '#D6A900'], INFO: ['#FFFFFF', '#080909', '#D4D6D1'] };
+    var NODE = { HIGH: '#D9362B', WATCH: '#F4C400', MEDIUM: '#F4C400', INFO: '#FFFFFF' };
+    var A = [
+      { id: 'a1', time: '15:58', sev: 'HIGH', cat: 'RISK · MUD LOSS', title: 'Mud-loss risk 83 % ahead of the Barail top', sub: 'Zone 3,180–3,240 m MD starts 56 m below the bit',
+        trig: [['83 %', 'up from 71 % in 40 min'], ['1.453', 'ECD, g/cm³'], ['−3 %', 'flow out, 40 min']],
+        chartLabel: 'Mud-loss probability, %', pts: '0,62 40,61 80,60 120,58 160,57 200,55 240,52 280,46 320,40 350,34 376,30', limitY: 18, limitColor: '#D9362B', lastY: 30,
+        offsets: 'W-067, W-088 and W-042, the three most similar offsets, all lost mud within 20 m below the Barail top.',
+        action: 'Pre-treat with 30–40 ppb LCM and hold ECD below 1.47 g/cm³ before 3,180 m MD.', href: 'RiskCentre.dc.html' },
+      { id: 'a2', time: '15:20', sev: 'WATCH', cat: 'PARAMETER · ECD', title: 'ECD trending up toward the fracture limit', sub: '1.453 g/cm³, rising 0.010 per hour; limit 1.52',
+        trig: [['1.453', 'ECD, g/cm³'], ['+0.010', 'per hour'], ['1.52', 'fracture limit']],
+        chartLabel: 'ECD, g/cm³ (dashed: fracture limit)', pts: '0,66 40,65 80,64 120,62 160,61 200,58 240,56 280,53 320,51 350,49 376,47', limitY: 12, limitColor: '#D9362B', lastY: 47,
+        offsets: 'W-088 ran ECD 1.478 when it lost total returns at the same position in the formation.',
+        action: 'Reduce pump rate by 5 % and check hole cleaning before the Barail top.', href: 'WellCompare.dc.html' },
+      { id: 'a3', time: '14:10', sev: 'WATCH', cat: 'PARAMETER · TORQUE', title: 'Torque 3.1 kN·m above the T&D model', sub: 'At 3,106 m MD; W-067 saw spikes in the Tipam',
+        trig: [['27.8', 'torque, kN·m'], ['+3.1', 'above model'], ['+5.0', 'alert threshold']],
+        chartLabel: 'Torque residual, kN·m (dashed: threshold)', pts: '0,70 40,68 80,69 120,64 160,62 200,60 240,55 280,52 320,48 350,46 376,44', limitY: 24, limitColor: '#D6A900', lastY: 44,
+        offsets: 'W-067 had erratic torque at 2,930 m MD in the Tipam; reducing WOB and adding 2 % lubricant settled it in 2 h.',
+        action: 'Reduce WOB to 75 kN and add lubricant if the residual passes +5 kN·m.', href: 'RiskCentre.dc.html' },
+      { id: 'a4', time: '13:32', sev: 'INFO', cat: 'PARAMETER · FLOW', title: 'Flow out down 3 % over 40 min', sub: 'Merged into the mud-loss risk at 15:58',
+        trig: [['97 %', 'flow out'], ['−3 %', 'in 40 min'], ['84.2', 'pit, m³']],
+        chartLabel: 'Flow out, % of flow in', pts: '0,20 40,21 80,21 120,23 160,26 200,28 240,31 280,34 320,36 350,38 376,40', limitY: 60, limitColor: '#454845', lastY: 40,
+        offsets: 'A slow flow-out drop preceded the W-067 losses by about 30 minutes.',
+        action: 'Keep the trip tank lined up and watch pit volume every 15 minutes.', href: 'RiskCentre.dc.html' },
+      { id: 'a5', time: '11:05', sev: 'MEDIUM', cat: 'RISK · STUCK PIPE', title: 'Stuck-pipe risk raised to 41 %', sub: 'Window 3,200–3,270 m MD, just below the Barail top',
+        trig: [['41 %', 'probability'], ['2 / 3', 'top offsets hit'], ['16 bar', 'overbalance at top']],
+        chartLabel: 'Stuck-pipe probability, %', pts: '0,58 40,58 80,57 120,56 160,55 200,54 240,53 280,52 320,52 350,51 376,51', limitY: 30, limitColor: '#D6A900', lastY: 51,
+        offsets: 'W-121 stuck differentially on a connection 18 m below the Barail top.',
+        action: 'Keep connections short and the string moving below 3,186 m MD.', href: 'RiskCentre.dc.html' },
+      { id: 'a6', time: '09:05', sev: 'INFO', cat: 'OPERATION', title: 'Drilled out of the 9⅝-in shoe', sub: 'FIT 1.56 g/cm³ equivalent mud weight',
+        trig: [['3,050', 'shoe, m MD'], ['1.56', 'FIT, g/cm³'], ['0.18', 'kick margin']],
+        chartLabel: 'Pressure during FIT, bar', pts: '0,70 40,62 80,52 120,42 160,34 200,30 240,30 280,31 320,32 350,33 376,33', limitY: 28, limitColor: '#454845', lastY: 33,
+        offsets: 'W-088 had a poor bond at its 9⅝-in shoe; this shoe passed its test.',
+        action: 'No action. Logged for the well record.', href: 'DocumentLibrary.dc.html' },
+      { id: 'a7', time: '07:40', sev: 'MEDIUM', cat: 'RISK · OVERPRESSURE', title: 'Overpressure risk 38 % beyond 3,420 m', sub: 'Based on one offset, W-112; low confidence',
+        trig: [['38 %', 'probability'], ['1', 'supporting offset'], ['0.52', 'confidence']],
+        chartLabel: 'Overpressure probability, %', pts: '0,64 40,63 80,63 120,62 160,60 200,59 240,58 280,57 320,56 350,55 376,55', limitY: 30, limitColor: '#D6A900', lastY: 55,
+        offsets: 'W-112 took a 1.2 m³ gas influx at 3,510 m MD and raised mud weight to 1.52.',
+        action: 'Review the mud-weight plan before 3,400 m MD.', href: 'RiskCentre.dc.html' }
+    ];
+    var isAck = function (a) { return !!acked[a.id]; };
+    var needN = A.filter(function (a) { return !isAck(a); }).length;
+    var list = A.filter(function (a) { return tab === 'all' || (tab === 'need' ? !isAck(a) : isAck(a)); });
+    var setAck = function (id, v) { var nx = Object.assign({}, acked); if (v) nx[id] = '16:02'; else delete nx[id]; self.setState({ acked: nx, sel: id }); };
+    var items = list.map(function (a, i) {
+      var on = a.id === sel, done = isAck(a), sv = SEV[a.sev];
+      return {
+        time: a.time, sev: a.sev, cat: a.cat, title: a.title, sub: a.sub,
+        sevBg: sv[0], sevFg: sv[1], sevBorder: sv[2], node: done ? '#E8E9E5' : NODE[a.sev],
+        lineTop: i === 0 ? 'transparent' : '#D4D6D1', timeColor: done ? '#6B6E69' : '#080909',
+        border: on ? '#080909' : '#E8E9E5', shadow: on ? 'inset 0 0 0 1px #080909' : 'none',
+        bar: on ? '#F4C400' : (done ? 'transparent' : NODE[a.sev]),
+        pressed: on ? 'true' : 'false', needs: !done, done: done, by: done ? 'by you at ' + acked[a.id] : '',
+        pick: function () { self.setState({ sel: a.id }); },
+        ack: function () { setAck(a.id, true); }
+      };
+    });
+    var s = A.filter(function (a) { return a.id === sel; })[0] || A[0];
+    var sdone = isAck(s), ssv = SEV[s.sev];
+    var d = {
+      sev: s.sev, sevBg: s.sev === 'INFO' ? '#FFFFFF' : ssv[0], sevFg: ssv[1], time: s.time, title: s.title,
+      trig: s.trig.map(function (t) { return { v: t[0], l: t[1] }; }),
+      chartLabel: s.chartLabel, chartAria: s.chartLabel + ' over the last two hours', pts: s.pts, limitY: s.limitY, limitColor: s.limitColor, lastY: s.lastY,
+      offsets: s.offsets, action: s.action, href: s.href,
+      needs: !sdone, done: sdone,
+      ack: function () { setAck(s.id, true); },
+      undo: function () { setAck(s.id, false); }
+    };
+    var tabs = [['all', 'ALL', A.length], ['need', 'NEEDS ACTION', needN], ['ack', 'ACKNOWLEDGED', A.length - needN]].map(function (t) {
+      var on = t[0] === tab;
+      return { label: t[1], n: String(t[2]), selected: on ? 'true' : 'false', bg: on ? '#080909' : '#FFFFFF', fg: on ? '#FFFFFF' : '#080909', countBg: t[0] === 'need' ? '#F4C400' : (on ? '#FFFFFF' : '#E8E9E5'), pick: function () { self.setState({ tab: t[0] }); } };
+    });
+    return { items: items, d: d, tabs: tabs };
+  }
+}
+</script>
+</body>
+</html>

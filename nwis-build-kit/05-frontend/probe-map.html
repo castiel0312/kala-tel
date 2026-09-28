@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/node_modules/mapbox-gl/dist/mapbox-gl.css" />
+    <style>
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        background: #ff00ff;
+      }
+      #m {
+        position: absolute;
+        inset: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="m"></div>
+    <script type="module">
+      import mapboxgl from 'mapbox-gl'
+      import { degradeBasemap, TERRARIUM_DEM, TERRAIN_EXAGGERATION_DEFAULT } from '/src/components/map/basemap.ts'
+
+      window.__err = []
+      window.addEventListener('error', (e) => window.__err.push(String(e.message)))
+      const map = new mapboxgl.Map({
+        container: 'm',
+        style: degradeBasemap().satellite,
+        center: [95.3, 27.35],
+        zoom: 13.2,
+        pitch: 50,
+        bearing: -24,
+        preserveDrawingBuffer: true,
+        accessToken: 'pk.zzz',
+      })
+      window.__map = map
+      window.__loaded = false
+      window.__ready = false
+      map.on('load', () => {
+        window.__loaded = true
+        if (location.search.includes('terrain')) {
+          map.addSource('terrarium-dem', TERRARIUM_DEM)
+          map.setTerrain({ source: 'terrarium-dem', exaggeration: TERRAIN_EXAGGERATION_DEFAULT })
+          map.once('idle', () => {
+            window.__ready = true
+          })
+        } else {
+          window.__ready = true
+        }
+      })
+    </script>
+  </body>
+</html>

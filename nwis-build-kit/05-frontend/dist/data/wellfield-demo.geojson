@@ -1,0 +1,243 @@
+{
+  "type": "FeatureCollection",
+  "name": "nwis-wellfield-demo",
+  "metadata": {
+    "well": "OIL-WELL-104",
+    "field": "Upper Assam (demo)",
+    "anchor": [95.3, 27.35],
+    "note": "Demo positions. The km offsets are the NWIS demo dataset's; the [lng, lat] pairs are those offsets projected through a local tangent plane at the anchor. Replace with surveyed coordinates from Oil India when available.",
+    "bitReference": "2968 m TVDSS",
+    "distanceBasis": "distanceAtBitKm is measured between the bit positions at the reference bit depth, not between wellheads."
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "id": "OIL-WELL-104",
+      "geometry": { "type": "Point", "coordinates": [95.3, 27.35] },
+      "properties": {
+        "id": "OIL-WELL-104",
+        "role": "reference",
+        "status": "Drilling",
+        "model": "derrick",
+        "surface": [95.3, 27.35],
+        "bit": [95.306068, 27.347287],
+        "surfaceKm": [0.0, 0.0],
+        "bitKm": [0.6, -0.3],
+        "distanceAtBitKm": 0,
+        "similarity": null,
+        "riskLevel": "HIGH",
+        "bitMdM": 3124,
+        "bitTvdssM": 2968,
+        "formation": "Tipam",
+        "nextTop": "Barail top in 62 m",
+        "topRisk": "Mud loss 83 %",
+        "region": "Upper Assam (demo)"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "W-067",
+      "geometry": { "type": "Point", "coordinates": [95.291909, 27.358139] },
+      "properties": {
+        "id": "W-067",
+        "role": "offset",
+        "status": "Producing",
+        "model": "pumpjack",
+        "surface": [95.291909, 27.358139],
+        "bit": [95.295955, 27.353617],
+        "surfaceKm": [-0.8, 0.9],
+        "bitKm": [-0.4, 0.4],
+        "distanceAtBitKm": 1.2,
+        "similarity": 87,
+        "riskLevel": "HIGH",
+        "eventCount": 2,
+        "eventSummary": "Mud loss 45 bbl/h, Torque spikes",
+        "tdMdM": 3420,
+        "barailTopTvdssM": 3004,
+        "spud": 2019
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "W-042",
+      "geometry": { "type": "Point", "coordinates": [95.326295, 27.351809] },
+      "properties": {
+        "id": "W-042",
+        "role": "offset",
+        "status": "Producing",
+        "model": "pumpjack",
+        "surface": [95.326295, 27.351809],
+        "bit": [95.325284, 27.355426],
+        "surfaceKm": [2.6, 0.2],
+        "bitKm": [2.5, 0.6],
+        "distanceAtBitKm": 2.1,
+        "similarity": 81,
+        "riskLevel": "MEDIUM",
+        "eventCount": 2,
+        "eventSummary": "Seepage loss 8 bbl/h, Overpull 25 t",
+        "tdMdM": 3510,
+        "barailTopTvdssM": 3062,
+        "spud": 2016
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "W-088",
+      "geometry": { "type": "Point", "coordinates": [95.319216, 27.326486] },
+      "properties": {
+        "id": "W-088",
+        "role": "offset",
+        "status": "Suspended",
+        "model": "wellhead",
+        "surface": [95.319216, 27.326486],
+        "bit": [95.324273, 27.331008],
+        "surfaceKm": [1.9, -2.6],
+        "bitKm": [2.4, -2.1],
+        "distanceAtBitKm": 2.6,
+        "similarity": 78,
+        "riskLevel": "HIGH",
+        "eventCount": 2,
+        "eventSummary": "Total loss, Poor cement bond",
+        "tdMdM": 3380,
+        "barailTopTvdssM": 3088,
+        "spud": 2014
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "W-081",
+      "geometry": { "type": "Point", "coordinates": [95.27775, 27.337339] },
+      "properties": {
+        "id": "W-081",
+        "role": "offset",
+        "status": "Producing",
+        "model": "pumpjack",
+        "surface": [95.27775, 27.337339],
+        "bit": [95.279773, 27.334626],
+        "surfaceKm": [-2.2, -1.4],
+        "bitKm": [-2.0, -1.7],
+        "distanceAtBitKm": 3.0,
+        "similarity": 58,
+        "riskLevel": "LOW",
+        "eventCount": 2,
+        "eventSummary": "Seepage loss 5 bbl/h, Bit balling",
+        "tdMdM": 3300,
+        "barailTopTvdssM": 3041,
+        "spud": 2017
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "W-112",
+      "geometry": { "type": "Point", "coordinates": [95.32933, 27.328295] },
+      "properties": {
+        "id": "W-112",
+        "role": "offset",
+        "status": "Producing",
+        "model": "pumpjack",
+        "surface": [95.32933, 27.328295],
+        "bit": [95.332364, 27.326486],
+        "surfaceKm": [2.9, -2.4],
+        "bitKm": [3.2, -2.6],
+        "distanceAtBitKm": 3.4,
+        "similarity": 41,
+        "riskLevel": "MEDIUM",
+        "eventCount": 1,
+        "eventSummary": "Gas influx 1.2 m³",
+        "tdMdM": 3640,
+        "barailTopTvdssM": 3110,
+        "spud": 2022
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "W-103",
+      "geometry": { "type": "Point", "coordinates": [95.28483, 27.382557] },
+      "properties": {
+        "id": "W-103",
+        "role": "offset",
+        "status": "Abandoned",
+        "model": "wellhead",
+        "surface": [95.28483, 27.382557],
+        "bit": [95.287864, 27.37894],
+        "surfaceKm": [-1.5, 3.6],
+        "bitKm": [-1.2, 3.2],
+        "distanceAtBitKm": 3.9,
+        "similarity": 36,
+        "riskLevel": "MEDIUM",
+        "eventCount": 2,
+        "eventSummary": "Tight hole, Losses while cementing",
+        "tdMdM": 3250,
+        "barailTopTvdssM": 2996,
+        "spud": 2018
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "W-121",
+      "geometry": { "type": "Point", "coordinates": [95.261568, 27.367183] },
+      "properties": {
+        "id": "W-121",
+        "role": "offset",
+        "status": "Producing",
+        "model": "pumpjack",
+        "surface": [95.261568, 27.367183],
+        "bit": [95.267636, 27.363566],
+        "surfaceKm": [-3.8, 1.9],
+        "bitKm": [-3.2, 1.5],
+        "distanceAtBitKm": 4.2,
+        "similarity": 64,
+        "riskLevel": "MEDIUM",
+        "eventCount": 1,
+        "eventSummary": "Differential sticking",
+        "tdMdM": 3480,
+        "barailTopTvdssM": 2985,
+        "spud": 2021
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "W-132",
+      "geometry": { "type": "Point", "coordinates": [95.357648, 27.330104] },
+      "properties": {
+        "id": "W-132",
+        "role": "offset",
+        "status": "Producing",
+        "model": "pumpjack",
+        "surface": [95.357648, 27.330104],
+        "bit": [95.360682, 27.326486],
+        "surfaceKm": [5.7, -2.2],
+        "bitKm": [6.0, -2.6],
+        "distanceAtBitKm": 5.8,
+        "similarity": 44,
+        "riskLevel": "LOW",
+        "eventCount": 0,
+        "tdMdM": 3560,
+        "barailTopTvdssM": 3120,
+        "spud": 2014
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "W-018",
+      "geometry": { "type": "Point", "coordinates": [95.245386, 27.376227] },
+      "properties": {
+        "id": "W-018",
+        "role": "offset",
+        "status": "Abandoned",
+        "model": "wellhead",
+        "surface": [95.245386, 27.376227],
+        "bit": [95.249432, 27.373514],
+        "surfaceKm": [-5.4, 2.9],
+        "bitKm": [-5.0, 2.6],
+        "distanceAtBitKm": 6.3,
+        "similarity": 52,
+        "riskLevel": "LOW",
+        "eventCount": 0,
+        "tdMdM": 3200,
+        "barailTopTvdssM": 3010,
+        "spud": 1998
+      }
+    }
+  ]
+}

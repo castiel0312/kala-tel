@@ -1,0 +1,91 @@
+.rail {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 340px;
+  max-width: calc(100vw - 40px);
+}
+
+.toast {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  background: var(--nw-black);
+  color: var(--nw-ink);
+  border-left: 4px solid var(--nw-yellow);
+  box-shadow: 0 8px 24px rgb(8 9 9 / 25%);
+  animation: slideIn 160ms ease-out;
+}
+
+.toastAlarm {
+  composes: toast;
+  border-left-color: var(--nw-red);
+}
+
+.toastOk {
+  composes: toast;
+  border-left-color: var(--nw-green);
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(8px);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+.body {
+  flex-grow: 1;
+  min-width: 0;
+}
+
+.metric {
+  font-family: var(--nw-font-display);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: var(--nw-yellow);
+}
+
+.alarmMetric {
+  composes: metric;
+  color: var(--nw-red);
+}
+
+.okMetric {
+  composes: metric;
+  color: var(--nw-green);
+}
+
+.text {
+  font-size: 12.5px;
+  color: var(--nw-ink-2);
+}
+
+.close {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #454845;
+  background: none;
+  color: var(--nw-ink);
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.close:hover {
+  background: var(--nw-charcoal);
+}

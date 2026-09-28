@@ -1,0 +1,642 @@
+/* ============================================================================
+   The experience shell: scrollport, fixed navigation, hero, footer.
+   The typographic system comes from tokens.css; this file only decides the
+   page-level spine — one measure, one rule weight, one scale step per level.
+   ========================================================================== */
+
+/* The scrollport is the experience's own container, not the document body: the body stays
+   locked for the utility routes, and `data-nwis-scroll` tells the drawer what to lock. */
+:global(#nwis-scroll) {
+  /* positioned so a section's offsetTop is measured against the scrollport, not the body */
+  position: relative;
+  height: 100dvh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior-y: contain;
+  background: var(--nw-paper);
+  /* Deliberately NOT `scroll-behavior: smooth`: that would also animate the browser's own
+     fragment jump and every corrective scrollTop, which turns a 5,000px cold deep link into
+     a several-second crawl. `goTo` asks for smooth per jump instead. */
+}
+
+/* ------------------------------------------------------------- the page --- */
+
+.main {
+  display: block;
+}
+
+.skipLink {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  z-index: 200;
+  padding: 10px 16px;
+  background: var(--nw-black);
+  color: var(--nw-ink);
+  font-family: var(--nw-font-display);
+  font-size: var(--nw-fs-xs);
+  font-weight: 700;
+  letter-spacing: var(--nw-track-label);
+  text-transform: uppercase;
+  border-radius: var(--nw-r1);
+  transform: translateY(-160%);
+  transition: transform var(--nw-dur) var(--nw-ease);
+}
+
+.skipLink:focus-visible {
+  transform: none;
+}
+
+/* A section that throws loses its panel, not the page. The map, the graph and the PDF worker
+   are three third-party runtimes on one scrollport; one of them failing must not blank the
+   other twelve sections. */
+:global(.nwis-section-error) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 220px;
+  margin: clamp(20px, 4vw, 64px);
+  padding: var(--nw-s6);
+  border: 1px solid var(--nw-border-2);
+  background: var(--nw-white);
+}
+
+:global(.nwis-section-error .label) {
+  color: var(--nw-text-3);
+}
+
+:global(.nwis-section-error .mono) {
+  margin-top: 8px;
+  font-family: var(--nw-font-mono);
+  font-size: var(--nw-fs-xs);
+  color: var(--nw-text-2);
+  word-break: break-word;
+}
+
+:global(.nwis-section-error button) {
+  margin-top: 14px;
+  padding: 9px 16px;
+  background: var(--nw-black);
+  color: var(--nw-ink);
+  font-family: var(--nw-font-display);
+  font-size: var(--nw-fs-xs);
+  font-weight: 700;
+  letter-spacing: var(--nw-track-label);
+  text-transform: uppercase;
+  border-radius: var(--nw-r1);
+}
+
+/* ------------------------------------------------------------------ nav --- */
+
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--nw-s5);
+  height: 64px;
+  padding: 0 var(--nw-s6);
+  background: color-mix(in srgb, var(--nw-paper) 88%, transparent);
+  backdrop-filter: saturate(140%) blur(6px);
+  border-bottom: 1px solid var(--nw-border);
+  transition: background var(--nw-dur) var(--nw-ease), border-color var(--nw-dur) var(--nw-ease);
+}
+
+.navScrolled {
+  background: color-mix(in srgb, var(--nw-paper) 97%, transparent);
+  border-bottom-color: var(--nw-border-2);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.brandMark {
+  width: 22px;
+  height: 26px;
+  flex: none;
+  background: var(--nw-black);
+  border-left: 5px solid var(--nw-yellow);
+  border-bottom: 3px solid var(--nw-yellow);
+}
+
+.brandText {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.brandText b {
+  font-family: var(--nw-font-display);
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  line-height: 1;
+}
+
+.brandText em {
+  font-style: normal;
+  font-size: 9.5px;
+  letter-spacing: var(--nw-track-label);
+  text-transform: uppercase;
+  color: var(--nw-text-3);
+  white-space: nowrap;
+}
+
+.navStrip {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  min-width: 0;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+
+.navStrip::-webkit-scrollbar {
+  display: none;
+}
+
+.navLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: none;
+  padding: 7px 9px;
+  border-bottom: 2px solid transparent;
+  font-family: var(--nw-font-display);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: var(--nw-track-label);
+  text-transform: uppercase;
+  color: var(--nw-text-3);
+  white-space: nowrap;
+  transition: color var(--nw-dur-fast) var(--nw-ease), border-color var(--nw-dur-fast) var(--nw-ease);
+}
+
+.navNo {
+  font-family: var(--nw-font-mono);
+  font-size: 9px;
+  color: var(--nw-text-4);
+  transition: color var(--nw-dur-fast) var(--nw-ease);
+}
+
+.navLink:hover {
+  color: var(--nw-text);
+}
+
+.navLink:hover .navNo {
+  color: var(--nw-text-3);
+}
+
+.navLinkOn {
+  color: var(--nw-text);
+  border-bottom-color: var(--nw-yellow);
+}
+
+.navLinkOn .navNo {
+  color: var(--nw-yellow-deep);
+}
+
+.navRight {
+  display: flex;
+  align-items: center;
+  gap: var(--nw-s3);
+  flex: none;
+}
+
+.navGhost {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border: 1px solid var(--nw-border-2);
+  border-radius: var(--nw-r1);
+  color: var(--nw-text-2);
+  transition: border-color var(--nw-dur-fast) var(--nw-ease), color var(--nw-dur-fast) var(--nw-ease);
+}
+
+.navGhost:hover {
+  border-color: var(--nw-text-3);
+  color: var(--nw-text);
+}
+
+.navGhost:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.navProgress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  background: transparent;
+}
+
+.navProgress span {
+  display: block;
+  height: 100%;
+  background: var(--nw-yellow);
+  transition: width 380ms var(--nw-ease);
+}
+
+/* ----------------------------------------------------------------- hero --- */
+
+/* The copy is the narrower column: the instrument is the subject, and it needs the width
+   for a section whose horizontal scale is real — and now the height, because the machine
+   above that section is a machine rather than a panel. */
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 0.74fr) minmax(0, 1.26fr);
+  align-items: center;
+  gap: clamp(24px, 3.4vw, 56px);
+  max-width: 1560px;
+  margin: 0 auto;
+  padding: clamp(32px, 4.4vh, 60px) clamp(20px, 3.2vw, 52px) clamp(40px, 6vh, 80px);
+  min-height: calc(100dvh - 64px);
+  scroll-margin-top: 76px;
+}
+
+.heroCopy {
+  min-width: 0;
+}
+
+.heroEyebrow {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: var(--nw-s5);
+  color: var(--nw-text-3);
+}
+
+.heroPulse {
+  width: 7px;
+  height: 7px;
+  border-radius: var(--nw-r-pill);
+  background: var(--nw-text-4);
+  flex: none;
+}
+
+.heroPulse[data-live='true'] {
+  background: var(--nw-green);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--nw-green) 18%, transparent);
+  animation: nwisPulse 2.4s ease-in-out infinite;
+}
+
+@keyframes nwisPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
+
+.heroTitle {
+  display: flex;
+  flex-direction: column;
+  font-size: clamp(34px, 5.1vw, 66px);
+  font-weight: 800;
+  line-height: 1.02;
+  letter-spacing: -0.022em;
+  text-wrap: balance;
+}
+
+.heroTitle > span {
+  display: block;
+  animation: nwisRise 620ms var(--nw-ease) both;
+}
+
+.heroTitle .d1 { animation-delay: 60ms; }
+.heroTitle .d2 { animation-delay: 190ms; }
+.heroTitle .d3 {
+  animation-delay: 320ms;
+  background: linear-gradient(transparent 68%, var(--nw-yellow) 68% 92%, transparent 92%);
+}
+
+@keyframes nwisRise {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: none; }
+}
+
+.heroLede {
+  max-width: 52ch;
+  margin-top: var(--nw-s6);
+  font-size: var(--nw-fs-md);
+  line-height: 1.55;
+  color: var(--nw-text-2);
+  animation: nwisRise 620ms var(--nw-ease) both;
+  animation-delay: 460ms;
+}
+
+.heroActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--nw-s4);
+  margin-top: var(--nw-s7);
+  animation: nwisRise 620ms var(--nw-ease) both;
+  animation-delay: 580ms;
+}
+
+.heroCta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 20px;
+  background: var(--nw-black);
+  color: var(--nw-ink);
+  font-family: var(--nw-font-display);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: var(--nw-track-label);
+  text-transform: uppercase;
+  border-radius: var(--nw-r1);
+  transition: background var(--nw-dur) var(--nw-ease), transform var(--nw-dur) var(--nw-ease);
+}
+
+.heroCta span {
+  transition: transform var(--nw-dur) var(--nw-ease);
+}
+
+.heroCta:hover {
+  background: var(--nw-charcoal-2);
+}
+
+.heroCta:hover span {
+  transform: translateX(4px);
+}
+
+.heroCtaAlt {
+  padding: 12px 4px;
+  font-family: var(--nw-font-display);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: var(--nw-track-label);
+  text-transform: uppercase;
+  color: var(--nw-text-2);
+  border-bottom: 1px solid var(--nw-border-2);
+  transition: color var(--nw-dur) var(--nw-ease), border-color var(--nw-dur) var(--nw-ease);
+}
+
+.heroCtaAlt:hover {
+  color: var(--nw-text);
+  border-bottom-color: var(--nw-yellow);
+}
+
+.heroStats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0;
+  margin-top: clamp(32px, 5vh, 56px);
+  border-top: 1px solid var(--nw-border);
+  animation: nwisRise 620ms var(--nw-ease) both;
+  animation-delay: 700ms;
+}
+
+.heroStats > div {
+  padding: 14px 14px 0 0;
+  border-right: 1px solid var(--nw-border);
+  padding-left: 0;
+}
+
+.heroStats > div:first-child {
+  padding-left: 0;
+}
+
+.heroStats > div:not(:first-child) {
+  padding-left: 14px;
+}
+
+.heroStats > div:last-child {
+  border-right: 0;
+}
+
+.heroStats dt {
+  font-family: var(--nw-font-display);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: var(--nw-track-label);
+  text-transform: uppercase;
+  color: var(--nw-text-3);
+}
+
+.heroStats dd {
+  margin: 6px 0 0;
+  font-size: var(--nw-fs-xl);
+  font-weight: 600;
+  color: var(--nw-text);
+}
+
+.heroVisual {
+  min-width: 0;
+  /* The panel is the taller of the two columns, and the copy centres against it. It is also the
+     whole height of the fold: the machine needs the room more than the paragraph above it does.
+
+     The height is published as a number as well as used as one, because the section's two rows are
+     sized from it and must be the same rows whether the well is open or shut. */
+  --nw-hero-panel-h: min(840px, calc(100dvh - 132px));
+  height: var(--nw-hero-panel-h);
+  min-height: 620px;
+  animation: nwisFade 900ms var(--nw-ease) both;
+  animation-delay: 240ms;
+}
+
+/**
+ * Opening the well does not move the column, and this is the whole of the rule.
+ *
+ * The closed panel is a fixed height because the machine, the rock and the readouts are one
+ * instrument and it is sized to the viewport. The machine the reader pressed has to be that same
+ * machine, at that same size, in that same place, the whole way through the opening — so the panel
+ * keeps its height and the two rows above the drawer keep their tracks, and the drawer takes the
+ * height it needs below them. The column therefore grows, but only downward, from a point below
+ * everything the reader is already looking at.
+ *
+ * It used to be `height: auto` with the rows restated in pixels, which is the same idea said
+ * carelessly: the rows were re-measured rather than held, so the stage lost 38px of height as the
+ * well opened and the rock the reader was watching was drawn to a different scale at the end of
+ * the sequence than at the start. One number, set here and read by both states, is the fix.
+ */
+.heroVisualOpen {
+  height: auto;
+}
+
+@keyframes nwisFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* --------------------------------------------------------------- footer --- */
+
+.footer {
+  border-top: 1px solid var(--nw-border);
+  background: var(--nw-white);
+}
+
+.footerInner {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: clamp(40px, 6vh, 72px) clamp(20px, 4vw, 64px) var(--nw-s7);
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 2fr);
+  gap: clamp(24px, 4vw, 64px);
+}
+
+.footerBrand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.footerBrand b {
+  font-family: var(--nw-font-display);
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+
+.footerNote {
+  margin-top: var(--nw-s4);
+  max-width: 44ch;
+  font-size: var(--nw-fs-sm);
+  line-height: 1.6;
+  color: var(--nw-text-3);
+}
+
+.footerAttribution {
+  margin-top: var(--nw-s3);
+  font-size: var(--nw-fs-xs);
+  color: var(--nw-text-4);
+}
+
+.footerLinks {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
+  gap: 2px 18px;
+  align-content: start;
+}
+
+.footerLink {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--nw-border);
+  font-family: var(--nw-font-display);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: var(--nw-track-label);
+  text-transform: uppercase;
+  color: var(--nw-text-2);
+  transition: color var(--nw-dur-fast) var(--nw-ease);
+}
+
+.footerLink:hover {
+  color: var(--nw-text);
+}
+
+.footerLink span {
+  font-family: var(--nw-font-mono);
+  font-size: 9px;
+  color: var(--nw-text-4);
+}
+
+.footerBase {
+  border-top: 1px solid var(--nw-border);
+}
+
+.footerBaseRow {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: var(--nw-s4) clamp(20px, 4vw, 64px);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--nw-s4);
+  justify-content: space-between;
+  font-size: var(--nw-fs-xs);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--nw-text-4);
+}
+
+@media (max-width: 1100px) {
+  .hero {
+    grid-template-columns: minmax(0, 1fr);
+    min-height: 0;
+  }
+
+  /* Stacked, the panel is no longer competing with a paragraph for the fold, so it takes a fixed
+     760 rather than a share of the viewport. The number is replaced rather than added to, so the
+     section's rows are still derived from whatever this column is doing. */
+  .heroVisual {
+    --nw-hero-panel-h: 760px;
+    min-height: 0;
+  }
+
+  .footerInner {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/**
+ * On a phone the machine comes before the words.
+ *
+ * The hero is stacked by this point, and measured at 390x844 the copy is 639px tall in an 844px
+ * screen — which puts the machine at y=778, entirely below the fold, behind a paragraph. The claim
+ * of this hero is that the well is the thing you look at and the thing you press, and in that
+ * order the claim is not being made at all: the reader is asked to believe in a machine they have
+ * not been shown.
+ *
+ * So the machine leads, and the copy follows it — which is also how the section itself reads, with
+ * the claim stated next to the thing it is about rather than a screen above it. The order is
+ * reversed here rather than in the markup, because the DOM order is the two-column reading order
+ * and a reader on a wide screen — or a screen reader on any width — is right about it.
+ */
+@media (max-width: 900px) {
+  .hero {
+    align-items: start;
+  }
+
+  .heroVisual {
+    order: -1;
+  }
+}
+
+@media (max-width: 860px) {
+  .nav {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: auto auto;
+    height: auto;
+    padding: 8px var(--nw-s4) 0;
+    gap: 6px var(--nw-s3);
+  }
+
+  .navStrip {
+    grid-column: 1 / -1;
+    order: 3;
+    margin: 0 calc(var(--nw-s4) * -1);
+    padding: 0 var(--nw-s4);
+  }
+
+  .navRight {
+    justify-self: end;
+  }
+
+  .heroStats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .heroStats > div:nth-child(2) {
+    border-right: 0;
+  }
+
+  .heroStats > div:nth-child(n + 3) {
+    border-top: 1px solid var(--nw-border);
+    padding-top: 12px;
+  }
+}

@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>NWIS sidebar</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div style="width: 248px; height: 900px; box-sizing: border-box; display: flex; flex-direction: column; background: #080909; color: #FFFFFF; font-family: 'IBM Plex Sans', system-ui, sans-serif">
+<a href="Landing.dc.html" aria-label="NWIS home" style="height: 88px; flex-shrink: 0; box-sizing: border-box; display: flex; align-items: center; gap: 12px; padding: 0 20px; border-bottom: 1px solid #242625; color: #FFFFFF; text-decoration: none">
+<span style="width: 40px; height: 40px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: #F4C400; color: #080909">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true" style="stroke-width: 2; stroke-linecap: round; stroke-linejoin: round"><path d="M12 2.5 7.5 21.5M12 2.5l4.5 19M9.2 14h5.6M8.4 18h7.2M10.4 9.5h3.2M4 21.5h16"></path></svg>
+</span>
+<span style="display: flex; flex-direction: column; gap: 3px">
+<span style="font-family: 'Archivo', sans-serif; font-size: 21px; font-weight: 900; line-height: 1; letter-spacing: 0.02em">NWIS</span>
+<span style="font-family: 'Archivo', sans-serif; font-size: 10px; font-weight: 700; line-height: 1.3; letter-spacing: 0.14em; color: #A3A6A1">NEARBY WELLS<br>INTELLIGENCE SYSTEM</span>
+</span>
+</a>
+
+<nav aria-label="Main" style="flex-grow: 1; min-height: 0; display: flex; flex-direction: column; gap: 14px; padding: 18px 12px; overflow: hidden">
+<sc-for list="{{groups}}" as="g" hint-placeholder-count="5">
+<div style="display: flex; flex-direction: column; gap: 2px">
+<span style="padding: 0 12px 6px 15px; font-family: 'Archivo', sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: 0.16em; color: #7D807B">{{g.label}}</span>
+<sc-for list="{{g.items}}" as="it" hint-placeholder-count="3">
+<a href="{{it.href}}" aria-current="{{it.current}}" style="height: 36px; box-sizing: border-box; display: flex; align-items: center; gap: 12px; padding: 0 12px; border-left: 3px solid {{it.bar}}; background: {{it.bg}}; color: {{it.fg}}; font-size: 13.5px; font-weight: {{it.weight}}; text-decoration: none">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="{{it.iconColor}}" aria-hidden="true" style="flex-shrink: 0; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round"><path d="{{it.icon}}"></path></svg>
+<span style="flex-grow: 1; white-space: nowrap">{{it.label}}</span>
+<sc-if value="{{it.hasBadge}}" hint-placeholder-val="{{false}}">
+<span style="min-width: 20px; height: 20px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; padding: 0 5px; background: #F4C400; color: #080909; font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600">{{it.badge}}</span>
+</sc-if>
+</a>
+</sc-for>
+</div>
+</sc-for>
+</nav>
+
+<div style="flex-shrink: 0; margin: 0 12px 12px; box-sizing: border-box; background: #121414; border: 1px solid #242625; overflow: hidden">
+<div style="height: 5px; background: repeating-linear-gradient(-45deg, #F4C400 0 6px, #080909 6px 12px)"></div>
+<div style="padding: 12px 14px 14px">
+<div style="display: flex; align-items: center; gap: 8px; font-family: 'Archivo', sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: 0.14em; color: #F4C400"><span style="width: 7px; height: 7px; border-radius: 50%; background: #3FB57A"></span>eRTMAC LIVE</div>
+<div style="margin-top: 8px; font-family: 'IBM Plex Mono', monospace; font-size: 14px; font-weight: 600">OIL-WELL-104</div>
+<div style="margin-top: 2px; font-size: 12px; color: #A3A6A1">3,124 m MD · Tipam · Drilling</div>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"active":{"editor":"enum","options":["command","nearby","active","compare","risk","alerts","knowledge","graph","documents","docintel","analytics","assistant","mobile"],"default":"command"},"$preview":{"width":248,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var a = this.props.active || 'command';
+    var I = {
+      command: 'M3 3h8v8H3zM13 3h8v5h-8zM13 10h8v11h-8zM3 13h8v8H3z',
+      nearby: 'M9 4 3 6.5V20l6-2.5 6 2.5 6-2.5V4l-6 2.5zM9 4v13.5M15 6.5V20',
+      active: 'M12 2.5 7.5 21.5M12 2.5l4.5 19M9.2 14h5.6M8.4 18h7.2M10.4 9.5h3.2M4 21.5h16',
+      compare: 'M7 4v16M17 4v16M3 9h8M13 15h8M3 9l2-2M3 9l2 2M21 15l-2-2M21 15l-2 2',
+      risk: 'M12 3 2 20h20zM12 10v4M12 17h.01',
+      alerts: 'M6 16v-5a6 6 0 0 1 12 0v5l2 2H4zM10 20.5a2 2 0 0 0 4 0',
+      knowledge: 'M4 4.5h6a2 2 0 0 1 2 2V20a2 2 0 0 0-2-2H4zM20 4.5h-6a2 2 0 0 0-2 2V20a2 2 0 0 1 2-2h6z',
+      graph: 'M6 3.5a2.5 2.5 0 1 0 0 5a2.5 2.5 0 1 0 0-5zM18 3.5a2.5 2.5 0 1 0 0 5a2.5 2.5 0 1 0 0-5zM12 15.5a2.5 2.5 0 1 0 0 5a2.5 2.5 0 1 0 0-5zM8 7.5l3 8M16 7.5l-3 8M8.5 6h7',
+      documents: 'M7 3h7l5 5v13H7zM14 3v5h5M10 13h6M10 17h6',
+      docintel: 'M4 8V4h4M16 4h4v4M20 16v4h-4M8 20H4v-4M7 12h10',
+      analytics: 'M5 20V11M11 20V5M17 20v-6M3 20h18',
+      assistant: 'M12 3v4M12 17v4M3 12h4M17 12h4M6.3 6.3l2.8 2.8M14.9 14.9l2.8 2.8M6.3 17.7l2.8-2.8M14.9 9.1l2.8-2.8',
+      mobile: 'M7 2.5h10v19H7zM11 18.5h2'
+    };
+    var G = [
+      { label: 'OPERATIONS', items: [['command', 'Command Centre', 'CommandCentre.dc.html'], ['nearby', 'Nearby Wells', 'NearbyWells.dc.html'], ['active', 'Active Well', 'ActiveWell.dc.html'], ['compare', 'Well Compare', 'WellCompare.dc.html']] },
+      { label: 'INTELLIGENCE', items: [['risk', 'Risk Centre', 'RiskCentre.dc.html'], ['alerts', 'Alerts', 'AlertsCentre.dc.html', '3'], ['knowledge', 'Knowledge Centre', 'KnowledgeCentre.dc.html'], ['graph', 'Knowledge Graph', 'KnowledgeGraph.dc.html']] },
+      { label: 'DATA', items: [['documents', 'Documents', 'DocumentLibrary.dc.html'], ['docintel', 'Document Intelligence', 'DocumentIntel.dc.html'], ['analytics', 'Analytics', 'AnalyticsHub.dc.html']] },
+      { label: 'AI', items: [['assistant', 'NWIS Assistant', 'AssistantPanel.dc.html']] },
+      { label: 'FIELD', items: [['mobile', 'Rig-site mobile', 'RigMobile.dc.html']] }
+    ];
+    return {
+      groups: G.map(function (g) {
+        return {
+          label: g.label,
+          items: g.items.map(function (x) {
+            var on = x[0] === a;
+            return {
+              label: x[1], href: x[2], icon: I[x[0]],
+              current: on ? 'page' : 'false',
+              bar: on ? '#F4C400' : 'transparent',
+              bg: on ? '#1B1D1C' : 'transparent',
+              fg: on ? '#FFFFFF' : '#C9CBC6',
+              iconColor: on ? '#F4C400' : '#8E918C',
+              weight: on ? 600 : 400,
+              hasBadge: !!x[3], badge: x[3] || ''
+            };
+          })
+        };
+      })
+    };
+  }
+}
+</script>
+</body>
+</html>

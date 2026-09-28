@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>NWIS Analytics</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0;background:#F5F5F1}
+a{color:#080909}a:hover{color:#454845}
+button{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; display: flex; overflow: hidden; background: #F5F5F1; color: #080909; font-family: 'IBM Plex Sans', system-ui, sans-serif">
+<dc-import name="NwisSidebar" active="analytics" hint-size="248px,900px"></dc-import>
+<div style="width: 1192px; height: 900px; display: flex; flex-direction: column">
+<dc-import name="NwisTopbar" num="11" section="Data" heading="Analytics" desc="Patterns across the offsets: where problems happen, how deep, and what they cost." hint-size="1192px,88px"></dc-import>
+<main style="flex-grow: 1; min-height: 0; box-sizing: border-box; padding: 24px; display: flex; flex-direction: column; gap: 16px">
+
+<div style="height: 44px; flex-shrink: 0; box-sizing: border-box; display: flex; align-items: center; gap: 14px; padding: 0 18px; background: #FFFFFF; border: 1px solid #E8E9E5; font-size: 12.5px; color: #454845">
+<span style="font-family: 'Archivo', sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: 0.16em; color: #6B6E69">SCOPE</span>
+<span style="color: #080909; font-weight: 600">24 wells within 10 km of OIL-WELL-104 · 1998–2025</span>
+<span>Hover or tab to any bar for its value</span>
+<span style="flex-grow: 1"></span>
+<span style="display: flex; align-items: center; gap: 6px"><span style="width: 12px; height: 12px; background: #F4C400"></span>What matters for 104</span>
+<span style="display: flex; align-items: center; gap: 6px"><span style="width: 12px; height: 12px; background: #242625"></span>Other</span>
+</div>
+
+<div style="flex-grow: 1; min-height: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(0, 1fr)); gap: 16px">
+
+<section aria-label="Mud-loss events by formation" style="position: relative; box-sizing: border-box; padding: 18px 20px; display: flex; flex-direction: column; gap: 14px; background: #FFFFFF; border: 1px solid #E8E9E5">
+<div style="display: flex; flex-direction: column; gap: 5px">
+<span style="display: flex; align-items: center; gap: 8px; font-family: 'Archivo', sans-serif; font-size: 10.5px; font-weight: 800; letter-spacing: 0.14em; color: #6B6E69"><span style="width: 14px; height: 3px; background: #F4C400"></span>01 · MUD LOSS BY FORMATION</span>
+<span style="font-family: 'Archivo', sans-serif; font-size: 15px; font-weight: 800">9 of 13 losses happen in the Barail</span>
+</div>
+<div style="position: relative; flex-grow: 1; min-height: 0; display: flex; flex-direction: column; justify-content: center">
+<div style="position: relative; display: flex; flex-direction: column">
+<div aria-hidden="true" style="position: absolute; left: 72px; right: 40px; top: 0; bottom: 22px">
+<span style="position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background: #080909"></span>
+<span style="position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: #EEEEEA"></span>
+<span style="position: absolute; left: 100%; top: 0; bottom: 0; width: 1px; background: #EEEEEA"></span>
+</div>
+<sc-for list="{{c1}}" as="b" hint-placeholder-count="3">
+<div style="height: 58px; display: grid; grid-template-columns: 72px minmax(0, 1fr) 40px; align-items: center">
+<span style="font-size: 13px; font-weight: 600">{{b.label}}</span>
+<div style="position: relative; height: 24px">
+<button type="button" aria-label="{{b.aria}}" onMouseEnter="{{b.on}}" onMouseLeave="{{b.off}}" onFocus="{{b.on}}" onBlur="{{b.off}}" style="position: absolute; left: 0; top: -8px; bottom: -8px; width: {{b.hit}}%; padding: 0; border: none; background: transparent; cursor: default">
+<span style="position: absolute; left: 0; top: 8px; height: 24px; width: {{b.fill}}%; background: {{b.color}}; border-radius: 0 4px 4px 0; opacity: {{b.op}}"></span>
+</button>
+<span style="position: absolute; left: calc({{b.w}}% + 8px); top: 3px; font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 600; pointer-events: none">{{b.v}}</span>
+<sc-if value="{{b.tip}}" hint-placeholder-val="{{false}}">
+<span style="position: absolute; left: {{b.w}}%; bottom: 32px; transform: translateX(-50%); z-index: 5; padding: 6px 9px; background: #080909; color: #FFFFFF; font-size: 12px; white-space: nowrap; pointer-events: none"><strong style="font-family: 'IBM Plex Mono', monospace; font-size: 13px">{{b.v}} events</strong> · {{b.detail}}</span>
+</sc-if>
+</div>
+<span></span>
+</div>
+</sc-for>
+<div style="height: 22px; display: grid; grid-template-columns: 72px minmax(0, 1fr) 40px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #6B6E69">
+<span></span><span style="position: relative"><span style="position: absolute; left: 0; top: 4px">0</span><span style="position: absolute; left: 50%; top: 4px; transform: translateX(-50%)">5</span><span style="position: absolute; left: 100%; top: 4px; transform: translateX(-50%)">10</span></span><span></span>
+</div>
+</div>
+</div>
+</section>
+
+<section aria-label="Barail events by metres below the top" style="position: relative; box-sizing: border-box; padding: 18px 20px; display: flex; flex-direction: column; gap: 14px; background: #FFFFFF; border: 1px solid #E8E9E5">
+<div style="display: flex; flex-direction: column; gap: 5px">
+<span style="display: flex; align-items: center; gap: 8px; font-family: 'Archivo', sans-serif; font-size: 10.5px; font-weight: 800; letter-spacing: 0.14em; color: #6B6E69"><span style="width: 14px; height: 3px; background: #F4C400"></span>02 · DEPTH BELOW THE BARAIL TOP</span>
+<span style="font-family: 'Archivo', sans-serif; font-size: 15px; font-weight: 800">Trouble clusters 10–20 m below the top</span>
+</div>
+<div style="position: relative; flex-grow: 1; min-height: 0; display: flex; flex-direction: column; justify-content: flex-end">
+<div style="position: relative; height: 196px; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); align-items: end; border-bottom: 1px solid #080909">
+<span aria-hidden="true" style="position: absolute; left: 0; right: 0; bottom: 56%; height: 1px; background: #EEEEEA"></span>
+<sc-for list="{{c2}}" as="b" hint-placeholder-count="5">
+<div style="position: relative; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: flex-end">
+<span style="margin-bottom: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 600">{{b.v}}</span>
+<button type="button" aria-label="{{b.aria}}" onMouseEnter="{{b.on}}" onMouseLeave="{{b.off}}" onFocus="{{b.on}}" onBlur="{{b.off}}" style="width: 48px; height: {{b.h}}px; display: flex; justify-content: center; padding: 0; border: none; background: transparent; cursor: default">
+<span style="width: 24px; height: 100%; background: {{b.color}}; border-radius: 4px 4px 0 0; opacity: {{b.op}}"></span>
+</button>
+<sc-if value="{{b.tip}}" hint-placeholder-val="{{false}}">
+<span style="position: absolute; left: 50%; bottom: calc({{b.h}}px + 28px); transform: translateX(-50%); z-index: 5; padding: 6px 9px; background: #080909; color: #FFFFFF; font-size: 12px; white-space: nowrap; pointer-events: none"><strong style="font-family: 'IBM Plex Mono', monospace; font-size: 13px">{{b.v}} events</strong> · {{b.detail}}</span>
+</sc-if>
+</div>
+</sc-for>
+</div>
+<div style="height: 36px; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #454845; text-align: center">
+<sc-for list="{{c2}}" as="b" hint-placeholder-count="5"><span style="padding-top: 6px">{{b.label}}</span></sc-for>
+</div>
+<span style="font-size: 11.5px; color: #6B6E69">Metres below the Barail top · mud loss and stuck pipe</span>
+</div>
+</section>
+
+<section aria-label="Lost time by problem type" style="position: relative; box-sizing: border-box; padding: 18px 20px; display: flex; flex-direction: column; gap: 14px; background: #FFFFFF; border: 1px solid #E8E9E5">
+<div style="display: flex; flex-direction: column; gap: 5px">
+<span style="display: flex; align-items: center; gap: 8px; font-family: 'Archivo', sans-serif; font-size: 10.5px; font-weight: 800; letter-spacing: 0.14em; color: #6B6E69"><span style="width: 14px; height: 3px; background: #F4C400"></span>03 · LOST TIME BY TYPE</span>
+<span style="font-family: 'Archivo', sans-serif; font-size: 15px; font-weight: 800">Lost circulation costs the most: 61 h</span>
+</div>
+<div style="position: relative; flex-grow: 1; min-height: 0; display: flex; flex-direction: column; justify-content: center">
+<div style="position: relative; display: flex; flex-direction: column">
+<div aria-hidden="true" style="position: absolute; left: 112px; right: 36px; top: 0; bottom: 22px">
+<span style="position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background: #080909"></span>
+<span style="position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: #EEEEEA"></span>
+<span style="position: absolute; left: 100%; top: 0; bottom: 0; width: 1px; background: #EEEEEA"></span>
+</div>
+<sc-for list="{{c3}}" as="b" hint-placeholder-count="5">
+<div style="height: 40px; display: grid; grid-template-columns: 112px minmax(0, 1fr) 36px; align-items: center">
+<span style="font-size: 12.5px; font-weight: 600; white-space: nowrap">{{b.label}}</span>
+<div style="position: relative; height: 20px">
+<button type="button" aria-label="{{b.aria}}" onMouseEnter="{{b.on}}" onMouseLeave="{{b.off}}" onFocus="{{b.on}}" onBlur="{{b.off}}" style="position: absolute; left: 0; top: -8px; bottom: -8px; width: {{b.hit}}%; padding: 0; border: none; background: transparent; cursor: default">
+<span style="position: absolute; left: 0; top: 8px; height: 20px; width: {{b.fill}}%; background: {{b.color}}; border-radius: 0 4px 4px 0; opacity: {{b.op}}"></span>
+</button>
+<span style="position: absolute; left: calc({{b.w}}% + 8px); top: 1px; font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; font-weight: 600; pointer-events: none">{{b.v}}</span>
+<sc-if value="{{b.tip}}" hint-placeholder-val="{{false}}">
+<span style="position: absolute; left: {{b.w}}%; bottom: 28px; transform: translateX(-50%); z-index: 5; padding: 6px 9px; background: #080909; color: #FFFFFF; font-size: 12px; white-space: nowrap; pointer-events: none"><strong style="font-family: 'IBM Plex Mono', monospace; font-size: 13px">{{b.v}} h</strong> · {{b.detail}}</span>
+</sc-if>
+</div>
+<span></span>
+</div>
+</sc-for>
+<div style="height: 22px; display: grid; grid-template-columns: 112px minmax(0, 1fr) 36px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #6B6E69">
+<span style="padding-top: 4px">hours</span><span style="position: relative"><span style="position: absolute; left: 0; top: 4px">0</span><span style="position: absolute; left: 50%; top: 4px; transform: translateX(-50%)">35</span><span style="position: absolute; left: 100%; top: 4px; transform: translateX(-50%)">70</span></span><span></span>
+</div>
+</div>
+</div>
+</section>
+
+<section aria-label="Events by formation and type" style="position: relative; box-sizing: border-box; padding: 18px 20px; display: flex; flex-direction: column; gap: 14px; background: #FFFFFF; border: 1px solid #E8E9E5">
+<div style="display: flex; flex-direction: column; gap: 5px">
+<span style="display: flex; align-items: center; gap: 8px; font-family: 'Archivo', sans-serif; font-size: 10.5px; font-weight: 800; letter-spacing: 0.14em; color: #6B6E69"><span style="width: 14px; height: 3px; background: #F4C400"></span>04 · RISK BY FORMATION</span>
+<span style="font-family: 'Archivo', sans-serif; font-size: 15px; font-weight: 800">The Barail carries most of every risk</span>
+</div>
+<div style="flex-grow: 1; min-height: 0; display: flex; flex-direction: column; justify-content: center; gap: 12px">
+<div style="display: grid; grid-template-columns: 64px repeat(5, minmax(0, 1fr)); gap: 2px">
+<span></span>
+<sc-for list="{{c4cols}}" as="h" hint-placeholder-count="5"><span style="padding-bottom: 4px; font-family: 'Archivo', sans-serif; font-size: 9.5px; font-weight: 700; letter-spacing: 0.1em; color: #6B6E69; text-align: center">{{h}}</span></sc-for>
+<sc-for list="{{c4}}" as="r" hint-placeholder-count="3">
+<span style="display: flex; align-items: center; font-size: 12.5px; font-weight: 600">{{r.label}}</span>
+<sc-for list="{{r.cells}}" as="c" hint-placeholder-count="5">
+<button type="button" aria-label="{{c.aria}}" onMouseEnter="{{c.on}}" onMouseLeave="{{c.off}}" onFocus="{{c.on}}" onBlur="{{c.off}}" style="position: relative; height: 54px; padding: 0; border: none; background: {{c.bg}}; color: {{c.fg}}; box-shadow: {{c.ring}}; font-family: 'IBM Plex Mono', monospace; font-size: 15px; font-weight: 600; cursor: default">{{c.v}}
+<sc-if value="{{c.tip}}" hint-placeholder-val="{{false}}">
+<span style="position: absolute; left: 50%; bottom: calc(100% + 6px); transform: translateX(-50%); z-index: 5; padding: 6px 9px; background: #080909; color: #FFFFFF; font-family: 'IBM Plex Sans', sans-serif; font-size: 12px; font-weight: 400; white-space: nowrap; pointer-events: none"><strong style="font-family: 'IBM Plex Mono', monospace; font-size: 13px">{{c.v}} events</strong> · {{c.detail}}</span>
+</sc-if>
+</button>
+</sc-for>
+</sc-for>
+</div>
+<div style="display: flex; align-items: center; gap: 8px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #6B6E69">
+<span>0</span>
+<span style="display: flex; gap: 2px"><span style="width: 22px; height: 10px; background: #F5F5F1; box-shadow: inset 0 0 0 1px #E8E9E5"></span><span style="width: 22px; height: 10px; background: #E1E2DC"></span><span style="width: 22px; height: 10px; background: #B9BBB5"></span><span style="width: 22px; height: 10px; background: #7D807B"></span><span style="width: 22px; height: 10px; background: #080909"></span></span>
+<span>9 events</span>
+</div>
+</div>
+</section>
+
+<section aria-label="Offset similarity" style="position: relative; box-sizing: border-box; padding: 18px 20px; display: flex; flex-direction: column; gap: 14px; background: #FFFFFF; border: 1px solid #E8E9E5">
+<div style="display: flex; flex-direction: column; gap: 5px">
+<span style="display: flex; align-items: center; gap: 8px; font-family: 'Archivo', sans-serif; font-size: 10.5px; font-weight: 800; letter-spacing: 0.14em; color: #6B6E69"><span style="width: 14px; height: 3px; background: #F4C400"></span>05 · OFFSET SIMILARITY</span>
+<span style="font-family: 'Archivo', sans-serif; font-size: 15px; font-weight: 800">Three offsets clear the 75 % bar</span>
+</div>
+<div style="position: relative; flex-grow: 1; min-height: 0; display: flex; flex-direction: column; justify-content: center">
+<div style="position: relative; display: flex; flex-direction: column">
+<div aria-hidden="true" style="position: absolute; left: 56px; right: 40px; top: 0; bottom: 22px">
+<span style="position: absolute; left: 75%; right: 0; top: 0; bottom: 0; background: #FFF3B0"></span>
+<span style="position: absolute; left: 75%; top: 0; bottom: 0; width: 1px; background: #D6A900"></span>
+<span style="position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background: #080909"></span>
+<span style="position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: #EEEEEA"></span>
+</div>
+<sc-for list="{{c5}}" as="b" hint-placeholder-count="7">
+<a href="NearbyWells.dc.html" aria-label="{{b.aria}}" onMouseEnter="{{b.on}}" onMouseLeave="{{b.off}}" onFocus="{{b.on}}" onBlur="{{b.off}}" style="position: relative; height: 30px; display: grid; grid-template-columns: 56px minmax(0, 1fr) 40px; align-items: center; color: #080909; text-decoration: none">
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600">{{b.label}}</span>
+<span style="position: relative; height: 12px">
+<span style="position: absolute; left: 0; top: 5px; height: 2px; width: {{b.w}}%; background: {{b.color}}"></span>
+<span style="position: absolute; left: {{b.w}}%; top: 6px; width: {{b.dot}}px; height: {{b.dot}}px; margin: -{{b.half}}px 0 0 -{{b.half}}px; box-sizing: border-box; border-radius: 50%; background: {{b.color}}; box-shadow: 0 0 0 2px #FFFFFF"></span>
+<sc-if value="{{b.tip}}" hint-placeholder-val="{{false}}">
+<span style="position: absolute; left: {{b.w}}%; bottom: 18px; transform: translateX(-50%); z-index: 5; padding: 6px 9px; background: #080909; color: #FFFFFF; font-size: 12px; white-space: nowrap; pointer-events: none"><strong style="font-family: 'IBM Plex Mono', monospace; font-size: 13px">{{b.v}} %</strong> · {{b.detail}}</span>
+</sc-if>
+</span>
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; text-align: right">{{b.v}}%</span>
+</a>
+</sc-for>
+<div style="height: 22px; display: grid; grid-template-columns: 56px minmax(0, 1fr) 40px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #6B6E69">
+<span></span><span style="position: relative"><span style="position: absolute; left: 0; top: 4px">0</span><span style="position: absolute; left: 50%; top: 4px; transform: translateX(-50%)">50</span><span style="position: absolute; left: 75%; top: 4px; transform: translateX(-50%); color: #080909; font-weight: 600">75</span><span style="position: absolute; left: 100%; top: 4px; transform: translateX(-50%)">100</span></span><span></span>
+</div>
+</div>
+</div>
+</section>
+
+<section aria-label="Mud-loss events per year" style="position: relative; box-sizing: border-box; padding: 18px 20px; display: flex; flex-direction: column; gap: 14px; background: #FFFFFF; border: 1px solid #E8E9E5">
+<div style="display: flex; flex-direction: column; gap: 5px">
+<span style="display: flex; align-items: center; gap: 8px; font-family: 'Archivo', sans-serif; font-size: 10.5px; font-weight: 800; letter-spacing: 0.14em; color: #6B6E69"><span style="width: 14px; height: 3px; background: #F4C400"></span>06 · MUD LOSS PER YEAR</span>
+<span style="font-family: 'Archivo', sans-serif; font-size: 15px; font-weight: 800">Still happening: 5 losses since 2022</span>
+</div>
+<div style="position: relative; flex-grow: 1; min-height: 0; display: flex; flex-direction: column; justify-content: flex-end">
+<div style="position: relative; height: 196px; display: grid; grid-template-columns: 22px repeat(12, minmax(0, 1fr)); align-items: end; border-bottom: 1px solid #080909">
+<span aria-hidden="true" style="position: absolute; left: 22px; right: 0; bottom: 33.3%; height: 1px; background: #EEEEEA"></span>
+<span aria-hidden="true" style="position: absolute; left: 22px; right: 0; bottom: 66.6%; height: 1px; background: #EEEEEA"></span>
+<span aria-hidden="true" style="position: absolute; left: 0; bottom: 66.6%; margin-bottom: -7px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #6B6E69">2</span>
+<span aria-hidden="true" style="position: absolute; left: 0; bottom: 33.3%; margin-bottom: -7px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #6B6E69">1</span>
+<span></span>
+<sc-for list="{{c6}}" as="b" hint-placeholder-count="12">
+<div style="position: relative; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: flex-end">
+<button type="button" aria-label="{{b.aria}}" onMouseEnter="{{b.on}}" onMouseLeave="{{b.off}}" onFocus="{{b.on}}" onBlur="{{b.off}}" style="width: 24px; height: {{b.hit}}px; display: flex; align-items: flex-end; justify-content: center; padding: 0; border: none; background: transparent; cursor: default">
+<span style="width: 14px; height: {{b.h}}px; background: {{b.color}}; border-radius: 4px 4px 0 0; opacity: {{b.op}}"></span>
+</button>
+<sc-if value="{{b.tip}}" hint-placeholder-val="{{false}}">
+<span style="position: absolute; left: 50%; bottom: calc({{b.h}}px + 8px); transform: translateX(-50%); z-index: 5; padding: 6px 9px; background: #080909; color: #FFFFFF; font-size: 12px; white-space: nowrap; pointer-events: none"><strong style="font-family: 'IBM Plex Mono', monospace; font-size: 13px">{{b.v}}</strong> · {{b.year}}</span>
+</sc-if>
+</div>
+</sc-for>
+</div>
+<div style="height: 36px; display: grid; grid-template-columns: 22px repeat(12, minmax(0, 1fr)); font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: #454845; text-align: center">
+<span></span>
+<sc-for list="{{c6}}" as="b" hint-placeholder-count="12"><span style="padding-top: 6px">{{b.short}}</span></sc-for>
+</div>
+<span style="font-size: 11.5px; color: #6B6E69">Events per year, 2014–2025 · last four years highlighted</span>
+</div>
+</section>
+
+</div>
+</main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { hov: '' };
+  }
+  renderVals() {
+    var self = this;
+    var hov = (this.state || {}).hov || '';
+    var HI = '#F4C400', LO = '#242625';
+    var mk = function (id) {
+      return {
+        tip: hov === id,
+        op: hov && hov.split('-')[0] === id.split('-')[0] && hov !== id ? 0.55 : 1,
+        on: function () { self.setState({ hov: id }); },
+        off: function () { if ((self.state || {}).hov === id) self.setState({ hov: '' }); }
+      };
+    };
+    var total1 = 13;
+    var c1 = [['Girujan', 1], ['Tipam', 3], ['Barail', 9]].map(function (x, i) {
+      var w = x[1] / 10 * 100;
+      return Object.assign(mk('c1-' + i), {
+        label: x[0], v: String(x[1]), w: w, fill: 100, hit: Math.max(w, 8),
+        color: x[0] === 'Barail' ? HI : LO,
+        detail: x[0] + ' · ' + Math.round(x[1] / total1 * 100) + ' % of losses',
+        aria: x[0] + ': ' + x[1] + ' mud-loss events'
+      });
+    });
+    c1.forEach(function (b) { b.fill = b.w / b.hit * 100; });
+    var c2 = [['0–10', 1], ['10–20', 5], ['20–30', 2], ['30–50', 1], ['50+', 2]].map(function (x, i) {
+      return Object.assign(mk('c2-' + i), {
+        label: x[0], v: String(x[1]), h: Math.round(x[1] / 6 * 160),
+        color: x[0] === '10–20' ? HI : LO,
+        detail: x[0] + ' m below the top' + (x[0] === '10–20' ? ' · 3,196–3,206 m MD on 104' : ''),
+        aria: x[1] + ' events ' + x[0] + ' metres below the Barail top'
+      });
+    });
+    var c3 = [['Lost circulation', 61], ['Equipment', 40], ['Stuck pipe', 27], ['Cementing', 24], ['Well control', 18]].map(function (x, i) {
+      var w = x[1] / 70 * 100;
+      return Object.assign(mk('c3-' + i), {
+        label: x[0], v: String(x[1]), w: w, hit: Math.max(w, 8), fill: 100,
+        color: i === 0 ? HI : LO,
+        detail: x[0] + ' · ' + Math.round(x[1] / 170 * 100) + ' % of lost time',
+        aria: x[0] + ': ' + x[1] + ' hours lost'
+      });
+    });
+    c3.forEach(function (b) { b.fill = b.w / b.hit * 100; });
+    var COLS = ['LOSS', 'STUCK', 'KICK', 'CEMENT', 'TORQUE'];
+    var NAMES = ['mud loss', 'stuck pipe', 'kick', 'cementing', 'torque'];
+    var RAMP = function (v) { return v >= 9 ? '#080909' : v >= 3 ? '#7D807B' : v >= 2 ? '#B9BBB5' : v >= 1 ? '#E1E2DC' : '#F5F5F1'; };
+    var c4 = [['Girujan', [1, 0, 0, 0, 0]], ['Tipam', [3, 2, 0, 1, 2]], ['Barail', [9, 2, 1, 1, 0]]].map(function (r, ri) {
+      return {
+        label: r[0],
+        cells: r[1].map(function (v, ci) {
+          var id = 'c4-' + ri + '-' + ci;
+          var m = mk(id);
+          return {
+            v: String(v), bg: RAMP(v), fg: v >= 3 ? '#FFFFFF' : '#080909',
+            ring: hov === id ? 'inset 0 0 0 3px #F4C400' : (r[0] === 'Barail' && ci === 0 ? 'inset 0 0 0 3px #F4C400' : 'none'),
+            tip: m.tip, on: m.on, off: m.off,
+            detail: r[0] + ' × ' + NAMES[ci],
+            aria: r[0] + ', ' + NAMES[ci] + ': ' + v + ' events'
+          };
+        })
+      };
+    });
+    var c5 = [['W-067', 87, '1.2 km'], ['W-042', 81, '2.1 km'], ['W-088', 78, '2.6 km'], ['W-121', 64, '4.2 km'], ['W-081', 58, '3.0 km'], ['W-112', 41, '3.4 km'], ['W-103', 36, '3.9 km']].map(function (x, i) {
+      var rel = x[1] >= 75;
+      return Object.assign(mk('c5-' + i), {
+        label: x[0], v: String(x[1]), w: x[1], color: rel ? '#080909' : '#A3A6A1',
+        dot: rel ? 12 : 10, half: rel ? 6 : 5,
+        detail: x[0] + ' · ' + x[2] + ' at bit depth',
+        aria: x[0] + ', ' + x[1] + ' percent similar, ' + x[2]
+      });
+    });
+    var years = [2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025];
+    var cnt = [2, 0, 1, 2, 1, 1, 1, 0, 2, 1, 1, 1];
+    var c6 = years.map(function (y, i) {
+      var v = cnt[i], h = Math.round(v / 3 * 196);
+      return Object.assign(mk('c6-' + i), {
+        year: String(y), short: "’" + String(y).slice(2), v: v === 1 ? '1 event' : v + ' events', h: h, hit: Math.max(h, 24),
+        color: y >= 2022 ? HI : LO,
+        aria: y + ': ' + v + ' mud-loss events'
+      });
+    });
+    return { c1: c1, c2: c2, c3: c3, c4: c4, c4cols: COLS, c5: c5, c6: c6 };
+  }
+}
+</script>
+</body>
+</html>

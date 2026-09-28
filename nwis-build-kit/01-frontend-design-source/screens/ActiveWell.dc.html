@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>NWIS Active Well</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0;background:#F5F5F1}
+a{color:#080909}a:hover{color:#454845}
+button{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; display: flex; overflow: hidden; background: #F5F5F1; color: #080909; font-family: 'IBM Plex Sans', system-ui, sans-serif">
+<dc-import name="NwisSidebar" active="active" hint-size="248px,900px"></dc-import>
+<div style="width: 1192px; height: 900px; display: flex; flex-direction: column">
+<dc-import name="NwisTopbar" num="03" section="Operations" heading="Active Well · OIL-WELL-104" desc="The well against its offsets, depth by depth, with live eRTMAC parameters underneath." hint-size="1192px,88px"></dc-import>
+<main style="flex-grow: 1; min-height: 0; box-sizing: border-box; padding: 24px; display: flex; gap: 16px">
+
+<div style="width: 744px; flex-shrink: 0; display: flex; flex-direction: column; gap: 16px">
+
+<section aria-label="Depth corridor" style="height: 598px; flex-shrink: 0; box-sizing: border-box; padding: 16px; display: flex; flex-direction: column; background: #FFFFFF; border: 1px solid #E8E9E5">
+<div style="height: 40px; display: flex; align-items: center; gap: 12px">
+<div style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px">
+<span style="display: flex; align-items: center; gap: 8px; font-family: 'Archivo', sans-serif; font-size: 12px; font-weight: 800; letter-spacing: 0.14em"><span style="width: 18px; height: 3px; background: #F4C400"></span>DEPTH CORRIDOR</span>
+<span style="font-size: 12.5px; color: #454845; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{caption}}</span>
+</div>
+<span style="font-family: 'Archivo', sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: 0.16em; color: #6B6E69">ALIGN BY</span>
+<div role="group" aria-label="Align wells by" style="display: flex">
+<sc-for list="{{modes}}" as="m" hint-placeholder-count="3">
+<button type="button" aria-pressed="{{m.pressed}}" onClick="{{m.pick}}" style="height: 32px; margin-left: -1px; padding: 0 12px; border: 1px solid {{m.border}}; background: {{m.bg}}; color: {{m.fg}}; font-family: 'Archivo', sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 0.1em; cursor: pointer">{{m.label}}</button>
+</sc-for>
+</div>
+</div>
+
+<div style="height: 32px; margin-top: 10px; display: flex; align-items: center; gap: 6px">
+<sc-for list="{{chips}}" as="c" hint-placeholder-count="5">
+<button type="button" aria-pressed="{{c.pressed}}" onClick="{{c.toggle}}" style="height: 30px; display: flex; align-items: center; gap: 7px; padding: 0 10px; border: 1px solid {{c.border}}; background: {{c.bg}}; color: {{c.fg}}; font-size: 12px; cursor: pointer; white-space: nowrap">
+<span style="display: block; flex-shrink: 0; width: {{c.w}}px; height: {{c.h}}px; background: #080909; border-radius: {{c.radius}}; transform: rotate({{c.rot}}deg); clip-path: {{c.clip}}; opacity: {{c.markerOp}}"></span>
+<span>{{c.name}}</span>
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #6B6E69">{{c.count}}</span>
+</button>
+</sc-for>
+<span style="flex-grow: 1"></span>
+<span style="display: flex; gap: 10px; font-size: 11px; color: #454845; white-space: nowrap">
+<span style="display: flex; align-items: center; gap: 5px"><span style="width: 8px; height: 8px; background: #D9362B"></span>High</span>
+<span style="display: flex; align-items: center; gap: 5px"><span style="width: 8px; height: 8px; background: #080909"></span>Medium</span>
+<span style="display: flex; align-items: center; gap: 5px"><span style="width: 8px; height: 8px; background: #A3A6A1"></span>Low</span>
+</span>
+</div>
+
+<div style="height: 34px; margin-top: 10px; display: flex; align-items: flex-end; gap: 8px">
+<div style="width: 52px; flex-shrink: 0; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; line-height: 1.25; color: #6B6E69; padding-bottom: 2px">{{axisUnit}}</div>
+<div style="width: 140px; flex-shrink: 0; display: flex; flex-direction: column; gap: 1px">
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 600">OIL-WELL-104</span>
+<span style="font-size: 11.5px; color: #6B6E69">Active · drilling</span>
+</div>
+<sc-for list="{{wells}}" as="w" hint-placeholder-count="5">
+<div style="flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 1px">
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 600">{{w.id}}</span>
+<span style="font-size: 11.5px; color: #6B6E69">{{w.dist}}</span>
+</div>
+</sc-for>
+</div>
+
+<div style="height: 432px; margin-top: 6px; display: flex; gap: 8px">
+<div style="position: relative; width: 52px; flex-shrink: 0">
+<sc-for list="{{ticks}}" as="t" hint-placeholder-count="7">
+<span style="position: absolute; right: 4px; top: {{t.ly}}px; margin-top: -7px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #6B6E69">{{t.label}}</span>
+</sc-for>
+</div>
+
+<div style="position: relative; width: 140px; flex-shrink: 0; height: 432px; overflow: hidden; background: #F5F5F1; box-shadow: inset 0 0 0 2px #080909">
+<sc-for list="{{activeBands}}" as="b" hint-placeholder-count="3">
+<div style="position: absolute; left: 0; right: 0; top: {{b.y}}px; height: {{b.h}}px; background: {{b.fill}}; border-top: 1px solid {{b.edge}}">
+<span style="position: absolute; left: 8px; top: {{b.labelTop}}px; font-family: 'Archivo', sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em; color: #454845; white-space: nowrap">{{b.label}}</span>
+</div>
+</sc-for>
+<sc-for list="{{ticks}}" as="t" hint-placeholder-count="7">
+<div style="position: absolute; left: 0; right: 0; top: {{t.y}}px; height: 1px; background: rgba(8,9,9,0.06)"></div>
+</sc-for>
+<div style="position: absolute; left: 0; right: 0; top: {{predY}}px; height: {{predH}}px; box-sizing: border-box; background: rgba(8,9,9,0.06); border-top: 1px dashed #080909; border-bottom: 1px dashed #080909"></div>
+<div style="position: absolute; left: 0; right: 0; top: {{bitY}}px; height: {{lookH}}px; box-sizing: border-box; background: rgba(244,196,0,0.26); border-top: 2px solid #080909; border-bottom: 1px dashed #D6A900"></div>
+<div style="position: absolute; left: 120px; width: 8px; top: 0; height: {{bitY}}px; background: #454845"></div>
+<div style="position: absolute; left: 120px; width: 8px; top: {{bitY}}px; bottom: 0; box-sizing: border-box; border: 1px dashed #A3A6A1; border-top: none"></div>
+<span style="position: absolute; left: 6px; top: {{bitY}}px; margin-top: -22px; height: 18px; display: flex; align-items: center; padding: 0 6px; background: #080909; color: #FFFFFF; font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; white-space: nowrap">BIT {{bitLabel}}</span>
+<span style="position: absolute; left: 8px; top: {{bitY}}px; margin-top: 6px; font-family: 'Archivo', sans-serif; font-size: 10.5px; font-weight: 800; letter-spacing: 0.08em; color: #080909; white-space: nowrap">NEXT {{look}} m</span>
+<svg width="18" height="14" viewBox="0 0 18 14" aria-hidden="true" style="position: absolute; left: 115px; top: {{bitY}}px; margin-top: -13px"><path d="M1 1h16L9 13z" fill="#F4C400" stroke="#080909" style="stroke-width: 1.25"></path></svg>
+</div>
+
+<sc-for list="{{wells}}" as="w" hint-placeholder-count="5">
+<div style="position: relative; flex: 1 1 0; min-width: 0; height: 432px; overflow: hidden; background: #F5F5F1; box-shadow: inset 0 0 0 1px #E8E9E5">
+<sc-for list="{{w.bands}}" as="b" hint-placeholder-count="3">
+<div style="position: absolute; left: 0; right: 0; top: {{b.y}}px; height: {{b.h}}px; background: {{b.fill}}; border-top: 1px solid {{b.edge}}"></div>
+</sc-for>
+<sc-for list="{{ticks}}" as="t" hint-placeholder-count="7">
+<div style="position: absolute; left: 0; right: 0; top: {{t.y}}px; height: 1px; background: rgba(8,9,9,0.06)"></div>
+</sc-for>
+<div style="position: absolute; left: 0; right: 0; top: {{bitY}}px; height: {{lookH}}px; box-sizing: border-box; background: rgba(244,196,0,0.16); border-top: 1px solid #D6A900; border-bottom: 1px dashed #D6A900"></div>
+<span style="position: absolute; right: 5px; top: {{w.barailY}}px; margin-top: -15px; display: {{w.barailDisplay}}; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #454845; white-space: nowrap">{{w.barailLabel}}</span>
+<sc-for list="{{w.events}}" as="ev" hint-placeholder-count="2">
+<button type="button" aria-label="{{ev.aria}}" aria-pressed="{{ev.pressed}}" onClick="{{ev.pick}}" style="position: absolute; left: 3px; right: 3px; top: {{ev.y}}px; height: 28px; margin-top: -14px; display: flex; align-items: center; gap: 5px; padding: 0 4px; border: none; background: {{ev.bg}}; box-shadow: inset 0 0 0 1.5px {{ev.ring}}; color: #080909; opacity: {{ev.op}}; cursor: pointer; text-align: left">
+<span style="display: block; flex-shrink: 0; width: {{ev.w}}px; height: {{ev.h}}px; background: {{ev.color}}; border-radius: {{ev.radius}}; transform: rotate({{ev.rot}}deg); clip-path: {{ev.clip}}"></span>
+<span style="font-size: 11px; font-weight: {{ev.weight}}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{ev.label}}</span>
+</button>
+</sc-for>
+</div>
+</sc-for>
+</div>
+</section>
+
+<section aria-label="Live drilling parameters" style="flex-grow: 1; min-height: 0; box-sizing: border-box; display: flex; flex-direction: column; background: #FFFFFF; border: 1px solid #E8E9E5">
+<div style="height: 38px; flex-shrink: 0; box-sizing: border-box; display: flex; align-items: center; gap: 12px; padding: 0 16px; border-bottom: 1px solid #E8E9E5">
+<span style="display: flex; align-items: center; gap: 8px; font-family: 'Archivo', sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 0.14em; white-space: nowrap"><span style="width: 7px; height: 7px; border-radius: 50%; background: #278052"></span>LIVE FROM eRTMAC</span>
+<span style="font-size: 11.5px; color: #6B6E69; white-space: nowrap">Rig state, last 2 h</span>
+<div role="img" aria-label="Rig state over the last two hours: mostly rotary drilling, one slide, three connections and one circulation" style="flex-grow: 1; height: 10px; display: flex; gap: 2px">
+<span style="width: 18%; background: #080909"></span>
+<span style="width: 3%; background: #D4D6D1"></span>
+<span style="width: 20%; background: #080909"></span>
+<span style="width: 8%; background: #F4C400"></span>
+<span style="width: 3%; background: #D4D6D1"></span>
+<span style="width: 6%; background: #6B6E69"></span>
+<span style="width: 22%; background: #080909"></span>
+<span style="width: 3%; background: #D4D6D1"></span>
+<span style="width: 17%; background: #080909"></span>
+</div>
+<div style="display: flex; gap: 10px; font-size: 11px; color: #454845; white-space: nowrap">
+<span style="display: flex; align-items: center; gap: 4px"><span style="width: 8px; height: 8px; background: #080909"></span>Rotary</span>
+<span style="display: flex; align-items: center; gap: 4px"><span style="width: 8px; height: 8px; background: #F4C400"></span>Slide</span>
+<span style="display: flex; align-items: center; gap: 4px"><span style="width: 8px; height: 8px; background: #6B6E69"></span>Circulate</span>
+<span style="display: flex; align-items: center; gap: 4px"><span style="width: 8px; height: 8px; background: #D4D6D1"></span>Connection</span>
+</div>
+</div>
+<div style="flex-grow: 1; min-height: 0; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr))">
+<sc-for list="{{live}}" as="l" hint-placeholder-count="6">
+<div style="position: relative; min-width: 0; display: flex; flex-direction: column; gap: 3px; padding: 10px 12px; border-right: 1px solid #E8E9E5">
+<div style="position: absolute; left: 0; right: 0; top: 0; height: 3px; background: {{l.bar}}"></div>
+<span style="display: flex; align-items: center; justify-content: space-between; font-family: 'Archivo', sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: 0.12em; color: #6B6E69">{{l.label}}
+<sc-if value="{{l.watch}}" hint-placeholder-val="{{false}}"><span style="padding: 1px 5px; background: #F4C400; color: #080909; font-size: 9.5px; letter-spacing: 0.08em">WATCH</span></sc-if>
+</span>
+<span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 19px; font-weight: 600">{{l.value}}</span> <span style="font-size: 11px; color: #6B6E69">{{l.unit}}</span></span>
+<svg width="100%" height="26" viewBox="0 0 120 28" preserveAspectRatio="none" aria-hidden="true"><line x1="0" y1="4" x2="120" y2="4" stroke="{{l.limit}}" style="stroke-width: 1; stroke-dasharray: 3 3; vector-effect: non-scaling-stroke"></line><polyline points="{{l.pts}}" fill="none" stroke="{{l.line}}" style="stroke-width: 1.75; vector-effect: non-scaling-stroke"></polyline></svg>
+<span style="font-size: 11px; color: #454845; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{l.sub}}</span>
+</div>
+</sc-for>
+</div>
+</section>
+</div>
+
+<aside aria-label="Look-ahead and precedent" style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+
+<section aria-label="Look-ahead" style="flex-shrink: 0; position: relative; box-sizing: border-box; padding: 18px 20px 20px; background: #080909; color: #FFFFFF; overflow: hidden">
+<div style="display: flex; align-items: center; justify-content: space-between">
+<span style="display: flex; align-items: center; gap: 8px; font-family: 'Archivo', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; color: #F4C400"><span style="width: 18px; height: 3px; background: #F4C400"></span>LOOK-AHEAD</span>
+<span style="display: flex; align-items: center; gap: 6px; padding: 3px 8px; background: #D9362B; font-family: 'Archivo', sans-serif; font-size: 10.5px; font-weight: 800; letter-spacing: 0.12em"><span style="width: 6px; height: 6px; border-radius: 50%; background: #FFFFFF"></span>MUD LOSS 83%</span>
+</div>
+<div style="margin-top: 12px; display: flex; align-items: flex-end; gap: 12px">
+<span style="font-family: 'Archivo', sans-serif; font-size: 52px; font-weight: 900; line-height: 0.9; color: #F4C400">62 m</span>
+<span style="display: flex; flex-direction: column; gap: 2px; padding-bottom: 2px; font-size: 12.5px; color: #C9CBC6"><span style="font-family: 'Archivo', sans-serif; font-size: 15px; font-weight: 800; color: #FFFFFF">to the Barail top</span>3,030 ± 12 m TVDSS · ≈ 4.5 h</span>
+</div>
+<div style="margin-top: 14px; display: flex; gap: 8px">
+<sc-if value="{{notAck}}" hint-placeholder-val="{{true}}">
+<button type="button" onClick="{{onAck}}" style="flex-grow: 1; height: 42px; border: none; background: #F4C400; color: #080909; font-family: 'Archivo', sans-serif; font-size: 12px; font-weight: 900; letter-spacing: 0.1em; cursor: pointer">ACKNOWLEDGE</button>
+</sc-if>
+<sc-if value="{{ack}}" hint-placeholder-val="{{false}}">
+<button type="button" onClick="{{onUndo}}" style="flex-grow: 1; height: 42px; border: 1px solid #3FB57A; background: transparent; color: #FFFFFF; font-family: 'Archivo', sans-serif; font-size: 12px; font-weight: 800; letter-spacing: 0.1em; cursor: pointer">✓ ACKNOWLEDGED · UNDO</button>
+</sc-if>
+<a href="RiskCentre.dc.html" style="height: 42px; box-sizing: border-box; display: flex; align-items: center; padding: 0 14px; border: 1px solid #454845; color: #FFFFFF; font-family: 'Archivo', sans-serif; font-size: 12px; font-weight: 800; letter-spacing: 0.1em; text-decoration: none">EVIDENCE</a>
+</div>
+<div style="position: absolute; left: 0; right: 0; bottom: 0; height: 5px; background: repeating-linear-gradient(-45deg, #F4C400 0 8px, #080909 8px 16px)"></div>
+</section>
+
+<section aria-label="Selected precedent" style="flex-shrink: 0; box-sizing: border-box; display: flex; flex-direction: column; background: #FFFFFF; border: 1px solid #E8E9E5">
+<div style="height: 40px; box-sizing: border-box; display: flex; align-items: center; gap: 10px; padding: 0 18px; border-bottom: 1px solid #E8E9E5">
+<span style="font-family: 'Archivo', sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 0.14em">SELECTED PRECEDENT</span>
+<span style="flex-grow: 1"></span>
+<span style="font-family: 'Archivo', sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: 0.12em; color: #6B6E69">MATCH</span>
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 15px; font-weight: 600">{{detail.sim}}%</span>
+</div>
+<div style="padding: 14px 18px 16px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; align-items: center; gap: 9px">
+<span style="display: block; flex-shrink: 0; width: {{detail.w}}px; height: {{detail.h}}px; background: {{detail.color}}; border-radius: {{detail.radius}}; transform: rotate({{detail.rot}}deg); clip-path: {{detail.clip}}"></span>
+<span style="font-family: 'Archivo', sans-serif; font-size: 16px; font-weight: 800; line-height: 1.25"><span style="font-family: 'IBM Plex Mono', monospace; font-weight: 600">{{detail.well}}</span> · {{detail.title}}</span>
+</div>
+<span style="font-size: 12px; line-height: 1.45; color: #454845">{{detail.date}} · {{detail.dist}} · {{detail.depth}} ({{detail.md}})</span>
+<span style="align-self: flex-start; display: flex; align-items: center; height: 22px; padding: 0 8px; background: #FFF3B0; border: 1px solid #D6A900; font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; font-weight: 600">{{detail.pos}}</span>
+<dl style="margin: 0; display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 4px 10px; font-size: 12.5px; line-height: 1.4">
+<dt style="font-family: 'Archivo', sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: 0.12em; color: #6B6E69; padding-top: 2px">ACTION</dt><dd style="margin: 0">{{detail.action}}</dd>
+<dt style="font-family: 'Archivo', sans-serif; font-size: 10.5px; font-weight: 700; letter-spacing: 0.12em; color: #6B6E69; padding-top: 2px">OUTCOME</dt><dd style="margin: 0">{{detail.outcome}}</dd>
+</dl>
+<div style="display: flex; flex-direction: column; gap: 5px">
+<sc-for list="{{detail.parts}}" as="p" hint-placeholder-count="5">
+<div style="height: 14px; display: flex; align-items: center; gap: 8px; font-size: 11.5px">
+<span style="width: 132px; flex-shrink: 0; color: #454845">{{p.name}}</span>
+<span style="position: relative; flex-grow: 1; height: 5px; background: #E8E9E5"><span style="position: absolute; left: 0; top: 0; bottom: 0; width: {{p.pct}}%; background: {{p.bar}}"></span></span>
+<span style="width: 28px; text-align: right; font-family: 'IBM Plex Mono', monospace">{{p.pct}}</span>
+</div>
+</sc-for>
+</div>
+<div style="display: flex; align-items: center; gap: 8px; padding-top: 10px; border-top: 1px solid #E8E9E5">
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#454845" aria-hidden="true" style="flex-shrink: 0; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round"><path d="M7 3h7l5 5v13H7zM14 3v5h5"></path></svg>
+<span style="min-width: 0; font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; color: #454845; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{detail.source}}</span>
+<span style="flex-grow: 1"></span>
+<a href="DocumentIntel.dc.html" style="font-family: 'Archivo', sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 0.1em; white-space: nowrap; text-decoration-color: #F4C400; text-decoration-thickness: 2px; text-underline-offset: 4px">SOURCE PAGE →</a>
+</div>
+</div>
+</section>
+
+<section aria-label="Today on this well" style="flex-grow: 1; min-height: 0; box-sizing: border-box; display: flex; flex-direction: column; background: #FFFFFF; border: 1px solid #E8E9E5; overflow: hidden">
+<div style="height: 40px; flex-shrink: 0; box-sizing: border-box; display: flex; align-items: center; padding: 0 18px; border-bottom: 1px solid #E8E9E5">
+<span style="font-family: 'Archivo', sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 0.14em">TODAY ON THIS WELL</span>
+<span style="flex-grow: 1"></span>
+<a href="AlertsCentre.dc.html" style="font-family: 'Archivo', sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 0.1em; text-decoration: none">ALL ALERTS →</a>
+</div>
+<ol style="margin: 0; padding: 12px 18px; list-style: none; display: flex; flex-direction: column; gap: 0">
+<sc-for list="{{timeline}}" as="t" hint-placeholder-count="4">
+<li style="display: grid; grid-template-columns: 44px 14px minmax(0, 1fr); gap: 8px; min-height: 36px">
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; color: #454845; padding-top: 1px">{{t.time}}</span>
+<span style="display: flex; flex-direction: column; align-items: center"><span style="width: 10px; height: 10px; flex-shrink: 0; margin-top: 3px; background: {{t.color}}; border: 1.5px solid #080909; box-sizing: border-box"></span><span style="flex-grow: 1; width: 1px; background: #E8E9E5"></span></span>
+<span style="display: flex; flex-direction: column; gap: 1px; padding-bottom: 8px"><span style="font-size: 12.5px; font-weight: 600">{{t.title}}</span><span style="font-size: 11.5px; color: #454845">{{t.sub}}</span></span>
+</li>
+</sc-for>
+</ol>
+</section>
+
+</aside>
+</main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"lookAhead":{"editor":"range","min":50,"max":300,"step":25,"unit":"m","default":150,"section":"Corridor"},"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { mode: 'tvdss', off: {}, sel: 'e1', ack: false };
+  }
+  renderVals() {
+    var self = this;
+    var TOP = 2700, SPAN = 600, H = 432, SC = H / SPAN;
+    var LOOK = Number(this.props.lookAhead != null ? this.props.lookAhead : 150);
+    var st = this.state || {};
+    var mode = st.mode || 'tvdss';
+    var off = st.off || {};
+    var sel = st.sel || 'e1';
+    var fmt = function (n) { return Math.round(n).toLocaleString('en-US'); };
+    var SEV = { high: '#D9362B', med: '#080909', low: '#A3A6A1' };
+    var SHAPES = {
+      circle: { w: 12, h: 12, radius: '50%', rot: 0, clip: 'none' },
+      square: { w: 11, h: 11, radius: '0px', rot: 0, clip: 'none' },
+      triangle: { w: 14, h: 12, radius: '0px', rot: 0, clip: 'polygon(50% 0%, 100% 100%, 0% 100%)' },
+      diamond: { w: 10, h: 10, radius: '0px', rot: 45, clip: 'none' },
+      bar: { w: 16, h: 6, radius: '0px', rot: 0, clip: 'none' }
+    };
+    var HZ = {
+      loss: { name: 'Mud loss', shape: 'circle' },
+      stuck: { name: 'Stuck pipe', shape: 'square' },
+      kick: { name: 'Kick', shape: 'triangle' },
+      torque: { name: 'Torque', shape: 'diamond' },
+      cement: { name: 'Cementing', shape: 'bar' }
+    };
+    var shapeOf = function (k) { return SHAPES[HZ[k].shape]; };
+    var ACT = { md: 156, tipam: 2752, barail: 3030, bit: 2968 };
+    var WELLS = [
+      { id: 'W-067', dist: '1.2 km', md: 40, tipam: 2738, barail: 3004 },
+      { id: 'W-042', dist: '2.1 km', md: 210, tipam: 2770, barail: 3062 },
+      { id: 'W-088', dist: '2.6 km', md: 95, tipam: 2790, barail: 3088 },
+      { id: 'W-112', dist: '3.4 km', md: 320, tipam: 2812, barail: 3110 },
+      { id: 'W-121', dist: '4.2 km', md: 12, tipam: 2724, barail: 2985 }
+    ];
+    var EV = [
+      { id: 'e1', well: 'W-067', type: 'loss', sev: 'high', z: 3021, short: 'Loss 45 bbl/h', title: 'Partial losses, 45 bbl/h', date: '14 Mar 2019', action: 'Cut flow 10 %, spotted a 40 ppb LCM pill', outcome: 'Cured in 3.5 h, 12 m³ lost', source: 'WCR W-067 p.47 · DDR 14 Mar 2019', sim: 84, parts: [100, 93, 86, 71, 90] },
+      { id: 'e2', well: 'W-067', type: 'torque', sev: 'low', z: 2890, short: 'Torque spikes', title: 'Erratic torque, 30–36 kN·m', date: '11 Mar 2019', action: 'Reduced WOB, added 2 % lubricant', outcome: 'Stable after 2 h', source: 'DDR W-067 11 Mar 2019', sim: 38, parts: [50, 40, 86, 60, 20] },
+      { id: 'e3', well: 'W-042', type: 'loss', sev: 'med', z: 3080, short: 'Seepage 8 bbl/h', title: 'Seepage losses, 8 bbl/h', date: '2 Nov 2016', action: 'Added 30 ppb fine LCM to the active system', outcome: 'Cured in 1 h', source: 'DDR W-042 2 Nov 2016', sim: 77, parts: [100, 91, 70, 66, 80] },
+      { id: 'e4', well: 'W-042', type: 'stuck', sev: 'med', z: 3140, short: 'Overpull 25 t', title: 'Tight hole, 25 t overpull on trip', date: '4 Nov 2016', action: 'Back-reamed 3,330–3,360 m MD', outcome: 'Freed, 6 h lost', source: 'DDR W-042 4 Nov 2016', sim: 52, parts: [100, 55, 70, 60, 30] },
+      { id: 'e5', well: 'W-088', type: 'cement', sev: 'med', z: 3050, short: 'Poor bond', title: 'Poor cement bond at the 9⅝-in shoe', date: '19 Jan 2014', action: 'Squeeze job before drilling ahead', outcome: 'Isolation restored, 1 day lost', source: 'WCR W-088 p.61 · CBL log', sim: 44, parts: [50, 60, 62, 50, 10] },
+      { id: 'e6', well: 'W-088', type: 'loss', sev: 'high', z: 3101, short: 'Total loss', title: 'Total losses on entering the Barail', date: '21 Jan 2014', action: 'Two LCM pills failed, then a cement plug', outcome: 'Cured after 36 h', source: 'WCR W-088 p.88 · DDR 21–22 Jan 2014', sim: 79, parts: [100, 95, 62, 74, 80] },
+      { id: 'e7', well: 'W-112', type: 'kick', sev: 'high', z: 3190, short: 'Gas influx', title: 'Gas influx, 1.2 m³ pit gain', date: '7 Jun 2022', action: 'Shut in, circulated out, raised MW to 1.52', outcome: 'Controlled in 9 h', source: 'DDR W-112 7 Jun 2022', sim: 29, parts: [100, 35, 45, 50, 10] },
+      { id: 'e8', well: 'W-121', type: 'stuck', sev: 'med', z: 3002, short: 'Diff. sticking', title: 'Differential sticking on a connection', date: '5 Aug 2021', action: 'Jarred, spotted a pipe-freeing pill', outcome: 'Freed after 9 h', source: 'DDR W-121 5 Aug 2021', sim: 61, parts: [100, 92, 35, 70, 30] }
+    ];
+    var shiftOf = function (w) { return mode === 'md' ? w.md : (mode === 'flat' ? ACT.barail - w.barail : 0); };
+    var yOf = function (d) { return (d - TOP) * SC; };
+    var aShift = mode === 'md' ? ACT.md : 0;
+    var bitD = ACT.bit + aShift;
+    var bitY = yOf(bitD);
+    var inLook = function (d) { return d >= bitD && d <= bitD + LOOK; };
+    var bands = function (w, s) {
+      return [
+        { name: 'Girujan', a: TOP - 1000, b: w.tipam, fill: '#F5F5F1' },
+        { name: 'Tipam', a: w.tipam, b: w.barail, fill: '#EBECE7' },
+        { name: 'Barail', a: w.barail, b: TOP + SPAN + 1000, fill: '#DCDDD7' }
+      ].map(function (d) {
+        var y1 = yOf(d.a + s), y2 = yOf(d.b + s);
+        var t = Math.max(0, y1), b = Math.min(H, y2);
+        return { name: d.name, fill: d.fill, y: t, h: Math.max(0, b - t), edge: y1 > 0 ? '#8E918C' : 'transparent' };
+      });
+    };
+    var evs = function (w, s) {
+      return EV.filter(function (e) { return e.well === w.id && !off[e.type]; }).map(function (e) {
+        var d = e.z + s, y = yOf(d), on = inLook(d), isSel = e.id === sel;
+        return Object.assign({}, shapeOf(e.type), {
+          label: e.short, color: SEV[e.sev], y: y,
+          op: on || isSel ? 1 : 0.5,
+          bg: isSel ? '#FFF3B0' : (on ? 'rgba(255,255,255,0.7)' : 'transparent'),
+          ring: isSel ? '#080909' : 'transparent',
+          weight: isSel ? 600 : 500,
+          pressed: isSel ? 'true' : 'false',
+          aria: HZ[e.type].name + ' in ' + e.well + ' at ' + fmt(e.z) + ' m TVDSS: ' + e.short,
+          pick: function () { self.setState({ sel: e.id }); },
+          keep: y > 6 && y < H - 6
+        });
+      }).filter(function (e) { return e.keep; });
+    };
+    var wells = WELLS.map(function (w) {
+      var s = shiftOf(w), by = yOf(w.barail + s);
+      return { id: w.id, dist: w.dist + ' at depth', bands: bands(w, s), events: evs(w, s), barailLabel: 'Barail ' + fmt(w.barail), barailY: by, barailDisplay: by > 18 && by < H ? 'block' : 'none' };
+    });
+    var activeBands = bands(ACT, aShift).map(function (b) {
+      return Object.assign(b, {
+        label: b.name === 'Barail' ? 'BARAIL · ' + fmt(ACT.barail + aShift) + ' ±12' : b.name.toUpperCase(),
+        labelTop: b.name === 'Barail' ? 13 : 6
+      });
+    });
+    var ticks = [2700, 2800, 2900, 3000, 3100, 3200, 3300].map(function (d) {
+      return { y: yOf(d), ly: Math.min(H - 7, Math.max(7, yOf(d))), label: fmt(d) };
+    });
+    var chips = Object.keys(HZ).map(function (k) {
+      var on = !off[k];
+      var n = EV.filter(function (e) { return e.type === k; }).filter(function (e) {
+        var w = WELLS.filter(function (x) { return x.id === e.well; })[0];
+        return inLook(e.z + shiftOf(w));
+      }).length;
+      return Object.assign({}, shapeOf(k), {
+        name: HZ[k].name, count: String(n),
+        pressed: on ? 'true' : 'false',
+        border: on ? '#080909' : '#D4D6D1',
+        bg: on ? '#FFFFFF' : '#F5F5F1',
+        fg: on ? '#080909' : '#6B6E69',
+        markerOp: on ? 1 : 0.3,
+        toggle: function () { var nx = Object.assign({}, off); nx[k] = !off[k]; self.setState({ off: nx }); }
+      });
+    });
+    var MODES = [{ k: 'md', label: 'MD' }, { k: 'tvdss', label: 'TVDSS' }, { k: 'flat', label: 'FORMATION' }];
+    var modes = MODES.map(function (m) {
+      var on = mode === m.k;
+      return { label: m.label, pressed: on ? 'true' : 'false', bg: on ? '#080909' : '#FFFFFF', fg: on ? '#F4C400' : '#080909', border: on ? '#080909' : '#D4D6D1', pick: function () { self.setState({ mode: m.k }); } };
+    });
+    var CAP = {
+      md: 'Measured depth ignores deviation, so the same rock sits at different depths and events scatter.',
+      tvdss: 'Vertical depth below sea level. The Barail top still varies by 125 m between wells.',
+      flat: 'Flattened on the Barail top: the losses and sticking line up just below it.'
+    };
+    var UNIT = { md: 'MD, m', tvdss: 'TVDSS, m', flat: 'TVDSS, flat' };
+    var se = EV.filter(function (e) { return e.id === sel; })[0] || EV[0];
+    var sw = WELLS.filter(function (w) { return w.id === se.well; })[0];
+    var rel = se.z - sw.barail;
+    var PARTS = ['Same formation', 'Position in formation', 'Distance at depth', 'Drilling conditions', 'Event type'];
+    var detail = Object.assign({}, shapeOf(se.type), {
+      color: SEV[se.sev], well: se.well, title: se.title, date: se.date, dist: sw.dist + ' at depth',
+      depth: fmt(se.z) + ' m TVDSS', md: fmt(se.z + sw.md) + ' m MD',
+      pos: rel >= 0 ? '+' + rel + ' m below the Barail top' : (-rel) + ' m above the Barail top',
+      action: se.action, outcome: se.outcome, source: se.source, sim: se.sim,
+      parts: se.parts.map(function (v, i) { return { name: PARTS[i], pct: v, bar: v >= 75 ? '#F4C400' : '#A3A6A1' }; })
+    });
+    var live = [
+      { label: 'ROP', value: '13.7', unit: 'm/h', sub: 'WOB 82 kN · 120 rpm', watch: false, pts: '0,16 10,15 20,17 30,14 40,15 50,13 60,16 70,14 80,15 90,13 100,14 110,12 120,13' },
+      { label: 'TORQUE', value: '27.8', unit: 'kN·m', sub: '+3.1 above T&D model', watch: true, pts: '0,20 10,19 20,20 30,18 40,19 50,17 60,15 70,16 80,12 90,13 100,9 110,8 120,6' },
+      { label: 'SPP', value: '182', unit: 'bar', sub: 'Within model ±5 bar', watch: false, pts: '0,12 10,13 20,12 30,12 40,13 50,12 60,12 70,13 80,12 90,12 100,13 110,12 120,12' },
+      { label: 'FLOW OUT', value: '97', unit: '%', sub: '−3 % in 40 min', watch: true, pts: '0,8 10,8 20,9 30,8 40,9 50,10 60,11 70,12 80,14 90,15 100,17 110,18 120,19' },
+      { label: 'PIT VOL', value: '84.2', unit: 'm³', sub: '−0.4 m³/h drilling', watch: true, pts: '0,6 10,6 20,7 30,7 40,8 50,9 60,10 70,12 80,13 90,15 100,16 110,18 120,20' },
+      { label: 'ECD', value: '1.453', unit: 'g/cm³', sub: 'Frac limit 1.52', watch: true, limit: true, pts: '0,20 10,19 20,19 30,18 40,17 50,17 60,16 70,15 80,14 90,13 100,12 110,11 120,10' }
+    ].map(function (l) {
+      return Object.assign(l, { bar: l.watch ? '#F4C400' : 'transparent', line: l.watch ? '#D6A900' : '#080909', limit: l.limit ? '#D9362B' : 'transparent' });
+    });
+    var timeline = [
+      { time: '15:58', title: 'Mud-loss risk raised to 83 %', sub: 'Barail top within 150 m look-ahead', color: '#D9362B' },
+      { time: '15:20', title: 'ECD trending up', sub: '+0.010 g/cm³ per hour toward 1.52', color: '#F4C400' },
+      { time: '14:10', title: 'Torque above T&D model', sub: '+3.1 kN·m at 3,106 m MD', color: '#F4C400' }
+    ];
+    return {
+      modes: modes, chips: chips, caption: CAP[mode], axisUnit: UNIT[mode], ticks: ticks,
+      wells: wells, activeBands: activeBands, bitY: bitY, lookH: LOOK * SC, look: LOOK,
+      bitLabel: fmt(bitD), predY: yOf(ACT.barail - 12 + aShift), predH: 24 * SC,
+      detail: detail, live: live, timeline: timeline, ack: !!st.ack, notAck: !st.ack,
+      onAck: function () { self.setState({ ack: true }); },
+      onUndo: function () { self.setState({ ack: false }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

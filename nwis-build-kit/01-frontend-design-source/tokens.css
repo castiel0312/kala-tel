@@ -1,0 +1,46 @@
+/* NWIS light industrial theme: design tokens taken from the .dc.html screens.
+   Rule of thumb: ~65–70 % white workspace, ~20–25 % black structure, 5–10 % yellow signal.
+   Yellow is never used as text on white; red only for critical; green only for healthy/confirmed. */
+:root {
+  /* neutrals */
+  --nw-black: #080909;          /* structure: sidebar, hero, table headers, primary buttons */
+  --nw-charcoal: #121414;       /* panels on black */
+  --nw-grey-900: #242625;       /* dividers on black, default chart bars */
+  --nw-white: #FFFFFF;          /* cards */
+  --nw-offwhite: #F5F5F1;       /* page background */
+  --nw-grey-100: #E8E9E5;       /* card borders, tracks */
+  --nw-grey-150: #EEEEEA;       /* row dividers */
+  --nw-grey-200: #D4D6D1;       /* control borders */
+  --nw-grey-400: #A3A6A1;       /* decorative only / low-severity marks */
+
+  /* text */
+  --nw-text: #080909;
+  --nw-text-2: #454845;         /* secondary text */
+  --nw-text-3: #6B6E69;         /* micro labels, captions */
+  --nw-text-on-black: #FFFFFF;
+  --nw-text-on-black-2: #C9CBC6;
+  --nw-text-on-black-3: #A3A6A1;
+
+  /* signal */
+  --nw-yellow: #F4C400;         /* signal: selected, watch, primary CTA on black */
+  --nw-yellow-dark: #D6A900;    /* dashed accents, lines on white */
+  --nw-yellow-light: #FFF3B0;   /* selected rows, review-needed fills */
+  --nw-red: #D9362B;            /* HIGH / critical only */
+  --nw-green: #278052;          /* healthy / confirmed on white */
+  --nw-green-on-black: #3FB57A;
+
+  /* type */
+  --nw-font-display: 'Archivo', system-ui, sans-serif;   /* 500–900, uppercase labels with 0.14–0.18em tracking */
+  --nw-font-body: 'IBM Plex Sans', system-ui, sans-serif;
+  --nw-font-mono: 'IBM Plex Mono', ui-monospace, monospace; /* all numbers */
+
+  /* shape & space */
+  --nw-radius: 0px;             /* square industrial look; chart bar ends use 4px */
+  --nw-gap: 16px;
+  --nw-page-pad: 24px;
+  --nw-sidebar-w: 248px;
+  --nw-header-h: 88px;
+
+  /* hazard stripe */
+  --nw-hazard: repeating-linear-gradient(-45deg, #F4C400 0 8px, #080909 8px 16px);
+}

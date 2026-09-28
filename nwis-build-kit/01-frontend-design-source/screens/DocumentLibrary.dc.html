@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>NWIS Documents</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0;background:#F5F5F1}
+a{color:#080909}a:hover{color:#454845}
+button{font-family:inherit}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; display: flex; overflow: hidden; background: #F5F5F1; color: #080909; font-family: 'IBM Plex Sans', system-ui, sans-serif">
+<dc-import name="NwisSidebar" active="documents" hint-size="248px,900px"></dc-import>
+<div style="width: 1192px; height: 900px; display: flex; flex-direction: column">
+<dc-import name="NwisTopbar" num="09" section="Data" heading="Documents" desc="Upload WCRs, DDRs and logs. NWIS reads them, pulls out events and adds them to the graph." hint-size="1192px,88px"></dc-import>
+<main style="flex-grow: 1; min-height: 0; box-sizing: border-box; padding: 24px; display: flex; flex-direction: column; gap: 16px">
+
+<div style="height: 196px; flex-shrink: 0; display: flex; gap: 16px">
+<section aria-label="Upload" style="width: 420px; flex-shrink: 0; box-sizing: border-box; display: flex; align-items: center; gap: 22px; padding: 20px 24px; background: #FFFFFF; border: 2px dashed #A3A6A1">
+<svg width="112" height="132" viewBox="0 0 112 132" aria-hidden="true" style="flex-shrink: 0">
+<rect x="22" y="4" width="78" height="100" fill="#E8E9E5" stroke="#080909" style="stroke-width: 1.5"></rect>
+<rect x="14" y="14" width="78" height="100" fill="#F5F5F1" stroke="#080909" style="stroke-width: 1.5"></rect>
+<path d="M6 24h58l20 20v84H6z" fill="#FFFFFF" stroke="#080909" style="stroke-width: 2"></path>
+<path d="M64 24v20h20" fill="#F4C400" stroke="#080909" style="stroke-width: 2; stroke-linejoin: round"></path>
+<rect x="16" y="54" width="44" height="4" fill="#080909"></rect>
+<rect x="16" y="64" width="58" height="3" fill="#C9CBC6"></rect>
+<rect x="16" y="72" width="52" height="3" fill="#C9CBC6"></rect>
+<rect x="14" y="79" width="62" height="9" fill="#F4C400"></rect>
+<rect x="16" y="82" width="54" height="3" fill="#080909"></rect>
+<rect x="16" y="94" width="58" height="3" fill="#C9CBC6"></rect>
+<rect x="16" y="102" width="40" height="3" fill="#C9CBC6"></rect>
+<rect x="16" y="112" width="30" height="3" fill="#C9CBC6"></rect>
+</svg>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<span style="font-family: 'Archivo', sans-serif; font-size: 20px; font-weight: 900; line-height: 1.1">DROP WCRs, DDRs<br>AND LOGS HERE</span>
+<span style="font-size: 12.5px; color: #454845; line-height: 1.45">PDF, scanned TIFF, LAS or Excel. Scans are read by on-prem OCR.</span>
+<button type="button" onClick="{{addFile}}" style="align-self: flex-start; margin-top: 4px; height: 40px; display: flex; align-items: center; gap: 8px; padding: 0 16px; border: none; background: #080909; color: #FFFFFF; font-family: 'Archivo', sans-serif; font-size: 11.5px; font-weight: 800; letter-spacing: 0.1em; cursor: pointer">
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F4C400" aria-hidden="true" style="stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round"><path d="M12 19V5M6 11l6-6 6 6"></path></svg>{{addLabel}}</button>
+</div>
+</section>
+
+<section aria-label="Processing" style="flex-grow: 1; min-width: 0; position: relative; box-sizing: border-box; display: flex; flex-direction: column; background: #080909; color: #FFFFFF; overflow: hidden">
+<div style="height: 44px; flex-shrink: 0; box-sizing: border-box; display: flex; align-items: center; gap: 12px; padding: 0 20px; border-bottom: 1px solid #242625">
+<span style="display: flex; align-items: center; gap: 8px; font-family: 'Archivo', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; color: #F4C400"><span style="width: 18px; height: 3px; background: #F4C400"></span>PROCESSING · {{jobCount}} JOBS</span>
+<span style="flex-grow: 1"></span>
+<span style="font-size: 12px; color: #A3A6A1">On-prem OCR · GPU node 2</span>
+</div>
+<div style="flex-grow: 1; min-height: 0; display: flex; flex-direction: column; justify-content: space-evenly; padding: 0 20px 6px">
+<sc-for list="{{jobs}}" as="j" hint-placeholder-count="2">
+<div style="display: grid; grid-template-columns: 210px repeat(3, minmax(0, 1fr)); align-items: center; gap: 18px">
+<span style="display: flex; flex-direction: column; gap: 2px; min-width: 0"><span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{j.name}}</span><span style="font-size: 11.5px; color: #A3A6A1">{{j.meta}}</span></span>
+<sc-for list="{{j.stages}}" as="s" hint-placeholder-count="3">
+<span style="display: flex; flex-direction: column; gap: 5px">
+<span style="display: flex; justify-content: space-between; font-family: 'Archivo', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.14em; color: #A3A6A1">{{s.label}}<span style="font-family: 'IBM Plex Mono', monospace; letter-spacing: 0; color: {{s.numColor}}">{{s.pct}}%</span></span>
+<span style="height: 8px; background: #242625; position: relative"><span style="position: absolute; left: 0; top: 0; bottom: 0; width: {{s.pct}}%; background: {{s.color}}"></span></span>
+</span>
+</sc-for>
+</div>
+</sc-for>
+</div>
+<div style="height: 5px; flex-shrink: 0; background: repeating-linear-gradient(-45deg, #F4C400 0 8px, #080909 8px 16px)"></div>
+</section>
+</div>
+
+<section aria-label="Library totals" style="height: 76px; flex-shrink: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); background: #FFFFFF; border: 1px solid #E8E9E5">
+<div style="display: flex; align-items: center; gap: 14px; padding: 0 22px; border-right: 1px solid #E8E9E5"><span style="font-family: 'Archivo', sans-serif; font-size: 32px; font-weight: 900">1,284</span><span style="font-family: 'Archivo', sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 0.14em">DOCUMENTS</span></div>
+<div style="display: flex; align-items: center; gap: 14px; padding: 0 22px; border-right: 1px solid #E8E9E5"><span style="font-family: 'Archivo', sans-serif; font-size: 32px; font-weight: 900">12,907</span><span style="font-family: 'Archivo', sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 0.14em">PAGES READ</span></div>
+<div style="display: flex; align-items: center; gap: 14px; padding: 0 22px; border-right: 1px solid #E8E9E5"><span style="font-family: 'Archivo', sans-serif; font-size: 32px; font-weight: 900">4,812</span><span style="font-family: 'Archivo', sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 0.14em">EVENTS EXTRACTED</span></div>
+<a href="DocumentIntel.dc.html" style="position: relative; display: flex; align-items: center; gap: 14px; padding: 0 22px; background: #F4C400; color: #080909; text-decoration: none"><span style="font-family: 'Archivo', sans-serif; font-size: 32px; font-weight: 900">37</span><span style="display: flex; flex-direction: column; gap: 1px"><span style="font-family: 'Archivo', sans-serif; font-size: 11px; font-weight: 800; letter-spacing: 0.14em">NEED REVIEW</span><span style="font-size: 12px">Low-confidence fields →</span></span></a>
+</section>
+
+<section aria-label="Library" style="flex-grow: 1; min-height: 0; display: flex; flex-direction: column; background: #FFFFFF; border: 1px solid #E8E9E5">
+<div style="height: 46px; flex-shrink: 0; box-sizing: border-box; display: flex; align-items: stretch; border-bottom: 1px solid #E8E9E5">
+<div role="tablist" aria-label="Document type" style="display: flex">
+<sc-for list="{{tabs}}" as="t" hint-placeholder-count="6">
+<button type="button" role="tab" aria-selected="{{t.selected}}" onClick="{{t.pick}}" style="position: relative; display: flex; align-items: center; gap: 8px; padding: 0 18px; border: none; border-right: 1px solid #E8E9E5; background: {{t.bg}}; color: {{t.fg}}; font-family: 'Archivo', sans-serif; font-size: 11.5px; font-weight: 800; letter-spacing: 0.12em; cursor: pointer">{{t.label}}<span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: 0; color: {{t.nColor}}">{{t.n}}</span></button>
+</sc-for>
+</div>
+<span style="flex-grow: 1"></span>
+<span style="display: flex; align-items: center; padding: 0 16px; font-size: 12px; color: #6B6E69">Showing documents for the 9 wells near OIL-WELL-104</span>
+</div>
+<div style="height: 32px; flex-shrink: 0; display: grid; grid-template-columns: minmax(0, 1fr) 70px 90px 52px 64px 72px 130px 118px; align-items: center; gap: 0 12px; padding: 0 16px; background: #080909; color: #FFFFFF; font-family: 'Archivo', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.14em">
+<span>DOCUMENT</span><span>WELL</span><span>TYPE</span><span>YEAR</span><span>PAGES</span><span>EVENTS</span><span>OCR QUALITY</span><span>STATUS</span>
+</div>
+<div style="flex-grow: 1; min-height: 0; overflow-y: auto">
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="8">
+<a href="DocumentIntel.dc.html" style="height: 38px; box-sizing: border-box; display: grid; grid-template-columns: minmax(0, 1fr) 70px 90px 52px 64px 72px 130px 118px; align-items: center; gap: 0 12px; padding: 0 16px; border-bottom: 1px solid #EEEEEA; color: #080909; text-decoration: none; font-size: 13px; background: {{r.bg}}">
+<span style="display: flex; align-items: center; gap: 10px; min-width: 0">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#080909" aria-hidden="true" style="flex-shrink: 0; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round"><path d="M7 3h7l5 5v13H7zM14 3v5h5"></path></svg>
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{r.file}}</span>
+</span>
+<span style="font-family: 'IBM Plex Mono', monospace; font-weight: 600">{{r.well}}</span>
+<span>{{r.type}}</span>
+<span style="font-family: 'IBM Plex Mono', monospace; color: #454845">{{r.year}}</span>
+<span style="font-family: 'IBM Plex Mono', monospace">{{r.pages}}</span>
+<span style="font-family: 'IBM Plex Mono', monospace">{{r.events}}</span>
+<span style="display: flex; align-items: center; gap: 8px"><span style="flex-grow: 1; height: 6px; background: #E8E9E5; position: relative"><span style="position: absolute; left: 0; top: 0; bottom: 0; width: {{r.q}}%; background: {{r.qColor}}"></span></span><span style="width: 32px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; text-align: right">{{r.qText}}</span></span>
+<span><span style="height: 22px; box-sizing: border-box; display: inline-flex; align-items: center; gap: 6px; padding: 0 8px; background: {{r.stBg}}; border: 1px solid {{r.stBorder}}; color: {{r.stFg}}; font-family: 'Archivo', sans-serif; font-size: 9.5px; font-weight: 800; letter-spacing: 0.12em; white-space: nowrap"><span style="width: 6px; height: 6px; border-radius: 50%; background: {{r.stDot}}"></span>{{r.status}}</span></span>
+</a>
+</sc-for>
+</div>
+</section>
+
+</main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { tab: 'ALL', added: false };
+  }
+  renderVals() {
+    var self = this;
+    var st = this.state || {};
+    var tab = st.tab || 'ALL';
+    var added = !!st.added;
+    var D = [
+      ['W-067_WCR_2019.pdf', 'W-067', 'WCR', 2019, 112, 9, 94, 'VERIFIED'],
+      ['W-067_DDR_Mar2019.pdf', 'W-067', 'DDR', 2019, 46, 14, 96, 'INDEXED'],
+      ['W-088_WCR_2014.pdf', 'W-088', 'WCR', 2014, 128, 11, 91, 'VERIFIED'],
+      ['W-042_DDR_Nov2016.pdf', 'W-042', 'DDR', 2016, 61, 12, 93, 'INDEXED'],
+      ['W-018_WCR_1998_scan.tif', 'W-018', 'WCR', 1998, 96, 4, 72, 'NEEDS REVIEW'],
+      ['W-103_DDR_Apr2018.zip', 'W-103', 'DDR', 2018, 54, 6, 89, 'PROCESSING'],
+      ['W-121_mudlog_2021.las', 'W-121', 'MUD LOG', 2021, 1, 3, 100, 'INDEXED'],
+      ['W-112_survey_2022.xlsx', 'W-112', 'SURVEY', 2022, 1, 0, 100, 'INDEXED'],
+      ['W-081_WCR_2017.pdf', 'W-081', 'WCR', 2017, 104, 7, 92, 'VERIFIED'],
+      ['W-132_WCR_2014_scan.pdf', 'W-132', 'WCR', 2014, 88, 5, 76, 'NEEDS REVIEW']
+    ];
+    var ST = {
+      'VERIFIED': ['#FFFFFF', '#278052', '#080909', '#278052'],
+      'INDEXED': ['#FFFFFF', '#D4D6D1', '#080909', '#080909'],
+      'PROCESSING': ['#080909', '#080909', '#FFFFFF', '#F4C400'],
+      'NEEDS REVIEW': ['#FFF3B0', '#D6A900', '#080909', '#D6A900']
+    };
+    var TYPES = ['ALL', 'WCR', 'DDR', 'MUD LOG', 'SURVEY'];
+    var list = D.filter(function (d) { return tab === 'ALL' || d[2] === tab; });
+    var rows = list.map(function (d) {
+      var s = ST[d[7]];
+      return {
+        file: d[0], well: d[1], type: d[2], year: String(d[3]), pages: String(d[4]), events: d[5] ? String(d[5]) : '—',
+        q: d[6], qText: d[7] === 'PROCESSING' ? '…' : (d[6] / 100).toFixed(2), qColor: d[6] < 80 ? '#D6A900' : '#080909',
+        status: d[7], stBg: s[0], stBorder: s[1], stFg: s[2], stDot: s[3], bg: d[7] === 'NEEDS REVIEW' ? '#FFFCEB' : '#FFFFFF'
+      };
+    });
+    var tabs = TYPES.map(function (t) {
+      var on = t === tab;
+      var n = t === 'ALL' ? D.length : D.filter(function (d) { return d[2] === t; }).length;
+      return { label: t, n: String(n), selected: on ? 'true' : 'false', bg: on ? '#080909' : '#FFFFFF', fg: on ? '#FFFFFF' : '#080909', nColor: on ? '#F4C400' : '#6B6E69', pick: function () { self.setState({ tab: t }); } };
+    });
+    var stage = function (label, pct) { return { label: label, pct: pct, color: pct >= 100 ? '#3FB57A' : '#F4C400', numColor: pct >= 100 ? '#3FB57A' : '#FFFFFF' }; };
+    var jobs = [
+      { name: 'W-018_WCR_1998_scan.tif', meta: 'Scanned WCR · 96 pages', stages: [stage('OCR', 82), stage('NLP', 64), stage('GRAPH', 51)] },
+      { name: 'W-103_DDR_Apr2018.zip', meta: 'DDR batch · 54 reports', stages: [stage('OCR', 100), stage('NLP', 88), stage('GRAPH', 30)] }
+    ];
+    if (added) jobs.push({ name: 'W-121_DDR_Aug2021.pdf', meta: 'Queued · 38 reports', stages: [stage('OCR', 6), stage('NLP', 0), stage('GRAPH', 0)] });
+    return {
+      rows: rows, tabs: tabs, jobs: jobs, jobCount: String(jobs.length),
+      addLabel: added ? 'ADDED · ADD MORE' : 'BROWSE FILES',
+      addFile: function () { self.setState({ added: true }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

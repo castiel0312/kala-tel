@@ -1,0 +1,76 @@
+/* ============================================================================
+   Not Found. The whole screen is a route table, so the answer to "where now" is
+   one click rather than a guess.
+   ========================================================================== */
+
+.body {
+  display: grid;
+  grid-template-columns: minmax(0, 480px) minmax(0, 1fr);
+  gap: var(--nw-gap);
+  flex: 1 1 auto;
+  min-height: 0;
+  align-items: start;
+}
+
+.routes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.route {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px var(--nw-s3);
+  border-bottom: 1px solid var(--nw-border-dark-2);
+  text-decoration: none;
+  color: var(--nw-ink-2);
+}
+
+.route:nth-child(odd) {
+  border-right: 1px solid var(--nw-border-dark-2);
+}
+
+.route:hover {
+  background: color-mix(in srgb, var(--nw-yellow) 16%, transparent);
+  color: var(--nw-ink-2);
+}
+
+.routeK {
+  font-family: var(--nw-font-mono);
+  font-size: 9.5px;
+  color: var(--nw-ink-3);
+  flex: 0 0 16px;
+}
+
+.routeL {
+  font-family: var(--nw-font-display);
+  font-size: var(--nw-fs-micro);
+  font-weight: 700;
+  letter-spacing: var(--nw-track-label);
+  text-transform: uppercase;
+  flex: 1 1 auto;
+}
+
+.route svg {
+  color: var(--nw-ink-3);
+  flex: 0 0 auto;
+}
+
+.note {
+  font-size: var(--nw-fs-sm);
+  line-height: 1.6;
+  color: var(--nw-text-3);
+  max-width: 54ch;
+  padding-top: var(--nw-s2);
+}
+
+.note p {
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
