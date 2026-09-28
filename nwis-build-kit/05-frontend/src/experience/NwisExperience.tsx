@@ -14,6 +14,7 @@ import { GraphSection } from './sections/GraphSection'
 import { LiveSection } from './sections/LiveSection'
 import { MapSection } from './sections/MapSection'
 import { MemorySection } from './sections/MemorySection'
+import { PotentialWellsSection } from './sections/PotentialWellsSection'
 import { RiskSection } from './sections/RiskSection'
 import { WellsSection } from './sections/WellsSection'
 import s from './experience.module.css'
@@ -21,7 +22,7 @@ import s from './experience.module.css'
 /**
  * NWIS, as one page.
  *
- * Thirteen sections on a single scrollport, joined by one shared selection: the well you click
+ * Fourteen sections on a single scrollport, joined by one shared selection: the well you click
  * on the map is the well the corridor draws, the graph centres on, the document opens, and the
  * assistant reasons about. No route change between any two of them, so looking at the next
  * thing never costs you the place you were.
@@ -47,6 +48,7 @@ export default function NwisExperience() {
           ['10 · Document intelligence', <DocumentsSection key="documents" />],
           ['11 · Historical analytics', <AnalyticsSection key="analytics" />],
           ['12 · Assistant', <AssistantSection key="assistant" />],
+          ['13 · Potential wells', <PotentialWellsSection key="potential" />],
         ] as [string, JSX.Element][]
       ).map(([label, node]) => (
         <SectionBoundary key={label} label={label}>

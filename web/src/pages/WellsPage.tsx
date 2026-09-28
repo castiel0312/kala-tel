@@ -1,19 +1,52 @@
 import { Link } from "react-router-dom";
 import { api, useApi } from "../api/client";
 import { Empty, ErrorBox, Field, Loading } from "../components/Data";
+import { PotentialWellPlanner } from "../components/PotentialWellPlanner/PotentialWellPlanner";
 
 export function WellsPage() {
   const state = useApi((s) => api.wells(s), []);
 
-  if (state.status === "loading") return <Loading />;
-  if (state.status === "error") return <ErrorBox error={state.error} />;
+  if (state.status === "loading") {
+    return (
+      <section>
+        <Loading />
+        <PotentialWellPlanner />
+      </section>
+    );
+  }
+
+  if (state.status === "error") {
+    return (
+      <section>
+        <ErrorBox error={state.error} />
+        <PotentialWellPlanner />
+      </section>
+    );
+  }
+
   if (state.data.length === 0) {
-    return <Empty>No wells are present in this release.</Empty>;
+    return (
+      <section>
+        <Empty>No wells are present in this release.</Empty>
+        <PotentialWellPlanner />
+      </section>
+    );
   }
 
   return (
     <section>
-      <h1>Wells</h1>
+      <div className="page-head" style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", gap: 12 }}>
+        <div>
+          <h1>Wells</h1>
+          <p className="muted">
+            Active and historical wellbore dataset &middot; Public real records
+          </p>
+        </div>
+        <a href="#potential-well-planner" className="evidence-link">
+          ↓ Jump to Potential Well Planner
+        </a>
+      </div>
+
       <div className="card-grid">
         {state.data.map((w) => (
           <article className="card" key={w.well_id}>
@@ -47,6 +80,10 @@ export function WellsPage() {
           </article>
         ))}
       </div>
+
+      {/* New Component: Potential & Future Well Planner with nearby offset intelligence */}
+      <PotentialWellPlanner />
     </section>
   );
 }
+

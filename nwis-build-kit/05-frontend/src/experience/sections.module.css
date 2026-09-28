@@ -2660,11 +2660,799 @@
   color: var(--nw-ink-3);
 }
 
+/* ====================================================== 13 potential wells ===
+   The placement plan is a plan view drawn in the same kilometre frame as the
+   evidence beside it, so the shortlist, the map and the inspector are one
+   argument rather than three widgets. Yellow marks the proposal; everything
+   that already exists is charcoal.
+   ========================================================================== */
+
+.pwpGrounding {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nw-s2);
+  margin-bottom: var(--nw-s4);
+}
+
+.pwpControls {
+  display: flex;
+  align-items: center;
+  gap: var(--nw-s3);
+  flex-wrap: wrap;
+  padding: 8px 12px;
+  border: 1px solid var(--nw-border);
+  background: var(--nw-surface);
+  margin-bottom: var(--nw-s4);
+}
+
+.pwpControlLabel {
+  font-family: var(--nw-font-display);
+  font-size: var(--nw-fs-label);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--nw-text-2);
+}
+
+.pwpControlHint {
+  margin-left: auto;
+  font-size: var(--nw-fs-xs);
+  color: var(--nw-text-3);
+}
+
+/* ------------------------------------------------------------------- key --- */
+
+.pwpKey {
+  margin-bottom: var(--nw-s4);
+}
+
+.pwpKeyRow {
+  display: flex;
+  align-items: center;
+  gap: var(--nw-s2);
+  margin-top: var(--nw-s2);
+}
+
+.pwpKeyField {
+  flex: 1 1 320px;
+  max-width: 460px;
+}
+
+/* ------------------------------------------------------------------ layout --- */
+
+.pwpLayout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(340px, 0.9fr);
+  gap: var(--nw-s4);
+  align-items: start;
+}
+
+.pwpMapCol {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nw-s4);
+  min-width: 0;
+}
+
+.pwpInspectorCol {
+  min-width: 0;
+  position: sticky;
+  top: calc(var(--nw-nav-h, 60px) + var(--nw-s4));
+}
+
+/* -------------------------------------------------------------- plan view --- */
+
+.pwpMapFrame {
+  position: relative;
+}
+
+.pwpPlan {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: var(--nw-surface);
+  border: 1px solid var(--nw-border);
+}
+
+.pwpMark {
+  cursor: pointer;
+}
+
+.pwpMark:focus {
+  outline: none;
+}
+
+.pwpMark:focus-visible circle:first-of-type {
+  stroke: var(--nw-yellow-deep);
+  stroke-width: 3;
+}
+
+.pwpTick {
+  font-family: var(--nw-font-mono);
+  font-size: 9px;
+  fill: var(--nw-text-4);
+}
+
+.pwpRadiusLabel {
+  font-family: var(--nw-font-display);
+  font-size: 9.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  fill: var(--nw-yellow-dim);
+}
+
+.pwpLabel,
+.pwpLabelActive {
+  font-family: var(--nw-font-mono);
+  font-size: 10px;
+  fill: var(--nw-text-2);
+}
+
+.pwpLabelActive {
+  fill: var(--nw-text);
+  font-weight: 700;
+}
+
+.pwpRank,
+.pwpRankOn {
+  font-family: var(--nw-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  fill: var(--nw-text);
+}
+
+.pwpRankOn {
+  fill: var(--nw-yellow-ink);
+}
+
+.pwpCandLabel,
+.pwpCandLabelOn,
+.pwpConf,
+.pwpConfOn {
+  font-family: var(--nw-font-mono);
+  font-size: 10px;
+  fill: var(--nw-text);
+}
+
+.pwpCandLabelOn,
+.pwpConfOn {
+  fill: var(--nw-ink);
+}
+
+.pwpConf,
+.pwpConfOn {
+  font-weight: 700;
+}
+
+.pwpSub {
+  font-family: var(--nw-font-mono);
+  font-size: 8.5px;
+  fill: var(--nw-text-4);
+}
+
+.pwpLinkLabel {
+  font-family: var(--nw-font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  fill: var(--nw-yellow);
+}
+
+.pwpLegend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  padding: 8px 12px;
+  border: 1px solid var(--nw-border);
+  border-top: 0;
+  font-size: var(--nw-fs-xs);
+  color: var(--nw-text-2);
+}
+
+.pwpLegend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pwpSwatchLive,
+.pwpSwatchExisting,
+.pwpSwatchCandidate,
+.pwpSwatchRejected,
+.pwpSwatchLoss {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex: none;
+}
+
+.pwpSwatchLive {
+  background: var(--nw-yellow);
+  border: 2px solid var(--nw-text);
+}
+
+.pwpSwatchExisting {
+  background: var(--nw-charcoal);
+  border: 1.5px solid var(--nw-white);
+}
+
+.pwpSwatchCandidate {
+  background: var(--nw-white);
+  border: 2px solid var(--nw-text);
+}
+
+.pwpSwatchRejected {
+  background: transparent;
+  border: 1.5px dashed var(--nw-text-4);
+}
+
+.pwpSwatchLoss {
+  background: var(--nw-red);
+}
+
+.pwpClear {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 8px;
+  font-family: var(--nw-font-display);
+  font-size: var(--nw-fs-xs);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--nw-text-2);
+  background: var(--nw-white);
+  border: 1px solid var(--nw-border-2);
+  transition: background var(--nw-dur-fast) var(--nw-ease);
+}
+
+.pwpClear:hover {
+  background: var(--nw-yellow-soft);
+  color: var(--nw-text);
+}
+
+/* -------------------------------------------------------------- shortlist --- */
+
+.pwpShortlist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.pwpShortlistRow {
+  display: grid;
+  grid-template-columns: 20px minmax(90px, 1.1fr) minmax(0, 1.2fr) minmax(0, 1.2fr) 96px;
+  align-items: center;
+  gap: var(--nw-s2);
+  width: 100%;
+  padding: 8px 12px;
+  text-align: left;
+  background: none;
+  border-bottom: 1px solid var(--nw-border);
+  transition: background var(--nw-dur-fast) var(--nw-ease);
+}
+
+.pwpShortlist li:last-child .pwpShortlistRow {
+  border-bottom: 0;
+}
+
+.pwpShortlistRow:hover {
+  background: var(--nw-surface-2);
+}
+
+.pwpShortlistRow[aria-pressed='true'] {
+  background: var(--nw-yellow-soft);
+  box-shadow: inset 3px 0 0 var(--nw-yellow);
+}
+
+.pwpShortlistRank {
+  font-family: var(--nw-font-mono);
+  font-size: var(--nw-fs-xs);
+  color: var(--nw-text-3);
+}
+
+.pwpShortlistName {
+  font-family: var(--nw-font-display);
+  font-size: var(--nw-fs-sm);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--nw-text);
+}
+
+.pwpShortlistMeta,
+.pwpShortlistSpacing {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: var(--nw-fs-xs);
+  color: var(--nw-text-2);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pwpShortlistConf {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pwpShortlistConf > :first-child {
+  flex: 1 1 auto;
+}
+
+.pwpShortlistConf b {
+  font-size: var(--nw-fs-xs);
+}
+
+/* -------------------------------------------------------------- inspector --- */
+
+.pwpInspectorEmpty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--nw-s2);
+  padding: var(--nw-s6) var(--nw-s4);
+  text-align: center;
+  color: var(--nw-text-3);
+  font-size: var(--nw-fs-sm);
+}
+
+.pwpInspectorEmpty p {
+  margin: 0;
+  max-width: 30ch;
+}
+
+.pwpInspectorHead {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nw-s2);
+  padding-bottom: var(--nw-s3);
+  border-bottom: 1px solid var(--nw-border);
+}
+
+.pwpInspectorTitleRow {
+  display: flex;
+  align-items: center;
+  gap: var(--nw-s2);
+  flex-wrap: wrap;
+}
+
+.pwpInspectorName {
+  margin: 0;
+  font-family: var(--nw-font-display);
+  font-size: var(--nw-fs-lg);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--nw-text);
+}
+
+.pwpInspectorConf {
+  display: flex;
+  align-items: center;
+  gap: var(--nw-s2);
+}
+
+.pwpInspectorConf > :first-child {
+  flex: 0 1 140px;
+}
+
+.pwpInspectorConf span {
+  font-size: var(--nw-fs-xs);
+  color: var(--nw-text-2);
+}
+
+.pwpInspectorConfLabel {
+  margin-left: auto;
+  color: var(--nw-text-3) !important;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: var(--nw-fs-micro) !important;
+}
+
+.pwpBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nw-s2);
+  padding: var(--nw-s3) 0;
+  border-bottom: 1px solid var(--nw-border);
+}
+
+.pwpBlock:last-of-type {
+  border-bottom: 0;
+}
+
+.pwpKv {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--nw-s2) var(--nw-s3);
+  margin: 0;
+}
+
+.pwpKv > div {
+  min-width: 0;
+}
+
+.pwpKv dt {
+  font-size: var(--nw-fs-micro);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--nw-text-3);
+}
+
+.pwpKv dd {
+  margin: 2px 0 0;
+  font-size: var(--nw-fs-sm);
+  color: var(--nw-text);
+  overflow-wrap: anywhere;
+}
+
+.pwpSpacingHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--nw-s2);
+  flex-wrap: wrap;
+}
+
+.pwpSpacingId {
+  font-family: var(--nw-font-mono);
+  font-size: var(--nw-fs-md);
+  font-weight: 700;
+  color: var(--nw-text);
+}
+
+.pwpSpacingDist {
+  margin-left: 8px;
+  font-family: var(--nw-font-mono);
+  font-size: var(--nw-fs-sm);
+  color: var(--nw-yellow-dim);
+}
+
+.pwpSpacingLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: var(--nw-fs-xs);
+  color: var(--nw-text-2);
+  background: none;
+  border: 0;
+  border-bottom: 1px solid var(--nw-border-2);
+  padding: 0 0 1px;
+  transition: color var(--nw-dur-fast) var(--nw-ease);
+}
+
+.pwpSpacingLink:hover {
+  color: var(--nw-text);
+  border-color: var(--nw-yellow-deep);
+}
+
+.pwpSpacingSecond {
+  margin: 0;
+  font-size: var(--nw-fs-xs);
+  color: var(--nw-text-2);
+}
+
+.pwpNote {
+  margin: 0;
+  font-size: var(--nw-fs-xs);
+  line-height: 1.55;
+  color: var(--nw-text-3);
+}
+
+.pwpClaimWarn {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin: 0;
+  padding: 7px 9px;
+  font-size: var(--nw-fs-xs);
+  line-height: 1.5;
+  color: var(--nw-red-deep);
+  background: var(--nw-red-soft);
+  border-left: 2px solid var(--nw-red);
+}
+
+.pwpEvidence {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--nw-s2);
+}
+
+.pwpEvidence li {
+  padding: 8px 10px;
+  background: var(--nw-surface);
+  border: 1px solid var(--nw-border);
+}
+
+.pwpEvidenceHead {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.pwpEvidenceHead b {
+  font-family: var(--nw-font-mono);
+  font-size: var(--nw-fs-sm);
+}
+
+.pwpEvidenceHead .mono {
+  font-size: var(--nw-fs-xs);
+  color: var(--nw-text-2);
+}
+
+.pwpEvidenceFactors {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 4px;
+  margin-top: 6px;
+}
+
+.pwpEvidenceFactors span {
+  display: flex;
+  flex-direction: column;
+  font-size: var(--nw-fs-micro);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--nw-text-3);
+}
+
+.pwpEvidenceFactors b {
+  font-size: var(--nw-fs-sm);
+  color: var(--nw-text);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.pwpEvidenceMeta {
+  margin: 6px 0 0;
+  font-size: var(--nw-fs-micro);
+  color: var(--nw-text-3);
+}
+
+.pwpEvidenceLesson {
+  margin: 6px 0 0;
+  padding-top: 6px;
+  border-top: 1px solid var(--nw-border);
+  font-size: var(--nw-fs-xs);
+  line-height: 1.55;
+  color: var(--nw-text-2);
+  font-style: italic;
+}
+
+.pwpRationale {
+  margin: 0;
+  font-size: var(--nw-fs-sm);
+  line-height: 1.6;
+  color: var(--nw-text-2);
+}
+
+.pwpFactors {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--nw-s2);
+}
+
+.pwpFactorHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--nw-s2);
+  font-size: var(--nw-fs-xs);
+  color: var(--nw-text-2);
+  margin-bottom: 3px;
+}
+
+.pwpFactorNote {
+  margin: 3px 0 0;
+  font-size: var(--nw-fs-micro);
+  line-height: 1.5;
+  color: var(--nw-text-3);
+}
+
+.pwpInherited {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: var(--nw-s2);
+  padding: 8px 10px;
+  background: var(--nw-surface-2);
+  border: 1px solid var(--nw-border);
+}
+
+.pwpInheritedLabel {
+  font-size: var(--nw-fs-micro);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--nw-text-3);
+}
+
+.pwpInheritedRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--nw-s2);
+  font-size: var(--nw-fs-xs);
+  color: var(--nw-text-2);
+}
+
+.pwpDrill {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--nw-s2);
+  counter-reset: none;
+}
+
+.pwpDrill li {
+  display: flex;
+  gap: var(--nw-s2);
+  align-items: flex-start;
+}
+
+.pwpDrillNo {
+  font-family: var(--nw-font-mono);
+  font-size: var(--nw-fs-xs);
+  font-weight: 700;
+  color: var(--nw-text-4);
+  flex: none;
+  padding-top: 1px;
+}
+
+.pwpDrill b {
+  display: block;
+  font-size: var(--nw-fs-sm);
+  color: var(--nw-text);
+}
+
+.pwpDrill p {
+  margin: 2px 0 0;
+  font-size: var(--nw-fs-xs);
+  line-height: 1.55;
+  color: var(--nw-text-2);
+}
+
+.pwpCaveats {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.pwpCaveats li {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: var(--nw-fs-xs);
+  line-height: 1.55;
+  color: var(--nw-text-2);
+}
+
+.pwpCaveats svg {
+  color: var(--nw-yellow-deep);
+  margin-top: 3px;
+}
+
+.pwpInspectorFoot {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: var(--nw-s3);
+  padding-top: var(--nw-s2);
+  border-top: 1px solid var(--nw-border);
+}
+
+.pwpInspectorFoot .mono {
+  font-size: var(--nw-fs-micro);
+  color: var(--nw-text-3);
+  margin-left: auto;
+}
+
+/* --------------------------------------------------------------- rejected --- */
+
+.pwpRejected {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.pwpRejected li {
+  display: grid;
+  grid-template-columns: 148px minmax(110px, auto) minmax(0, 1fr);
+  align-items: baseline;
+  gap: var(--nw-s3);
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--nw-border);
+  font-size: var(--nw-fs-xs);
+  color: var(--nw-text-2);
+}
+
+.pwpRejected li:last-child {
+  border-bottom: 0;
+}
+
+.pwpRejected b {
+  font-family: var(--nw-font-mono);
+  font-size: var(--nw-fs-sm);
+  color: var(--nw-text);
+}
+
+.pwpRejected li > span:last-child {
+  line-height: 1.5;
+  min-width: 0;
+}
+
+/* --------------------------------------------------------------- running --- */
+
+.pwpRunning {
+  display: flex;
+  align-items: center;
+  gap: var(--nw-s3);
+  padding: var(--nw-s5) var(--nw-s4);
+  border: 1px solid var(--nw-border);
+  background: var(--nw-surface);
+}
+
+.pwpRunning p {
+  margin: 0;
+  font-size: var(--nw-fs-sm);
+  color: var(--nw-text-2);
+}
+
+.pwpRunningBar {
+  position: relative;
+  width: 120px;
+  height: 4px;
+  flex: none;
+  overflow: hidden;
+  background: var(--nw-surface-2);
+  border: 1px solid var(--nw-border);
+}
+
+.pwpRunningBar::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  width: 38%;
+  background: var(--nw-yellow);
+  animation: pwpSweep 1.15s var(--nw-ease) infinite;
+}
+
+@keyframes pwpSweep {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(365%);
+  }
+}
+
 /* ============================================================ responsive === */
 
 @media (max-width: 1280px) {
   .wellCards {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .pwpLayout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pwpInspectorCol {
+    position: static;
   }
 
   .analyticsFoot {
@@ -2754,5 +3542,46 @@
 
   .askForm button {
     justify-content: center;
+  }
+
+  .pwpControls {
+    gap: var(--nw-s2);
+  }
+
+  .pwpControlHint {
+    margin-left: 0;
+    flex: 1 1 100%;
+  }
+
+  .pwpShortlistRow {
+    grid-template-columns: 18px minmax(0, 1fr) 84px;
+    row-gap: 4px;
+  }
+
+  .pwpShortlistMeta,
+  .pwpShortlistSpacing {
+    grid-column: 2 / -1;
+  }
+
+  .pwpShortlistConf {
+    grid-row: 1;
+    grid-column: 3;
+  }
+
+  .pwpKv {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pwpEvidenceFactors {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .pwpRejected li {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
+  }
+
+  .pwpInspectorFoot .mono {
+    margin-left: 0;
   }
 }

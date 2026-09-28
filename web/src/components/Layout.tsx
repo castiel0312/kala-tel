@@ -3,6 +3,7 @@ import { api, useApi } from "../api/client";
 
 const NAV = [
   { to: "/", label: "Wells", end: true },
+  { to: "/#potential-well-planner", label: "Future Well Planner" },
   { to: "/quality", label: "Data quality" },
 ];
 

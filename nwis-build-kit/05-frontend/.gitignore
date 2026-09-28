@@ -1,0 +1,20 @@
+# Local environment. .env holds the real VITE_MAPBOX_TOKEN and VITE_GROQ_API_KEY.
+# It is deliberately untracked: VITE_-prefixed values are inlined into the public
+# JS bundle at build time, so a committed .env publishes those keys. .env.example
+# is the tracked, secret-free template and documents every variable.
+.env
+.env.local
+.env.*.local
+
+# Build output. Also untracked, and this matters for the same reason as .env:
+# `vite build` inlines the VITE_* values above into dist/assets/*.js, so a
+# committed dist leaks the Groq key just as a committed .env would.
+dist/
+
+# Playwright and Vite run artifacts.
+test-results/
+playwright-report/
+blob-report/
+.playwright/
+*.tsbuildinfo
+.vite/

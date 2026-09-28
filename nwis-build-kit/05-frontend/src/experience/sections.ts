@@ -122,6 +122,15 @@ const DEFS = {
     lede: 'Answers from the indexed records, with sources and confidence. It will not guess.',
     tone: 'black',
   },
+  potential: {
+    id: 'potential',
+    no: '13',
+    nav: 'Potential',
+    eyebrow: 'Potential / future well planner',
+    title: 'Where should the next well go?',
+    lede: 'Candidate locations proposed from the measured wellfield, then checked by NWIS against the radius, the spacing rules and the depth the offsets actually reached — with the reasoning and the distances attached.',
+    tone: 'paper',
+  },
 } satisfies Record<string, SectionDef>
 
 /** Every section, in reading order. One list for the nav, the scroll spy and the footer. */

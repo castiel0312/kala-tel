@@ -211,6 +211,7 @@ const STATUS_TONE: Record<string, ChipTone | undefined> = {
   DONE: 'greenGhost',
   OPEN: 'yellowGhost',
   ACK: 'greenGhost',
+  PLANNED: 'yellowGhost',
   Producing: 'greenGhost',
   Suspended: 'grey',
   Abandoned: 'grey',
