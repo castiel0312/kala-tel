@@ -11,6 +11,8 @@ import { AssistantSection } from './sections/AssistantSection'
 import { CorridorSection } from './sections/CorridorSection'
 import { DocumentsSection } from './sections/DocumentsSection'
 import { GraphSection } from './sections/GraphSection'
+import { WellsCompareSection } from './sections/WellsCompareSection'
+import { WellRiskSection } from './sections/WellRiskSection'
 import { LiveSection } from './sections/LiveSection'
 import { MapSection } from './sections/MapSection'
 import { MemorySection } from './sections/MemorySection'
@@ -45,10 +47,18 @@ export default function NwisExperience() {
           ['07 · Live alerts', <AlertsSection key="alerts" />],
           ['08 · Knowledge repository', <MemorySection key="memory" />],
           ['09 · Knowledge graph', <GraphSection key="graph" />],
+<<<<<<< Updated upstream
           ['10 · Document intelligence', <DocumentsSection key="documents" />],
           ['11 · Historical analytics', <AnalyticsSection key="analytics" />],
           ['12 · Assistant', <AssistantSection key="assistant" />],
           ['13 · Potential wells', <PotentialWellsSection key="potential" />],
+=======
+          ['10 · Well performance comparison', <WellsCompareSection key="wells-compare" />],
+          ['11 · Well risk profile', <WellRiskSection key="well-risk" />],
+          ['12 · Document intelligence', <DocumentsSection key="documents" />],
+          ['13 · Historical analytics', <AnalyticsSection key="analytics" />],
+          ['14 · Assistant', <AssistantSection key="assistant" />],
+>>>>>>> Stashed changes
         ] as [string, JSX.Element][]
       ).map(([label, node]) => (
         <SectionBoundary key={label} label={label}>

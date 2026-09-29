@@ -1,0 +1,1091 @@
+/* ============================================================================
+   Well Risk section styles.
+   No hard-coded hex. No new fonts. Only var(--nw-*) design tokens.
+
+   Risk level colours are resolved via data-level attributes so the colour
+   mapping lives in one place and is never duplicated across components:
+     data-level="low"      → --nw-green  / --nw-green-deep
+     data-level="moderate" → --nw-yellow (fill only, never as text on light)
+     data-level="high"     → --nw-orange
+     data-level="critical" → --nw-red
+
+   Inline colour swatch elements (i, small rects) are coloured by assigning
+   .levelLow / .levelModerate / .levelHigh / .levelCritical directly.
+   ========================================================================== */
+
+/* ── Root panel wrapper ── */
+.panelRoot {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nw-s5);
+}
+
+/* ── Skeleton / loading ── */
+.skeletonHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--nw-s4);
+  padding-bottom: var(--nw-s4);
+  border-bottom: 1px solid var(--nw-border);
+}
+
+.skeletonColumns {
+  display: grid;
+  grid-template-columns: minmax(280px, 1fr) minmax(310px, 1.1fr);
+  gap: var(--nw-s6);
+}
+
+.skeletonSummary {
+  display: grid;
+  align-content: start;
+  gap: var(--nw-s4);
+}
+
+.skeleton {
+  display: block;
+  border-radius: var(--nw-r1);
+  background: repeating-linear-gradient(90deg, var(--nw-surface) 0 40px, var(--nw-white) 40px 80px);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s linear infinite;
+}
+
+.skeletonName  { width: 170px; height: 12px; }
+.skeletonLabel { width: 115px; height: 10px; }
+.skeletonLine  { width: 150px; height: 14px; }
+.skeletonDial  { width: 220px; height: 155px; margin: 0 auto; border-radius: 50% 50% var(--nw-r1) var(--nw-r1); }
+.skeletonFactor { height: 28px; }
+.skeletonChart { min-height: 350px; }
+
+@keyframes shimmer {
+  to { background-position-x: -200%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton { animation: none; }
+}
+
+/* ── Error panel ── */
+.errorPanel {
+  display: flex;
+  align-items: center;
+  gap: var(--nw-s5);
+  min-height: 140px;
+  padding: var(--nw-s5);
+  border: 1px solid var(--nw-border);
+  background: var(--nw-white);
+}
+
+.errorPanel p {
+  font-size: var(--nw-fs-md);
+  color: var(--nw-text-2);
+}
+
+.retryBtn {
+  padding: 8px 14px;
+  border: 1px solid var(--nw-border-2);
+  border-radius: var(--nw-r1);
+  background: var(--nw-white);
+  font-family: var(--nw-font-display);
+  font-size: var(--nw-fs-xs);
+  font-weight: 700;
+  letter-spacing: var(--nw-track-label);
+  text-transform: uppercase;
+  color: var(--nw-text-2);
+  cursor: pointer;
+  transition: background var(--nw-dur-fast) var(--nw-ease);
+}
+
+.retryBtn:hover { background: var(--nw-surface); }
+
+/* ── Panel layout ── */
+.panelLayout {
+  display: grid;
+  gap: var(--nw-s5);
+}
+
+.panelPrimary {
+  display: grid;
+  grid-template-columns: minmax(340px, 1.1fr) minmax(340px, 0.9fr);
+  align-items: start;
+  gap: 1px;
+  background: var(--nw-border);
+  border: 1px solid var(--nw-border);
+}
+
+.panelProfile {
+  display: grid;
+  gap: var(--nw-s3);
+}
+
+.replayRow {
+  display: flex;
+  align-items: center;
+  gap: var(--nw-s4);
+  font-size: var(--nw-fs-xs);
+  color: var(--nw-text-3);
+}
+
+.replayBtn {
+  padding: 7px 12px;
+  border: 1px solid var(--nw-border-2);
+  border-radius: var(--nw-r1);
+  background: var(--nw-white);
+  font: inherit;
+  font-size: var(--nw-fs-xs);
+  color: var(--nw-text-2);
+  cursor: pointer;
+  transition: background var(--nw-dur-fast) var(--nw-ease);
+}
+
+.replayBtn:hover  { background: var(--nw-surface); }
+.replayBtn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.disclaimer {
+  padding-top: var(--nw-s4);
+  border-top: 1px solid var(--nw-border);
+  font-size: var(--nw-fs-xs);
+  color: var(--nw-text-4);
+}
+
+.compact { padding: var(--nw-s4); }
+
+/* ── Gauge root ── */
+.gaugeRoot {
+  background: var(--nw-white);
+  padding: var(--nw-s5);
+  min-width: 0;
+}
+
+.gaugeHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--nw-s4);
+  padding-bottom: var(--nw-s4);
+  border-bottom: 1px solid var(--nw-border);
+  font-family: var(--nw-font-display);
+  font-size: var(--nw-fs-xs);
+  font-weight: 700;
+  letter-spacing: var(--nw-track-label);
+  text-transform: uppercase;
+  color: var(--nw-text-3);
+}
+
+.gaugeColumns {
+  display: grid;
+  gap: var(--nw-s5);
+  padding-top: var(--nw-s4);
+}
+
+.gaugeSummary { min-width: 0; }
+
+.gaugeEmpty {
+  margin: var(--nw-s6) 0;
+  font-size: var(--nw-fs-md);
+  color: var(--nw-text-3);
+  text-align: center;
+}
+
+/* ── Depth readout ── */
+.depthReadout {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin: 0;
+  font-family: var(--nw-font-mono);
+  font-size: var(--nw-fs-md);
+  font-variant-numeric: tabular-nums;
+  color: var(--nw-text);
+}
+
+.depthReadout span {
+  font-family: var(--nw-font-display);
+  font-size: var(--nw-fs-xs);
+  font-weight: 700;
+  letter-spacing: var(--nw-track-label);
+  text-transform: uppercase;
+  color: var(--nw-text-3);
+}
+
+/* ── Gauge meter ── */
+.gaugeMeter {
+  position: relative;
+  width: min(100%, 300px);
+  margin: var(--nw-s4) auto var(--nw-s4);
+  text-align: center;
+}
+
+.dial {
+  display: block;
+  width: 100%;
+  overflow: visible;
+}
+
+/* Gauge arc segments — active state controlled by data-active */
+.segment {
+  fill: none;
+  stroke: var(--nw-border-2);
+  stroke-width: 11;
+  stroke-linecap: butt;
+  transition: stroke var(--nw-dur-fast) var(--nw-ease);
+}
+
+.segmentLow[data-active='true']      { stroke: var(--nw-green); }
+.segmentModerate[data-active='true'] { stroke: var(--nw-yellow); }
+.segmentHigh[data-active='true']     { stroke: var(--nw-orange); }
+.segmentCritical[data-active='true'] { stroke: var(--nw-red); }
+
+.tick      { stroke: var(--nw-border-2); stroke-width: 1; }
+.tickMajor { stroke: var(--nw-border-2); stroke-width: 1.2; }
+
+.dialLabel {
+  fill: var(--nw-text-3);
+  font-family: var(--nw-font-mono);
+  font-size: 8px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Needle colour driven by data-level */
+.needle {
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke: var(--nw-text);
+  transition: x2 220ms var(--nw-ease), y2 220ms var(--nw-ease);
+}
+.needle[data-level='low']      { stroke: var(--nw-green); }
+.needle[data-level='moderate'] { stroke: var(--nw-yellow); }
+.needle[data-level='high']     { stroke: var(--nw-orange); }
+.needle[data-level='critical'] { stroke: var(--nw-red); }
+
+.hub { fill: var(--nw-text); }
+
+/* ── Score + level display ── */
+.scoreline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--nw-s4);
+  margin-top: -4px;
+}
+
+.score {
+  font-family: var(--nw-font-display);
+  font-size: 52px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  color: var(--nw-text);
+}
+
+.levelLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--nw-font-display);
+  font-size: var(--nw-fs-lg);
+  font-weight: 700;
+  color: var(--nw-text);
+}
+
+/* ── Level colour swatches (small i / rect elements) ── */
+/* These are used as background-colour fills on inline swatch icons */
+.levelLow      { background: var(--nw-green); }
+.levelModerate { background: var(--nw-yellow); }
+.levelHigh     { background: var(--nw-orange); }
+.levelCritical { background: var(--nw-red); }
+
+/* ── Risk factors list ── */
+.factors {
+  display: grid;
+  gap: 2px;
+}
+
+.factors h3 {
+  margin: 0 0 var(--nw-s3);
+  font-family: var(--nw-font-display);
+  font-size: var(--nw-fs-xs);
+  font-weight: 700;
+  letter-spacing: var(--nw-track-label);
+  text-transform: uppercase;
+  color: var(--nw-text-3);
+}
+
+.factor {
+  display: grid;
+  width: 100%;
+  gap: 6px;
+  padding: 8px 0;
+  border: 0;
+  border-bottom: 1px solid var(--nw-border);
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  transition: background var(--nw-dur-fast) var(--nw-ease);
+}
+
+.factor:hover { background: var(--nw-surface); }
+.factorOpen   { background: var(--nw-surface); }
+
+.factorTop {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--nw-s4);
+  font-size: var(--nw-fs-sm);
+}
+
+.factorTop > span:last-child {
+  font-family: var(--nw-font-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--nw-text-3);
+}
+
+.factorTop i {
+  font-style: normal;
+  font-size: var(--nw-fs-xs);
+  color: var(--nw-text-4);
+}
+
+.factorTrack {
+  display: block;
+  height: 4px;
+  overflow: hidden;
+  border-radius: 10px;
+  background: var(--nw-surface);
+  border: 1px solid var(--nw-border);
+}
+
+.factorTrack > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  transition: width 220ms var(--nw-ease);
+  background: var(--nw-text-3);
+}
+
+.factorTrack > span[data-level='low']      { background: var(--nw-green); }
+.factorTrack > span[data-level='moderate'] { background: var(--nw-yellow); }
+.factorTrack > span[data-level='high']     { background: var(--nw-orange); }
+.factorTrack > span[data-level='critical'] { background: var(--nw-red); }
+
+.factorDetail {
+  display: grid;
+  gap: 4px;
+  padding: 3px 0 1px;
+  font-size: var(--nw-fs-xs);
+  line-height: 1.5;
+  color: var(--nw-text-3);
+}
+
+.factorDetail span:last-child {
+  font-family: var(--nw-font-mono);
+  font-size: var(--nw-fs-xs);
+  color: var(--nw-text-2);
+}
+
+.footnote {
+  margin: var(--nw-s3) 0 0;
+  font-size: var(--nw-fs-xs);
+  line-height: 1.5;
+  color: var(--nw-text-4);
+}
+
+/* ── Risk profile chart card ── */
+.profileCard {
+  padding: var(--nw-s5);
+  border: 1px solid var(--nw-border);
+  background: var(--nw-white);
+}
+
+.profileCardHeading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--nw-s4);
+  padding-bottom: var(--nw-s3);
+  border-bottom: 1px solid var(--nw-border);
+}
+
+.profileCardHeading h2 {
+  margin: 0;
+  font-family: var(--nw-font-display);
+  font-size: var(--nw-fs-xl);
+  font-weight: 800;
+  color: var(--nw-text);
+}
+
+.profileCardHeading > span {
+  font-family: var(--nw-font-display);
+  font-size: var(--nw-fs-xs);
+  font-weight: 700;
+  letter-spacing: var(--nw-track-label);
+  text-transform: uppercase;
+  color: var(--nw-text-3);
+}
+
+.chartWrap {
+  min-width: 0;
+  width: 100%;
+  height: 340px;
+  padding-top: var(--nw-s3);
+}
+
+.chart {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  touch-action: none;
+  cursor: ew-resize;
+  outline: none;
+}
+
+.chart:focus-visible {
+  outline: 2px solid var(--nw-yellow-deep);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.gridline {
+  stroke: var(--nw-border);
+  stroke-width: 1;
+  stroke-dasharray: 2 4;
+}
+
+.depthGrid {
+  stroke: var(--nw-border);
+  stroke-width: 0.7;
+  opacity: 0.7;
+}
+
+.chartLabel, .depthLabel {
+  fill: var(--nw-text-3);
+  font-family: var(--nw-font-mono);
+  font-size: 8px;
+}
+
+.profileArea {
+  fill: var(--nw-yellow);
+  opacity: 0.1;
+}
+
+.profileLine {
+  fill: none;
+  stroke: var(--nw-yellow-deep);
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.eventMarker {
+  fill: var(--nw-red);
+  stroke: var(--nw-white);
+  stroke-width: 1.5;
+  cursor: help;
+}
+
+.cursor {
+  stroke: var(--nw-text-2);
+  stroke-width: 1;
+  stroke-dasharray: 4 3;
+  pointer-events: none;
+}
+
+.cursorDot {
+  fill: var(--nw-text);
+  stroke: var(--nw-white);
+  stroke-width: 2;
+}
+
+.chartHint {
+  margin: var(--nw-s2) 0 0;
+  font-size: var(--nw-fs-xs);
+  color: var(--nw-text-4);
+}
+
+/* ── Well section diagram card ── */
+.sectionCard {
+  background: var(--nw-white);
+  padding: var(--nw-s4) var(--nw-s5);
+  min-width: 0;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--nw-s4);
+  padding-bottom: var(--nw-s3);
+  border-bottom: 1px solid var(--nw-border);
+}
+
+.sectionHeader h2 {
+  margin: 0;
+  font-family: var(--nw-font-display);
+  font-size: var(--nw-fs-xl);
+  font-weight: 800;
+  color: var(--nw-text);
+}
+
+.sectionHeader > span {
+  font-family: var(--nw-font-display);
+  font-size: var(--nw-fs-xs);
+  font-weight: 700;
+  letter-spacing: var(--nw-track-label);
+  text-transform: uppercase;
+  color: var(--nw-text-3);
+}
+
+.sectionLayout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 205px;
+  align-items: start;
+  gap: var(--nw-s4);
+  padding-top: var(--nw-s3);
+}
+
+.sectionVisual { min-width: 0; }
+
+.sectionSvg {
+  display: block;
+  width: 100%;
+  height: auto;
+  min-height: 420px;
+  max-height: 720px;
+  overflow: visible;
+  touch-action: none;
+  cursor: ns-resize;
+  outline: none;
+  color: var(--nw-text);
+}
+
+.sectionSvg:focus-visible {
+  outline: 2px solid var(--nw-yellow-deep);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ── SVG ground/geology elements ── */
+.earthBand { fill: transparent; stroke: none; }
+
+.strataBoundary {
+  stroke: var(--nw-border-2);
+  stroke-width: 1;
+  opacity: 0.75;
+}
+
+/* Risk overlay colours driven by data-level + data-reached */
+.riskOverlay {
+  cursor: pointer;
+  transition: fill-opacity 200ms var(--nw-ease);
+  fill: var(--nw-border-2);
+  fill-opacity: 0.25;
+}
+
+.riskOverlay[data-level='low']      { fill: var(--nw-green); }
+.riskOverlay[data-level='moderate'] { fill: var(--nw-yellow); }
+.riskOverlay[data-level='high']     { fill: var(--nw-orange); }
+.riskOverlay[data-level='critical'] { fill: var(--nw-red); }
+.riskOverlay[data-reached='true']   { fill-opacity: 0.7; }
+.riskOverlay[data-reached='false']  { fill-opacity: 0.25; }
+
+.riskOverlay:focus-visible { outline: none; stroke: var(--nw-text); stroke-width: 2; }
+
+.riskSliceOutline {
+  fill: none;
+  stroke: var(--nw-text);
+  stroke-width: 2;
+  pointer-events: none;
+}
+
+.riskSlice {}
+.riskSliceSelected .riskSliceOutline { display: block; }
+
+.riskStrip {
+  pointer-events: none;
+  transition: fill 200ms var(--nw-ease);
+  fill: var(--nw-border-2);
+}
+.riskStrip[data-level='low']      { fill: var(--nw-green); }
+.riskStrip[data-level='moderate'] { fill: var(--nw-yellow); }
+.riskStrip[data-level='high']     { fill: var(--nw-orange); }
+.riskStrip[data-level='critical'] { fill: var(--nw-red); }
+
+.riskFutureEdge {
+  stroke: var(--nw-border-2);
+  stroke-width: 0.8;
+  stroke-dasharray: 2 3;
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.surfaceLine, .groundLine {
+  stroke: var(--nw-text);
+  stroke-width: 1.5;
+}
+
+/* ── SVG ruler ── */
+.rulerTick, .percentTick { stroke: var(--nw-text-3); stroke-width: 1; }
+
+.rulerLabel, .percentLabel, .rulerTitle {
+  fill: var(--nw-text-3);
+  font-family: var(--nw-font-mono);
+  font-size: 8px;
+  font-variant-numeric: tabular-nums;
+}
+
+.rulerTitle {
+  font-family: var(--nw-font-display);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.percentLabel { fill: var(--nw-yellow-deep); font-size: 7px; }
+
+/* ── SVG rig + well path ── */
+.rig {
+  fill: none;
+  stroke: var(--nw-text);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.wellOuter {
+  fill: none;
+  stroke: var(--nw-white);
+  stroke-width: 8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.wellFuture {
+  fill: none;
+  stroke: var(--nw-white);
+  stroke-width: 6;
+  stroke-dasharray: 3 5;
+  stroke-linecap: round;
+}
+
+.wellSegment {
+  fill: none;
+  stroke: var(--nw-text);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke 200ms var(--nw-ease), opacity 200ms var(--nw-ease);
+}
+
+.wellSegment[data-level='low']      { stroke: var(--nw-green); }
+.wellSegment[data-level='moderate'] { stroke: var(--nw-yellow); }
+.wellSegment[data-level='high']     { stroke: var(--nw-orange); }
+.wellSegment[data-level='critical'] { stroke: var(--nw-red); }
+
+.wellSegmentDim {
+  stroke: var(--nw-border-2);
+  stroke-dasharray: 3 5;
+  opacity: 0.7;
+}
+
+.depthGuide {
+  stroke: var(--nw-text-3);
+  stroke-width: 0.8;
+  stroke-dasharray: 3 3;
+  opacity: 0.75;
+}
+
+.bit path {
+  fill: var(--nw-white);
+  stroke: var(--nw-text);
+  stroke-width: 1.6;
+  stroke-linejoin: round;
+  transition: transform 200ms var(--nw-ease);
+}
+
+.bit circle { fill: var(--nw-yellow-deep); }
+
+/* ── Bit label tooltip ── */
+.bitLabel rect:first-child {
+  fill: var(--nw-white);
+  stroke: var(--nw-border-2);
+  stroke-width: 1;
+}
+
+.bitDepth {
+  fill: var(--nw-text);
+  font-family: var(--nw-font-display);
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.bitScore {
+  fill: var(--nw-text);
+  font-family: var(--nw-font-mono);
+  font-size: 8px;
+}
+
+.bitSquare {
+  stroke: none;
+}
+.bitSquare[data-level='low']      { fill: var(--nw-green); }
+.bitSquare[data-level='moderate'] { fill: var(--nw-yellow); }
+.bitSquare[data-level='high']     { fill: var(--nw-orange); }
+.bitSquare[data-level='critical'] { fill: var(--nw-red); }
+
+.bitLevel {
+  fill: var(--nw-text-3);
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+/* ── Section events ── */
+.sectionEvent {
+  cursor: help;
+  outline: none;
+}
+
+.sectionEvent line {
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke: var(--nw-yellow-deep);
+}
+
+.sectionEvent line[data-severity='critical'] { stroke: var(--nw-red); }
+.sectionEvent line[data-severity='high']     { stroke: var(--nw-orange); }
+.sectionEvent line[data-severity='moderate'] { stroke: var(--nw-yellow-deep); }
+
+.sectionEvent:focus-visible line { stroke-width: 4; }
+
+.sectionCaption {
+  margin: 2px 0 0;
+  font-size: var(--nw-fs-xs);
+  line-height: 1.5;
+  color: var(--nw-text-4);
+}
+
+/* ── Risk zones sidebar ── */
+.riskZones {
+  display: grid;
+  align-content: start;
+  gap: 2px;
+  padding-top: var(--nw-s2);
+}
+
+.riskZones h3 {
+  margin: 0 0 var(--nw-s3);
+  font-family: var(--nw-font-display);
+  font-size: var(--nw-fs-xs);
+  font-weight: 700;
+  letter-spacing: var(--nw-track-label);
+  text-transform: uppercase;
+  color: var(--nw-text-3);
+}
+
+.zone {}
+
+.zoneRow {
+  display: grid;
+  grid-template-columns: 8px 1fr auto;
+  align-items: center;
+  gap: 7px;
+  width: 100%;
+  padding: 6px 3px;
+  border: 0;
+  border-bottom: 1px solid var(--nw-border);
+  background: transparent;
+  color: var(--nw-text);
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  transition: background var(--nw-dur-fast) var(--nw-ease);
+}
+
+.zoneRow i {
+  width: 7px;
+  height: 7px;
+  border-radius: 1px;
+  display: block;
+}
+
+.zoneRow span {
+  font-family: var(--nw-font-mono);
+  font-size: 9px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.zoneRow strong {
+  font-size: var(--nw-fs-xs);
+  font-weight: 600;
+  color: var(--nw-text-3);
+}
+
+.zoneRow:hover, .zoneRow:focus-visible {
+  background: var(--nw-surface);
+  outline: none;
+}
+
+.zoneDetails {
+  display: grid;
+  gap: 5px;
+  padding: 8px 8px 10px 18px;
+  border-bottom: 1px solid var(--nw-border);
+  background: var(--nw-surface);
+}
+
+.zoneDetailSummary {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--nw-s3);
+}
+
+.zoneDetailSummary strong {
+  font-family: var(--nw-font-mono);
+  font-size: var(--nw-fs-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.zoneDetailSummary span {
+  font-size: var(--nw-fs-xs);
+  color: var(--nw-text-3);
+}
+
+.zoneFactor {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--nw-s3);
+  margin: 0;
+  font-size: var(--nw-fs-xs);
+  line-height: 1.4;
+}
+
+.zoneFactor span:last-child {
+  font-family: var(--nw-font-mono);
+  font-size: var(--nw-fs-xs);
+  color: var(--nw-text-3);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.zoneTotal, .zoneNotScored, .zoneEvents {
+  margin: 2px 0 0;
+  font-size: var(--nw-fs-xs);
+  line-height: 1.45;
+  color: var(--nw-text-4);
+}
+
+.zoneTotal {
+  color: var(--nw-text);
+  font-family: var(--nw-font-mono);
+}
+
+/* ── Interval assessment card ── */
+.assessmentCard {
+  margin-top: var(--nw-s4);
+  padding: var(--nw-s4) var(--nw-s5);
+  border: 1px solid var(--nw-border);
+  border-left-width: 3px;
+  border-left-color: var(--nw-yellow);
+  background: var(--nw-surface);
+}
+
+.assessmentHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--nw-s4);
+}
+
+.assessmentHeader h2 {
+  margin: 0 0 6px;
+  font-family: var(--nw-font-display);
+  font-size: var(--nw-fs-xl);
+  font-weight: 800;
+}
+
+.assessmentLevel {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--nw-font-display);
+  font-size: var(--nw-fs-xs);
+  font-weight: 700;
+  letter-spacing: var(--nw-track-label);
+  text-transform: uppercase;
+  color: var(--nw-text-3);
+}
+
+.assessmentLevel i {
+  width: 8px;
+  height: 8px;
+  border-radius: 1px;
+  display: block;
+}
+
+.assessmentClear {
+  padding: 5px 9px;
+  border: 1px solid var(--nw-border-2);
+  border-radius: var(--nw-r1);
+  background: transparent;
+  color: var(--nw-text-3);
+  font: inherit;
+  font-size: var(--nw-fs-xs);
+  cursor: pointer;
+  transition: background var(--nw-dur-fast) var(--nw-ease);
+}
+
+.assessmentClear:hover { background: var(--nw-white); }
+
+.assessmentRange, .assessmentScore {
+  margin: 10px 0 0;
+  font-family: var(--nw-font-mono);
+  font-size: var(--nw-fs-xs);
+  font-variant-numeric: tabular-nums;
+  color: var(--nw-text);
+}
+
+.assessmentRange span, .assessmentScore span { color: var(--nw-text-4); }
+
+.assessmentFactors {
+  display: grid;
+  gap: var(--nw-s3);
+  margin-top: var(--nw-s4);
+}
+
+.assessmentFactor { display: grid; gap: 4px; }
+
+.assessmentFactor > div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--nw-s3);
+  font-size: var(--nw-fs-xs);
+}
+
+.assessmentFactor strong {
+  font-family: var(--nw-font-mono);
+  font-size: var(--nw-fs-xs);
+  font-weight: 500;
+  color: var(--nw-text-3);
+  font-variant-numeric: tabular-nums;
+}
+
+.assessmentTrack {
+  display: block;
+  height: 4px;
+  overflow: hidden;
+  border-radius: 8px;
+  background: var(--nw-border-2);
+}
+
+.assessmentTrack i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+}
+
+/* Assessment track bar coloured by the .levelX class set on the <i> */
+.assessmentTrack .levelLow      { background: var(--nw-green); }
+.assessmentTrack .levelModerate { background: var(--nw-yellow); }
+.assessmentTrack .levelHigh     { background: var(--nw-orange); }
+.assessmentTrack .levelCritical { background: var(--nw-red); }
+
+.assessmentSection {
+  margin-top: var(--nw-s4);
+  padding-top: var(--nw-s3);
+  border-top: 1px solid var(--nw-border);
+}
+
+.assessmentSection h3 {
+  margin: 0 0 6px;
+  font-family: var(--nw-font-display);
+  font-size: var(--nw-fs-xs);
+  font-weight: 700;
+  letter-spacing: var(--nw-track-label);
+  text-transform: uppercase;
+  color: var(--nw-text-3);
+}
+
+.assessmentSection p {
+  margin: 0;
+  font-size: var(--nw-fs-xs);
+  line-height: 1.5;
+  color: var(--nw-text);
+}
+
+.assessmentSection ul {
+  display: grid;
+  gap: 5px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.assessmentSection li {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--nw-s3);
+  font-size: var(--nw-fs-xs);
+}
+
+.assessmentSection li span {
+  font-family: var(--nw-font-mono);
+  font-size: var(--nw-fs-xs);
+  color: var(--nw-text-3);
+}
+
+.assessmentAverages {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px var(--nw-s5);
+  margin: 0;
+}
+
+.assessmentAverages div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--nw-s3);
+  font-size: var(--nw-fs-xs);
+}
+
+.assessmentAverages dt { color: var(--nw-text-3); }
+.assessmentAverages dd {
+  margin: 0;
+  font-family: var(--nw-font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.assessmentUnscored {
+  margin: var(--nw-s3) 0 0;
+  font-size: var(--nw-fs-xs);
+  line-height: 1.5;
+  color: var(--nw-text-4);
+}
+
+/* ── Responsive ── */
+@media (max-width: 1050px) {
+  .panelPrimary { grid-template-columns: minmax(0, 1fr); }
+  .skeletonColumns { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 899px) {
+  .sectionLayout { grid-template-columns: minmax(0, 1fr); }
+  .riskZones { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+  .riskZones h3 { grid-column: 1 / -1; }
+  .sectionSvg { min-height: 320px; max-height: 540px; }
+  .assessmentCard { margin-top: var(--nw-s3); }
+}
+
+@media (max-width: 680px) {
+  .replayRow { flex-direction: column; align-items: flex-start; }
+  .chartWrap { height: 260px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .needle { transition: none; }
+  .factorTrack > span { transition: none; }
+  .riskOverlay { transition: none; }
+  .wellSegment { transition: none; }
+  .skeleton { animation: none; }
+}
