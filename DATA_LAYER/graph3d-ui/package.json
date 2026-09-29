@@ -1,0 +1,56 @@
+{
+  "name": "@nwis/graph3d",
+  "version": "1.0.0",
+  "description": "Drop-in interactive 3D knowledge-graph viewer for React. Streams live updates from Neo4j and the offline local graph.",
+  "type": "module",
+  "main": "./src/index.js",
+  "module": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./theme": "./src/theme.js",
+    "./styles": "./src/styles.js",
+    "./styles.css": "./src/styles.js",
+    "./stream": "./src/useGraphStream.js",
+    "./transform": "./src/graphTransform.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "src",
+    "README.md"
+  ],
+  "sideEffects": [
+    "./src/styles.js"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview --port 4173"
+  },
+  "keywords": [
+    "react",
+    "3d",
+    "graph",
+    "network",
+    "knowledge-graph",
+    "neo4j",
+    "networkx",
+    "force-graph",
+    "realtime",
+    "visualization"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "react-force-graph-3d": "^1.29.1",
+    "three": "^0.180.0"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "vite": "^5.4.11"
+  }
+}

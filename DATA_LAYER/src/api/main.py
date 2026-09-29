@@ -1,7 +1,7 @@
 """FastAPI Application for NWIS"""
 import asyncio
 import json
-from fastapi import FastAPI, File, UploadFile, Form, HTTPException, Depends, BackgroundTasks, WebSocket
+from fastapi import FastAPI, File, UploadFile, Form, HTTPException, Depends, BackgroundTasks, WebSocket, WebSocketDisconnect
 from fastapi.encoders import jsonable_encoder
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, FileResponse, StreamingResponse
@@ -734,6 +734,144 @@ async def graph_stats():
     except Exception as error:
         return {"backend": None, "error": f"{type(error).__name__}: {error}",
                 "backends": graph_health()}
+
+
+@app.get("/api/v1/graph/view")
+async def graph_view(
+    backends: Optional[str] = None,
+    limit: int = 750,
+    merge: bool = True,
+    focus: Optional[str] = None,
+    depth: Optional[int] = None,
+):
+    """One snapshot of the knowledge graph for the 3D viewer.
+
+    Works identically whether the data is served by Neo4j, the offline NetworkX
+    graph, or both at once (``backends=local,neo4j``). ``focus`` + ``depth``
+    restrict the result to the neighbourhood of a single entity.
+    """
+    from src.api.graph_viz import DEFAULT_LIMIT, MAX_LIMIT, fetch_snapshot
+
+    wanted = [b.strip() for b in (backends or "local,neo4j").split(",") if b.strip()]
+    return await asyncio.to_thread(
+        fetch_snapshot,
+        backends=wanted,
+        limit=max(1, min(limit, MAX_LIMIT)) or DEFAULT_LIMIT,
+        merge_backends=merge,
+        focus=focus,
+        depth=depth,
+    )
+
+
+@app.websocket("/api/v1/graph/stream")
+async def graph_stream(
+    websocket: WebSocket,
+    interval: float = 3.0,
+    backends: Optional[str] = None,
+    limit: int = 750,
+    merge: bool = True,
+    focus: Optional[str] = None,
+    depth: Optional[int] = None,
+):
+    """Live graph feed: pushes a snapshot first, then deltas as the graph grows.
+
+    The socket re-reads both the Neo4j server and the offline local graph on
+    every tick, so nodes and relationships appear in the browser the moment
+    ingestion writes them - no reload, no polling from the client.
+
+    Client control messages (all optional, so the socket also works for a plain
+    fire-and-forget viewer):
+
+    ``{"type": "ping"}``      - keep intermediaries from closing an idle socket
+    ``{"type": "refresh"}``   - resend a full snapshot immediately
+    ``{"type": "configure", "backends": ["local"], "limit": 2000,
+       "focus": "WELL-X", "depth": 2, "merge": false, "interval": 5}``
+      - change what the stream reads, and get a fresh snapshot straight away
+    """
+    from src.api.graph_viz import BACKENDS, MAX_INTERVAL, MIN_INTERVAL, diff_snapshots, fetch_snapshot
+
+    await websocket.accept()
+    state: Dict[str, Any] = {
+        "backends": [b.strip() for b in (backends or ",".join(BACKENDS)).split(",") if b.strip()]
+                   or list(BACKENDS),
+        "limit": int(limit or 750),
+        "merge": bool(merge),
+        "focus": focus or None,
+        "depth": depth or None,
+        "interval": max(MIN_INTERVAL, min(float(interval or 3.0), MAX_INTERVAL)),
+    }
+    wake = asyncio.Event()
+    full = False
+
+    async def reader() -> None:
+        """Consume client control messages without blocking the push loop."""
+        nonlocal full
+        while True:
+            try:
+                message = await websocket.receive_json()
+            except Exception:
+                return
+            if not isinstance(message, dict):
+                continue
+            kind = message.get("type")
+            if kind == "ping":
+                try:
+                    await websocket.send_json({"type": "pong", "ts": datetime.utcnow().isoformat()})
+                except Exception:
+                    return
+            elif kind == "refresh":
+                full = True
+                wake.set()
+            elif kind == "configure":
+                if isinstance(message.get("backends"), list):
+                    state["backends"] = [b for b in message["backends"] if b in BACKENDS] or list(BACKENDS)
+                if message.get("limit"):
+                    state["limit"] = int(message["limit"])
+                if message.get("merge") is not None:
+                    state["merge"] = bool(message["merge"])
+                if "focus" in message:
+                    state["focus"] = message.get("focus") or None
+                if "depth" in message:
+                    state["depth"] = message.get("depth") or None
+                if message.get("interval"):
+                    state["interval"] = max(MIN_INTERVAL, min(float(message["interval"]), MAX_INTERVAL))
+                full = True
+                wake.set()
+
+    reader_task = asyncio.create_task(reader())
+    previous: Optional[dict] = None
+    try:
+        while True:
+            current = await asyncio.to_thread(
+                fetch_snapshot,
+                backends=state["backends"],
+                limit=state["limit"],
+                merge_backends=state["merge"],
+                focus=state["focus"],
+                depth=state["depth"],
+            )
+            message = diff_snapshots(previous, current) if not full else None
+            if message is None and (full or previous is None):
+                message = {"type": "snapshot", **current}
+            if message is not None:
+                await websocket.send_json(message)
+            full = False
+            previous = current
+            wake.clear()
+            try:
+                await asyncio.wait_for(wake.wait(), timeout=state["interval"])
+            except asyncio.TimeoutError:
+                pass
+    except WebSocketDisconnect:
+        logger.info("graph stream client disconnected")
+    except Exception as error:
+        logger.warning("graph stream error: %s", error)
+        try:
+            await websocket.send_json({"type": "error", "message": f"{type(error).__name__}: {error}"})
+        except Exception:
+            pass
+    finally:
+        reader_task.cancel()
 
 
 @app.post("/api/v1/graph/reseed")

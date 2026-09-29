@@ -1,0 +1,28 @@
+html, body, #root { height: 100%; }
+
+body {
+  margin: 0;
+  background: #06090d;
+  color: #e8eef5;
+  font: 14px/1.5 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+.demo { display: flex; flex-direction: column; min-height: 100%; padding: 16px; gap: 14px; }
+
+.demo-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.demo-head h1 { margin: 0 0 4px; font-size: 18px; letter-spacing: -0.01em; }
+.demo-head p { margin: 0; max-width: 62ch; color: #8ea0b3; font-size: 12.5px; }
+.demo-actions { display: flex; gap: 8px; }
+
+.demo-actions button {
+  padding: 6px 12px;
+  border: 1px solid rgba(120, 160, 200, 0.22);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  color: inherit;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.demo-actions button:hover { background: rgba(255, 255, 255, 0.11); }
